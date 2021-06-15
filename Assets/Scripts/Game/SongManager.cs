@@ -32,6 +32,8 @@ public class SongManager : MonoBehaviour
         this.beatsPerBar = beatsPerBar;
         this.tempo = tempo;
 
+        ldm.MakeBeatLines(beatsPerBar);
+
         StartSong();
     }
 
