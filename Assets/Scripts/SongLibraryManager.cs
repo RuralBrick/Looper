@@ -6,8 +6,8 @@ using UnityEngine;
 [Serializable]
 public class Song
 {
-    public AudioClip file;
     public string title;
+    public AudioClip file;
     public int beatsPerBar = 4;
     public int beatUnit = 4;
     public float tempo;
