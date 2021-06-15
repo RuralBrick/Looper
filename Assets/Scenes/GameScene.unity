@@ -651,18 +651,18 @@ PrefabInstance:
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].clip
       value: 
-      objectReference: {fileID: 8300000, guid: d6c96f82a2509984c80f298d775a28a4, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].name
-      value: testTrack
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].pitch
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].volume
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886520, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: m_RootOrder
