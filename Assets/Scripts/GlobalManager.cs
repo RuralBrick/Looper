@@ -9,6 +9,9 @@ public class GlobalManager : MonoBehaviour
     SoundManager sm;
     SongLibraryManager slm;
 
+    [Range(-0.05f, 0.05f)]
+    public float calibration = 0f;
+
     void Awake()
     {
         if (instance != null)
