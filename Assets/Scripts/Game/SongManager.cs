@@ -47,7 +47,7 @@ public class SongManager : MonoBehaviour
 
     IEnumerator PlaySong()
     {
-        beat = 0;
+        beat = GlobalManager.instance.calibration * tempo / SECONDS_PER_MINUTE;
         song.Play();
         while (true)
         {
