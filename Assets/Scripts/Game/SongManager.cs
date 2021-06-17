@@ -10,6 +10,9 @@ public class SongManager : MonoBehaviour
     int beatsPerBar = 0;
     float tempo = 0;
 
+    List<Note> notes;
+    //List<>
+
     AudioSource song;
     Coroutine songCoroutine;
     LoopDisplayManager ldm;
@@ -19,18 +22,23 @@ public class SongManager : MonoBehaviour
         ldm = FindObjectOfType<LoopDisplayManager>();
     }
 
+    void Start()
+    {
+        ldm.MakeLaneLines(0.75f);
+    }
+
     float CurrentBarPercent()
     {
         return (beat % beatsPerBar) / beatsPerBar;
     }
 
-    public void LoadSong(AudioClip file, int beatsPerBar, float tempo)
+    public void LoadSong(Song s)
     {
         song = gameObject.AddComponent<AudioSource>();
-        song.clip = file;
+        song.clip = s.file;
 
-        this.beatsPerBar = beatsPerBar;
-        this.tempo = tempo;
+        beatsPerBar = s.beatsPerBar;
+        tempo = s.tempo;
 
         ldm.MakeBeatLines(beatsPerBar);
 
