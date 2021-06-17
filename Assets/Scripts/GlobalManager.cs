@@ -29,6 +29,6 @@ public class GlobalManager : MonoBehaviour
     void Start()
     {
         Song s = slm.FindSong("test track");
-        FindObjectOfType<SongManager>().LoadSong(s.file, s.beatsPerBar, s.tempo);
+        FindObjectOfType<SongManager>().LoadSong(s);
     }
 }
