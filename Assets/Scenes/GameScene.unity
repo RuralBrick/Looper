@@ -382,8 +382,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0.52156866, g: 0.52156866, b: 0.52156866, a: 1}
+      key1: {r: 0.52156866, g: 0.52156866, b: 0.52156866, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -446,6 +446,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c19423b4a94b1f14188f5b697de4cced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notePrefabs:
+  - {fileID: 4482068774927038285, guid: c81c7480000096e488e72f9451466e25, type: 3}
+  - {fileID: 3543880337164776414, guid: 6ac1e5206d1516041930c8c97fa214d9, type: 3}
+  - {fileID: 4491817472374134709, guid: c77c236c501e5704caf291d057f285c5, type: 3}
+  - {fileID: 576043017046469062, guid: 84aad2f0848262f4f9c46397818cac65, type: 3}
 --- !u!4 &687512475
 Transform:
   m_ObjectHideFlags: 0
@@ -550,9 +555,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cb4626c43221124a900e26a6aeb5733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
+  circleSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   lineMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   spriteMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  circleSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
 --- !u!1 &1252249964
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,8 +627,8 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1292589773
-  m_SortingLayer: 1
+  m_SortingLayerID: 111141897
+  m_SortingLayer: 2
   m_SortingOrder: 200
   m_Positions:
   - {x: 0, y: 0, z: 0}

@@ -4,9 +4,10 @@ using UnityEngine;
 
 public struct Note
 {
-    float beat;
-    float start;
-    float stop;
+    public int lane;
+    public float beatPos;
+    public float start;
+    public float stop;
 }
 
 public class TrackParser : MonoBehaviour
