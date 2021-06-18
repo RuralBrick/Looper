@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LoopDisplayManager : MonoBehaviour
+public class LoopDisplayHandler : MonoBehaviour
 {
     const float RADIUS = 4f;
     const float SUB_BEAT_LINE_WIDTH = 0.025f;

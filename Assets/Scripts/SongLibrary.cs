@@ -13,22 +13,9 @@ public class Song
     public float tempo;
 }
 
-public class SongLibraryManager : MonoBehaviour
+public class SongLibrary : MonoBehaviour
 {
-    static SongLibraryManager instance;
-
     public Song[] songs;
-
-    void Awake()
-    {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        instance = this;
-    }
 
     public Song FindSong(string title)
     {

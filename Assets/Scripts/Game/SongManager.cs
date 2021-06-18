@@ -18,7 +18,7 @@ public class SongManager : MonoBehaviour
 
     AudioSource song;
     Coroutine songCoroutine;
-    LoopDisplayManager ldm;
+    LoopDisplayHandler ldm;
 
     public GameObject[] notePrefabs = new GameObject[LANE_COUNT];
 
@@ -30,7 +30,7 @@ public class SongManager : MonoBehaviour
 
     void Awake()
     {
-        ldm = FindObjectOfType<LoopDisplayManager>();
+        ldm = FindObjectOfType<LoopDisplayHandler>();
     }
 
     public void LoadSong(Song s)
@@ -85,10 +85,15 @@ public class SongManager : MonoBehaviour
             }
         }
     }
+
+    public void CheckLane(int lane)
+    {
+        Debug.LogFormat($"Checking lane {lane}");
+    }
     
     IEnumerator PlaySong()
     {
-        beat = GlobalManager.instance.calibration * tempo / SECONDS_PER_MINUTE;
+        beat = -GlobalManager.instance.calibration * tempo / SECONDS_PER_MINUTE;
         song.Play();
         while (true)
         {

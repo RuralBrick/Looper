@@ -22,9 +22,6 @@ public class Sound
 
 public class SoundManager : MonoBehaviour
 {
-    [HideInInspector]
-    public static SoundManager instance;
-
     public Sound[] sounds;
 
     [HideInInspector]
@@ -34,14 +31,6 @@ public class SoundManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        instance = this;
-
         foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
