@@ -8,16 +8,20 @@ public class SongManager : MonoBehaviour
     const int LANE_COUNT = 4;
     const float LANE_WIDTH = 0.75f;
     const float NOTE_WIDTH = 0.65f;
+    const float BASE_SONG_WAIT = 3f;
+    const float PERFECT_MARGIN = 0.075f;
+    const float GREAT_MARGIN = 0.25f;
 
     float beat = 0;
     int beatsPerBar = 0;
     float tempo = 0;
+    float songOffset = 0f;
 
     List<Note> notes = new List<Note>();
     List<NoteHandler>[] activeNotes = new List<NoteHandler>[LANE_COUNT];
 
     AudioSource song;
-    Coroutine songCoroutine;
+    Coroutine metCoroutine;
     LoopDisplayHandler ldm;
 
     public GameObject[] notePrefabs = new GameObject[LANE_COUNT];
@@ -40,15 +44,25 @@ public class SongManager : MonoBehaviour
 
         beatsPerBar = s.beatsPerBar;
         tempo = s.tempo;
+        songOffset = s.offset;
 
         ldm.Initialize(beatsPerBar, LANE_COUNT, LANE_WIDTH);
 
         Note testNote = new Note();
         testNote.lane = 0;
         testNote.beatPos = 0f;
-        testNote.start = 8f;
-        testNote.stop = 12f;
+        testNote.start = 0f;
+        testNote.stop = 16f;
 
+        notes.Add(testNote);
+
+        testNote.beatPos = 1f;
+        notes.Add(testNote);
+
+        testNote.beatPos = 2f;
+        notes.Add(testNote);
+
+        testNote.beatPos = 3f;
         notes.Add(testNote);
 
         StartSong();
@@ -58,8 +72,14 @@ public class SongManager : MonoBehaviour
     {
         if (song != null && beatsPerBar != 0 && tempo != 0)
         {
-            songCoroutine = StartCoroutine(PlaySong());
+            StartCoroutine(PlaySong());
+            metCoroutine = StartCoroutine(KeepTime());
         }
+    }
+
+    float CurrentBeatPos()
+    {
+        return beat % beatsPerBar;
     }
     
     void SpawnNotes()
@@ -86,21 +106,66 @@ public class SongManager : MonoBehaviour
         }
     }
 
+    void ClearNotes()
+    {
+        foreach (List<NoteHandler> lane in activeNotes)
+        {
+            for (int i = lane.Count - 1; i >= 0; i--)
+            {
+                NoteHandler nh = lane[i];
+                if (beat > nh.end)
+                {
+                    nh.Disappear();
+                    lane.RemoveAt(i);
+                }
+            }
+        }
+    }
+
     public void CheckLane(int lane)
     {
-        Debug.LogFormat($"Checking lane {lane}");
+        foreach (NoteHandler nh in activeNotes[lane])
+        {
+            float diff = CurrentBeatPos() - nh.beatPos;
+            bool late = diff > 0;
+            float dist = Mathf.Abs(diff);
+
+            if (dist <= PERFECT_MARGIN)
+            {
+                nh.GetHit();
+                Debug.Log("Perfect");
+            }
+            else if (dist <= GREAT_MARGIN)
+            {
+                nh.GetHit();
+                Debug.Log("Great");
+                Debug.Log(late ? "Late" : "Not late");
+            }
+        }
     }
-    
+
     IEnumerator PlaySong()
     {
-        beat = -GlobalManager.instance.calibration * tempo / SECONDS_PER_MINUTE;
+        float wait = BASE_SONG_WAIT + songOffset;
+        yield return new WaitForSeconds(wait);
         song.Play();
+    }
+    
+    IEnumerator KeepTime()
+    {
+        float offset = BASE_SONG_WAIT + GlobalManager.instance.calibration;
+        beat = -offset * tempo / SECONDS_PER_MINUTE;
+        ldm.SetMetronome(CurrentBeatPos());
+
+        yield return new WaitForEndOfFrame();
+
         while (true)
         {
             beat += Time.deltaTime * tempo / SECONDS_PER_MINUTE;
 
-            ldm.SetMetronome(beat % beatsPerBar);
+            ldm.SetMetronome(CurrentBeatPos());
             SpawnNotes();
+            ClearNotes();
 
             yield return null;
         }

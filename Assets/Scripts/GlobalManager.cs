@@ -43,6 +43,9 @@ public class GlobalManager : MonoBehaviour
     {
         SceneManager.sceneLoaded += SetupScenes;
         SceneManager.sceneUnloaded += TeardownScenes;
+        // HACK
+        SetupGameScene();
+        // end HACK
     }
     
     #region Scenes
