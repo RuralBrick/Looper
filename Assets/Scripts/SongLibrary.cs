@@ -8,6 +8,7 @@ public class Song
 {
     public string title;
     public AudioClip file;
+    public float offset = 0f;
     public int beatsPerBar = 4;
     public int beatUnit = 4;
     public float tempo;
