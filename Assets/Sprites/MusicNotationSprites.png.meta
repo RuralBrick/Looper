@@ -1,0 +1,2004 @@
+fileFormatVersion: 2
+guid: f482907f7d5940c45b8bfb8d890d733a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1414419356777578757
+    second: MusicNotationSprites_0
+  - first:
+      213: 6602254822030875497
+    second: MusicNotationSprites_1
+  - first:
+      213: 5842201370309141131
+    second: MusicNotationSprites_2
+  - first:
+      213: -5812025284562212536
+    second: MusicNotationSprites_3
+  - first:
+      213: 3077787693082934630
+    second: MusicNotationSprites_4
+  - first:
+      213: -79700521705774732
+    second: MusicNotationSprites_5
+  - first:
+      213: 515814235509758086
+    second: MusicNotationSprites_6
+  - first:
+      213: -2309663261145353307
+    second: MusicNotationSprites_7
+  - first:
+      213: -2988780024380591864
+    second: MusicNotationSprites_8
+  - first:
+      213: 4127762131415090794
+    second: MusicNotationSprites_9
+  - first:
+      213: -4675688536229090739
+    second: MusicNotationSprites_10
+  - first:
+      213: -3307893462804845921
+    second: MusicNotationSprites_11
+  - first:
+      213: 3847428102997128703
+    second: MusicNotationSprites_12
+  - first:
+      213: 6388294698818837597
+    second: MusicNotationSprites_13
+  - first:
+      213: -4638652576195876876
+    second: MusicNotationSprites_14
+  - first:
+      213: -2132532649591522898
+    second: MusicNotationSprites_15
+  - first:
+      213: 1855235739457456851
+    second: MusicNotationSprites_16
+  - first:
+      213: 3183593226344740335
+    second: MusicNotationSprites_17
+  - first:
+      213: 6695509985633314326
+    second: MusicNotationSprites_18
+  - first:
+      213: 6590344281535660413
+    second: MusicNotationSprites_19
+  - first:
+      213: -4624146086704300711
+    second: MusicNotationSprites_20
+  - first:
+      213: 2568169510514442818
+    second: MusicNotationSprites_21
+  - first:
+      213: 5807840337854294257
+    second: MusicNotationSprites_22
+  - first:
+      213: 55762567948743655
+    second: MusicNotationSprites_23
+  - first:
+      213: -4411978958626739523
+    second: MusicNotationSprites_24
+  - first:
+      213: 5784208382283628430
+    second: MusicNotationSprites_25
+  - first:
+      213: 6217905306289976849
+    second: MusicNotationSprites_26
+  - first:
+      213: 8309750004602294290
+    second: MusicNotationSprites_27
+  - first:
+      213: -961388137312953887
+    second: MusicNotationSprites_28
+  - first:
+      213: 1606895467331474716
+    second: MusicNotationSprites_29
+  - first:
+      213: 8657591453335243661
+    second: MusicNotationSprites_30
+  - first:
+      213: 2111335080426101226
+    second: MusicNotationSprites_31
+  - first:
+      213: 3865804243904568251
+    second: MusicNotationSprites_32
+  - first:
+      213: -8211168823419309953
+    second: MusicNotationSprites_33
+  - first:
+      213: -2526016731742358754
+    second: MusicNotationSprites_34
+  - first:
+      213: 1094447898067334471
+    second: MusicNotationSprites_35
+  - first:
+      213: -4014259625130376034
+    second: MusicNotationSprites_36
+  - first:
+      213: -4710273319467602957
+    second: MusicNotationSprites_37
+  - first:
+      213: -4195094828383299023
+    second: MusicNotationSprites_38
+  - first:
+      213: -7871847189696196312
+    second: MusicNotationSprites_39
+  - first:
+      213: -7937454809053394798
+    second: MusicNotationSprites_40
+  - first:
+      213: -6926016508605080675
+    second: MusicNotationSprites_41
+  - first:
+      213: 8713870243519069775
+    second: MusicNotationSprites_42
+  - first:
+      213: 2942749028366674745
+    second: MusicNotationSprites_43
+  - first:
+      213: -1720055114477717074
+    second: MusicNotationSprites_44
+  - first:
+      213: 2493942645661561845
+    second: MusicNotationSprites_45
+  - first:
+      213: -142331131506639614
+    second: MusicNotationSprites_46
+  - first:
+      213: 5669131992146409978
+    second: MusicNotationSprites_47
+  - first:
+      213: 799148197003138202
+    second: MusicNotationSprites_48
+  - first:
+      213: -2692451295410170033
+    second: MusicNotationSprites_49
+  - first:
+      213: -325319716315269781
+    second: MusicNotationSprites_50
+  - first:
+      213: 4450261217451303340
+    second: MusicNotationSprites_51
+  - first:
+      213: -6196172230647158016
+    second: MusicNotationSprites_52
+  - first:
+      213: -7016364235994963858
+    second: MusicNotationSprites_53
+  - first:
+      213: 4152769845576621892
+    second: MusicNotationSprites_54
+  - first:
+      213: -5864948383987175310
+    second: MusicNotationSprites_55
+  - first:
+      213: -1847931238430942992
+    second: MusicNotationSprites_56
+  - first:
+      213: -1099519915772466748
+    second: MusicNotationSprites_57
+  - first:
+      213: -6305822513329049170
+    second: MusicNotationSprites_58
+  - first:
+      213: 4436486256193505672
+    second: MusicNotationSprites_59
+  - first:
+      213: -7304208060272411485
+    second: MusicNotationSprites_60
+  - first:
+      213: 4005924055599618117
+    second: MusicNotationSprites_61
+  - first:
+      213: -2786690458621527147
+    second: MusicNotationSprites_62
+  - first:
+      213: 5097187860648651153
+    second: MusicNotationSprites_63
+  - first:
+      213: 3099445475696557602
+    second: MusicNotationSprites_64
+  - first:
+      213: -6272331297714188157
+    second: MusicNotationSprites_65
+  - first:
+      213: -5957163598360717847
+    second: MusicNotationSprites_66
+  - first:
+      213: 1410074358467428161
+    second: MusicNotationSprites_67
+  - first:
+      213: 8742989196170189626
+    second: MusicNotationSprites_68
+  - first:
+      213: -5168127645434473174
+    second: MusicNotationSprites_69
+  - first:
+      213: -6158578561217201845
+    second: MusicNotationSprites_70
+  - first:
+      213: -2834718670715951206
+    second: MusicNotationSprites_71
+  - first:
+      213: -2680198989453920744
+    second: MusicNotationSprites_72
+  - first:
+      213: -5880659011123749038
+    second: MusicNotationSprites_73
+  - first:
+      213: -5873798167371846621
+    second: MusicNotationSprites_74
+  - first:
+      213: -5479183843002951347
+    second: MusicNotationSprites_75
+  - first:
+      213: 397570794191176553
+    second: MusicNotationSprites_76
+  - first:
+      213: 7923012325585207716
+    second: MusicNotationSprites_77
+  - first:
+      213: 2754255238664739383
+    second: MusicNotationSprites_78
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MusicNotationSprites_0
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 504
+        width: 40
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfef5d3c619fe5ce0800000000000000
+      internalID: -1414419356777578757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_1
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 516
+        width: 40
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96b92c7c7cbef9b50800000000000000
+      internalID: 6602254822030875497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_2
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 516
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b82a397613ba31150800000000000000
+      internalID: 5842201370309141131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 516
+        width: 24
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 849a4101cc9875fa0800000000000000
+      internalID: -5812025284562212536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_4
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 516
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66df64c999f76ba20800000000000000
+      internalID: 3077787693082934630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_5
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 524
+        width: 24
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 471605b3cc8d4eef0800000000000000
+      internalID: -79700521705774732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_6
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 524
+        width: 16
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68816a5705a882700800000000000000
+      internalID: 515814235509758086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_7
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 524
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a339a8408d62ffd0800000000000000
+      internalID: -2309663261145353307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_8
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 516
+        width: 40
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 801f20f2768b586d0800000000000000
+      internalID: -2988780024380591864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_9
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 530
+        width: 32
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a664e48e9c1c84930800000000000000
+      internalID: 4127762131415090794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_10
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 532
+        width: 48
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4ae2b59c0e9c1fb0800000000000000
+      internalID: -4675688536229090739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_11
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 542
+        width: 48
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9a2eaaeb600812d0800000000000000
+      internalID: -3307893462804845921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_12
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 535
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff5bff1a97fc46530800000000000000
+      internalID: 3847428102997128703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_13
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 500
+        width: 16
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5c9b939e28c7a850800000000000000
+      internalID: 6388294698818837597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_14
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 428
+        width: 40
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f7e46ffe0230afb0800000000000000
+      internalID: -4638652576195876876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_15
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 428
+        width: 59
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea9bc259ad8b762e0800000000000000
+      internalID: -2132532649591522898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_16
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 444
+        width: 6
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3da88f8531f1fb910800000000000000
+      internalID: 1855235739457456851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_17
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 494
+        width: 4
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe53e950c256e2c20800000000000000
+      internalID: 3183593226344740335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_18
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 450
+        width: 40
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61621cb8bda3bec50800000000000000
+      internalID: 6695509985633314326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_19
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 452
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d71c578f43b957b50800000000000000
+      internalID: 6590344281535660413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_20
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 428
+        width: 24
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95d3a7842abb3dfb0800000000000000
+      internalID: -4624146086704300711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_21
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 428
+        width: 24
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 242c3352098f3a320800000000000000
+      internalID: 2568169510514442818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_22
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 428
+        width: 37
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f86df91408999050800000000000000
+      internalID: 5807840337854294257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_23
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 428
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e3395692cb16c000800000000000000
+      internalID: 55762567948743655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_24
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 428
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dba2e86438085c2c0800000000000000
+      internalID: -4411978958626739523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_25
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 428
+        width: 96
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8f3adca0e2a54050800000000000000
+      internalID: 5784208382283628430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_26
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 428
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1163e64aeef6a4650800000000000000
+      internalID: 6217905306289976849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_27
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 428
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 210de9c2a99225370800000000000000
+      internalID: 8309750004602294290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_28
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 428
+        width: 4
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e9df20359678a2f0800000000000000
+      internalID: -961388137312953887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_29
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 438
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c155a71f9e6dc4610800000000000000
+      internalID: 1606895467331474716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_30
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 436
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8b41829e81f52870800000000000000
+      internalID: 8657591453335243661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_31
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 324
+        width: 96
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae95e9eb118fc4d10800000000000000
+      internalID: 2111335080426101226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_32
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 327
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbb11295a7816a530800000000000000
+      internalID: 3865804243904568251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_33
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 324
+        width: 128
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f707451b5711c0e80800000000000000
+      internalID: -8211168823419309953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_34
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 324
+        width: 99
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e13bdc77a29c1fcd0800000000000000
+      internalID: -2526016731742358754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_35
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 326
+        width: 5
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 745f97d8092403f00800000000000000
+      internalID: 1094447898067334471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_36
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 324
+        width: 144
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9449efa32c7a48c0800000000000000
+      internalID: -4014259625130376034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_37
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 324
+        width: 65
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3fb222e3f5fb1aeb0800000000000000
+      internalID: -4710273319467602957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_38
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 332
+        width: 5
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13a922bea7708c5c0800000000000000
+      internalID: -4195094828383299023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_39
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 325
+        width: 4
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 821500410b491c290800000000000000
+      internalID: -7871847189696196312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_40
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 204
+        width: 96
+        height: 104
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29808a5d7ee78d190800000000000000
+      internalID: -7937454809053394798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_41
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 212
+        width: 96
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9b5a185ea8d1ef90800000000000000
+      internalID: -6926016508605080675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_42
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 212
+        width: 56
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4efcc381d2ede870800000000000000
+      internalID: 8713870243519069775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_43
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 195
+        width: 56
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93bebe266aeb6d820800000000000000
+      internalID: 2942749028366674745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_44
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 204
+        width: 24
+        height: 104
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea936739cf22128e0800000000000000
+      internalID: -1720055114477717074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_45
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 212
+        width: 40
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f3fadc6f934c9220800000000000000
+      internalID: 2493942645661561845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_46
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 212
+        width: 72
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20d311a0796560ef0800000000000000
+      internalID: -142331131506639614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_47
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 116
+        width: 27
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af970b0b28dccae40800000000000000
+      internalID: 5669131992146409978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_48
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 190
+        width: 4
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9414451d05271b00800000000000000
+      internalID: 799148197003138202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_49
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 116
+        width: 4
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f475902efcd72aad0800000000000000
+      internalID: -2692451295410170033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_50
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 116
+        width: 16
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b65f89e017b3c7bf0800000000000000
+      internalID: -325319716315269781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_51
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 116
+        width: 24
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca1e1efaff082cd30800000000000000
+      internalID: 4450261217451303340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_52
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 116
+        width: 24
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00be2295f26c20aa0800000000000000
+      internalID: -6196172230647158016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_53
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 116
+        width: 8
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e60e3c2d6edd0ae90800000000000000
+      internalID: -7016364235994963858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_54
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 116
+        width: 32
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44f5c871c2a91a930800000000000000
+      internalID: 4152769845576621892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_55
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 180
+        width: 312
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2707172c4848b9ea0800000000000000
+      internalID: -5864948383987175310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_56
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 140
+        width: 312
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f8d9f35454da56e0800000000000000
+      internalID: -1847931238430942992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_57
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 151
+        width: 312
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c92aec4678bdb0f0800000000000000
+      internalID: -1099519915772466748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_58
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 148
+        width: 5
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea17c5475d73d78a0800000000000000
+      internalID: -6305822513329049170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_59
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 124
+        width: 312
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88901579eb0919d30800000000000000
+      internalID: 4436486256193505672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_60
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 124
+        width: 304
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3acfae1f77d32aa90800000000000000
+      internalID: -7304208060272411485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_61
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 20
+        width: 16
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 548153b44b6e79730800000000000000
+      internalID: 4005924055599618117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_62
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 28
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59bb4eadacfa359d0800000000000000
+      internalID: -2786690458621527147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_63
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 28
+        width: 24
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 199656b6a59dcb640800000000000000
+      internalID: 5097187860648651153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_64
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 28
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22eb5931d31730b20800000000000000
+      internalID: 3099445475696557602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_65
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 76
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3805e2ebae334f8a0800000000000000
+      internalID: -6272331297714188157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_66
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 28
+        width: 24
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e552da0547e35da0800000000000000
+      internalID: -5957163598360717847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_67
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 28
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14f765b7827919310800000000000000
+      internalID: 1410074358467428161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_68
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 28
+        width: 24
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3b5dc00a56555970800000000000000
+      internalID: 8742989196170189626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_69
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 28
+        width: 24
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a259004d94f1748b0800000000000000
+      internalID: -5168127645434473174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_70
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 28
+        width: 24
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b49ff499d65588aa0800000000000000
+      internalID: -6158578561217201845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_71
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 28
+        width: 24
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a97eec1536e09a8d0800000000000000
+      internalID: -2834718670715951206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_72
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 59
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 816fc3a28350ecad0800000000000000
+      internalID: -2680198989453920744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_73
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 28
+        width: 24
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25fd4c459c3b36ea0800000000000000
+      internalID: -5880659011123749038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_74
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 28
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32ce57fffa31c7ea0800000000000000
+      internalID: -5873798167371846621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_75
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 35
+        width: 4
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d49dfb2235706f3b0800000000000000
+      internalID: -5479183843002951347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_76
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 40
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 963c5d8e784748500800000000000000
+      internalID: 397570794191176553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_77
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 28
+        width: 24
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a14c817bb134fd60800000000000000
+      internalID: 7923012325585207716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MusicNotationSprites_78
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 29
+        width: 5
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73ade510c84193620800000000000000
+      internalID: 2754255238664739383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

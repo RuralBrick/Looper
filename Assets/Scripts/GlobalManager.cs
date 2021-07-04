@@ -13,7 +13,7 @@ public class GlobalManager : MonoBehaviour
     TrackParser tp;
 
     public delegate void LaneInput(int lane);
-    public LaneInput LanePressed;
+    public LaneInput LanePressed = delegate { };
 
     [Range(-0.05f, 0.05f)]
     public float calibration = 0f;
@@ -21,6 +21,7 @@ public class GlobalManager : MonoBehaviour
     string currentScene;
 
     SongManager sngm;
+    EditorManager em;
 
     void Awake()
     {
@@ -44,10 +45,10 @@ public class GlobalManager : MonoBehaviour
         SceneManager.sceneLoaded += SetupScenes;
         SceneManager.sceneUnloaded += TeardownScenes;
         // HACK
-        SetupGameScene();
+        SetupEditorScene();
         // end HACK
     }
-    
+
     #region Scenes
     public static void ChangeScene(string sceneName)
     {
@@ -59,6 +60,7 @@ public class GlobalManager : MonoBehaviour
         switch (scene.name)
         {
             case "GameScene": SetupGameScene(); break;
+            case "EditorScene": SetupEditorScene(); break;
         }
         currentScene = scene.name;
     }
@@ -68,6 +70,7 @@ public class GlobalManager : MonoBehaviour
         switch (scene.name)
         {
             case "GameScene": TeardownGameScene(); break;
+            case "EditorScene": TeardownEditorScene(); break;
         }
     }
 
@@ -84,6 +87,19 @@ public class GlobalManager : MonoBehaviour
     {
         LanePressed -= sngm.CheckLane;
         sngm = null;
+    }
+
+    void SetupEditorScene()
+    {
+        em = FindObjectOfType<EditorManager>();
+
+        Song s = sl.FindSong("test track");
+        em.LoadSong(s);
+    }
+
+    void TeardownEditorScene()
+    {
+        em = null;
     }
     #endregion
 }
