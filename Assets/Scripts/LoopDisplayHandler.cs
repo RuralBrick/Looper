@@ -61,6 +61,11 @@ public class LoopDisplayHandler : MonoBehaviour
         metronomeLine.SetPosition(1, CalcLinePosition(beatPos));
     }
 
+    public void HideMetronome()
+    {
+        metronomeLine.enabled = false;
+    }
+
     public void Initialize(int beatsPerBar, int laneCount, float laneWidth)
     {
         this.beatsPerBar = beatsPerBar;
@@ -83,6 +88,8 @@ public class LoopDisplayHandler : MonoBehaviour
         {
             GameObject line = new GameObject("Beat " + (i + 1) + " Line");
             line.transform.parent = transform;
+            line.transform.localPosition = Vector3.zero;
+            line.transform.localScale = Vector3.one;
 
             LineRenderer lr = line.AddComponent<LineRenderer>();
             lr.startColor = lr.endColor = lineColor;
@@ -90,6 +97,7 @@ public class LoopDisplayHandler : MonoBehaviour
             lr.sortingLayerName = "Track";
             lr.sortingOrder = 100;
             lr.startWidth = lr.endWidth = SUB_BEAT_LINE_WIDTH;
+            lr.useWorldSpace = false;
             lr.SetPosition(1, CalcLinePosition(i));
         }
     }
@@ -100,6 +108,8 @@ public class LoopDisplayHandler : MonoBehaviour
         {
             GameObject line = new GameObject("Lane Line " + i);
             line.transform.parent = transform;
+            line.transform.localPosition = Vector3.zero;
+            line.transform.localScale = Vector3.one;
 
             LineRenderer lr = line.AddComponent<LineRenderer>();
             lr.startColor = lr.endColor = lineColor;
@@ -108,6 +118,7 @@ public class LoopDisplayHandler : MonoBehaviour
             lr.sortingOrder = 100;
             lr.loop = true;
             lr.startWidth = lr.endWidth = LANE_LINE_WIDTH;
+            lr.useWorldSpace = false;
             lr.positionCount = LANE_LINE_SUBDIVISIONS;
 
             float lanePercent = (float)i / laneCount;
@@ -128,6 +139,7 @@ public class LoopDisplayHandler : MonoBehaviour
         {
             GameObject dot = new GameObject("Center Dot");
             dot.transform.parent = transform;
+            dot.transform.localPosition = Vector3.zero;
             dot.transform.localScale = new Vector3(LANE_LINE_WIDTH, LANE_LINE_WIDTH, 1f);
 
             SpriteRenderer sr = dot.AddComponent<SpriteRenderer>();
@@ -141,6 +153,8 @@ public class LoopDisplayHandler : MonoBehaviour
         {
             GameObject line = new GameObject("Lane Line 0");
             line.transform.parent = transform;
+            line.transform.localPosition = Vector3.zero;
+            line.transform.localScale = Vector3.one;
 
             LineRenderer lr = line.AddComponent<LineRenderer>();
             lr.startColor = lr.endColor = lineColor;
@@ -149,6 +163,7 @@ public class LoopDisplayHandler : MonoBehaviour
             lr.sortingOrder = 100;
             lr.loop = true;
             lr.startWidth = lr.endWidth = LANE_LINE_WIDTH;
+            lr.useWorldSpace = false;
             lr.positionCount = LANE_LINE_SUBDIVISIONS;
 
             float r = innerGap;
