@@ -56,7 +56,7 @@ public class LoopDisplayHandler : MonoBehaviour
     
     public void SetMetronome(float beatPos)
     {
-        Debug.Assert(initialized && beatPos < beatsPerBar);
+        Debug.Assert(beatsPerBar != 0 && beatPos < beatsPerBar);
 
         metronomeLine.SetPosition(1, CalcLinePosition(beatPos));
     }
@@ -66,20 +66,24 @@ public class LoopDisplayHandler : MonoBehaviour
         metronomeLine.enabled = false;
     }
 
-    public void Initialize(int beatsPerBar, int laneCount, float laneWidth)
+    public void Initialize(int beatsPerBar, int laneCount = 0, float laneWidth = 0f)
     {
         this.beatsPerBar = beatsPerBar;
-        this.laneCount = laneCount;
-        this.laneWidth = laneWidth;
-
-        trackWidth = laneCount * laneWidth;
-        Debug.Assert(trackWidth <= RADIUS);
-        innerGap = RADIUS - trackWidth;
-
         MakeBeatLines();
-        MakeLaneLines();
 
-        initialized = true;
+        if (laneCount != 0 && laneWidth != 0f)
+        {
+            this.laneCount = laneCount;
+            this.laneWidth = laneWidth;
+
+            trackWidth = laneCount * laneWidth;
+            Debug.Assert(trackWidth <= RADIUS);
+            innerGap = RADIUS - trackWidth;
+
+            MakeLaneLines();
+
+            initialized = true;
+        }
     }
 
     void MakeBeatLines()
