@@ -24,11 +24,6 @@ public class SoundManager : MonoBehaviour
 {
     public Sound[] sounds;
 
-    [HideInInspector]
-    public AudioLowPassFilter lowPassFilter;
-    public const float maxFreq = 22000;
-    public const float minFreq = 10;
-
     void Awake()
     {
         foreach (Sound s in sounds)
@@ -190,48 +185,5 @@ public class SoundManager : MonoBehaviour
         Coroutine cr = StartCoroutine(PlayLater(s2, delay));
         StartCoroutine(Fade(s1, FadeDirection.IN, time));
         return cr;
-    }
-
-    IEnumerator Fade(AudioLowPassFilter filter, float time, float? targetFreq = null)
-    {
-        if (targetFreq != null)
-        {
-            filter.cutoffFrequency = maxFreq;
-            filter.enabled = true;
-        }
-        float start = filter.cutoffFrequency;
-        float end = targetFreq != null ? (float)targetFreq : maxFreq;
-        float timeToFreq = (end - start) / time;
-        float timePassed = 0;
-        while (timePassed < time)
-        {
-            filter.cutoffFrequency = start + timePassed * timeToFreq;
-            timePassed += Time.deltaTime;
-            yield return null;
-        }
-        filter.cutoffFrequency = end;
-        if (targetFreq == null)
-            filter.enabled = false;
-        yield return null;
-    }
-
-    public void ActivateLowPassFilter(float time, float targetFrequency)
-    {
-        if (lowPassFilter == null)
-        {
-            Debug.LogWarning("Low Pass Filter not found");
-            return;
-        }
-        StartCoroutine(Fade(lowPassFilter, time, targetFrequency));
-    }
-
-    public void DeactivateLowPassFilter(float time)
-    {
-        if (lowPassFilter == null)
-        {
-            Debug.LogWarning("Low Pass Filter not found");
-            return;
-        }
-        StartCoroutine(Fade(lowPassFilter, time));
     }
 }

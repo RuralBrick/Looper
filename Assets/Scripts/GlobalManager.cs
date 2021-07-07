@@ -22,6 +22,7 @@ public class GlobalManager : MonoBehaviour
 
     SongManager sngm;
     EditorManager em;
+    CalibrationManager cm;
 
     void Awake()
     {
@@ -45,7 +46,7 @@ public class GlobalManager : MonoBehaviour
         SceneManager.sceneLoaded += SetupScenes;
         SceneManager.sceneUnloaded += TeardownScenes;
         // HACK
-        SetupEditorScene();
+        SetupCalibrationScene();
         // end HACK
     }
 
@@ -61,6 +62,7 @@ public class GlobalManager : MonoBehaviour
         {
             case "GameScene": SetupGameScene(); break;
             case "EditorScene": SetupEditorScene(); break;
+            case "CalibrationScene": SetupCalibrationScene(); break;
         }
         currentScene = scene.name;
     }
@@ -71,6 +73,7 @@ public class GlobalManager : MonoBehaviour
         {
             case "GameScene": TeardownGameScene(); break;
             case "EditorScene": TeardownEditorScene(); break;
+            case "CalibrationScene": TeardownCalibrationScene(); break;
         }
     }
 
@@ -100,6 +103,30 @@ public class GlobalManager : MonoBehaviour
     void TeardownEditorScene()
     {
         em = null;
+    }
+
+    void SetupCalibrationScene()
+    {
+        cm = FindObjectOfType<CalibrationManager>();
+        LanePressed += cm.Hit;
+    }
+
+    void TeardownCalibrationScene()
+    {
+        LanePressed -= cm.Hit;
+        cm = null;
+    }
+    #endregion
+
+    #region Sounds
+    public void StartMetronome()
+    {
+        sndm.Play("metronome");
+    }
+
+    public void StopMetronome()
+    {
+        sndm.Stop("metronome");
     }
     #endregion
 }

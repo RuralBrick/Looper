@@ -21,6 +21,8 @@ public class EditorManager : MonoBehaviour
     {
         ldm = FindObjectOfType<LoopDisplayHandler>();
         sdm = FindObjectOfType<SongDisplayManager>();
+        offsetField = GameObject.Find("Offset Field").transform.GetComponent<InputField>();
+        offsetSlider = GameObject.Find("Offset Slider").transform.GetComponent<Slider>();
     }
 
     void Start()
@@ -35,9 +37,6 @@ public class EditorManager : MonoBehaviour
         ldm.Initialize(s.beatsPerBar, LANE_COUNT, LANE_WIDTH);
         
         sdm.Initialize(s);
-
-        offsetField = GameObject.Find("Offset Field").transform.GetComponent<InputField>();
-        offsetSlider = GameObject.Find("Offset Slider").transform.GetComponent<Slider>();
 
         GameObject.Find("Title Field").transform.GetComponent<InputField>().text = s.title;
         offsetField.text = s.offset.ToString();
