@@ -1,21 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EditorManager : MonoBehaviour
 {
-    const float SECONDS_PER_MINUTE = 60f;
     const int LANE_COUNT = 4;
     const float LANE_WIDTH = 0.75f;
-    const int NUM_BUFFER_BARS = 2;
 
-    float[] samples;
-    float samplesPerBar;
-
+    Song currentSong;
     int currentBar;
 
     LoopDisplayHandler ldm;
     SongDisplayManager sdm;
+
+    InputField offsetField;
+    Slider offsetSlider;
 
     void Awake()
     {
@@ -30,75 +30,69 @@ public class EditorManager : MonoBehaviour
 
     public void LoadSong(Song s)
     {
-        samples = new float[s.file.samples * s.file.channels];
-        s.file.GetData(samples, 0);
-
-        samplesPerBar = s.beatsPerBar * s.file.frequency * SECONDS_PER_MINUTE / s.tempo;
+        currentSong = s;
 
         ldm.Initialize(s.beatsPerBar, LANE_COUNT, LANE_WIDTH);
+        
+        sdm.Initialize(s);
+
+        offsetField = GameObject.Find("Offset Field").transform.GetComponent<InputField>();
+        offsetSlider = GameObject.Find("Offset Slider").transform.GetComponent<Slider>();
+
+        GameObject.Find("Title Field").transform.GetComponent<InputField>().text = s.title;
+        offsetField.text = s.offset.ToString();
+        offsetSlider.value = s.offset;
 
         currentBar = 0;
-        DisplayCurrentBar();
+        sdm.DisplayBar(currentBar);
     }
 
-    int PhraseBarCount()
+    int CurrentBar
     {
-        return 2 * NUM_BUFFER_BARS + 1;
-    }
-
-    void DisplayCurrentBar()
-    {
-        float[] displaySamples = new float[(int)(PhraseBarCount() * samplesPerBar)];
-
-        int startBar = currentBar - NUM_BUFFER_BARS;
-        int start = (int)(startBar * samplesPerBar);
-        int endBar = currentBar + NUM_BUFFER_BARS + 1;
-        int end = (int)(endBar * samplesPerBar) - 1;
-        end = end < samples.Length ? end : samples.Length;
-
-        int i = start;
-        int j = 0;
-        for (; i < 0; i++)
+        get => currentBar;
+        set
         {
-            displaySamples[j] = 0f;
-            j++;
+            if (value < 0) currentBar = 0;
+            else currentBar = value;
+            sdm.DisplayBar(currentBar);
         }
-        for (; i < end; i++)
-        {
-            displaySamples[j] = samples[i];
-            j++;
-        }
-        for (; j < displaySamples.Length; j++)
-        {
-            displaySamples[j] = 0f;
-        }
-
-        sdm.UpdateWaveform(displaySamples);
     }
 
     public void DisplayNextBar()
     {
-        currentBar++;
-        DisplayCurrentBar();
+        CurrentBar++;
     }
 
     public void DisplayPrevBar()
     {
-        currentBar--;
-        if (currentBar < 0) currentBar = 0;
-        DisplayCurrentBar();
+        CurrentBar--;
     }
 
     public void DisplayNextPhrase()
     {
-        currentBar += PhraseBarCount();
-        DisplayCurrentBar();
+        CurrentBar += SongDisplayManager.BarsDisplayed();
     }
 
     public void DisplayPrevPhrase()
     {
-        currentBar -= PhraseBarCount();
-        if (currentBar < 0) currentBar = 0;
-        DisplayCurrentBar();
+        CurrentBar -= SongDisplayManager.BarsDisplayed(); 
+    }
+
+    public void SetOffset(string textOffset)
+    {
+        float newOffset;
+        if (float.TryParse(textOffset, out newOffset))
+        {
+            currentSong.offset = newOffset;
+            offsetSlider.value = newOffset;
+            sdm.SetOffset(currentBar, newOffset);
+        }
+    }
+
+    public void SetOffset(float newOffset)
+    {
+        currentSong.offset = newOffset;
+        offsetField.text = newOffset.ToString();
+        sdm.SetOffset(currentBar, newOffset);
     }
 }
