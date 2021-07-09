@@ -5,9 +5,6 @@ using UnityEngine;
 public class SongManager : MonoBehaviour
 {
     const float SECONDS_PER_MINUTE = 60f;
-    const int LANE_COUNT = 4;
-    const float LANE_WIDTH = 0.75f;
-    const float NOTE_WIDTH = 0.65f;
     const float BASE_SONG_WAIT = 3f;
     const float PERFECT_MARGIN = 0.075f;
     const float GREAT_MARGIN = 0.25f;
@@ -18,17 +15,17 @@ public class SongManager : MonoBehaviour
     float songOffset = 0f;
 
     List<Note> notes = new List<Note>();
-    List<NoteHandler>[] activeNotes = new List<NoteHandler>[LANE_COUNT];
+    List<NoteHandler>[] activeNotes = new List<NoteHandler>[LoopDisplayHandler.LANE_COUNT];
 
     AudioSource song;
     Coroutine metCoroutine;
     LoopDisplayHandler ldm;
 
-    public GameObject[] notePrefabs = new GameObject[LANE_COUNT];
+    public GameObject[] notePrefabs = new GameObject[LoopDisplayHandler.LANE_COUNT];
 
     public SongManager()
     {
-        for (int i = 0; i < LANE_COUNT; i++)
+        for (int i = 0; i < LoopDisplayHandler.LANE_COUNT; i++)
             activeNotes[i] = new List<NoteHandler>();
     }
 
@@ -46,24 +43,10 @@ public class SongManager : MonoBehaviour
         tempo = s.tempo;
         songOffset = s.offset;
 
-        ldm.Initialize(beatsPerBar, LANE_COUNT, LANE_WIDTH);
+        foreach (Note n in GlobalManager.instance.LoadTrack(s.trackFile))
+            notes.Add(n);
 
-        Note testNote = new Note();
-        testNote.lane = 0;
-        testNote.beatPos = 0f;
-        testNote.start = 0f;
-        testNote.stop = 16f;
-
-        notes.Add(testNote);
-
-        testNote.beatPos = 1f;
-        notes.Add(testNote);
-
-        testNote.beatPos = 2f;
-        notes.Add(testNote);
-
-        testNote.beatPos = 3f;
-        notes.Add(testNote);
+        ldm.Initialize(beatsPerBar);
 
         StartSong();
     }
@@ -92,9 +75,8 @@ public class SongManager : MonoBehaviour
                 GameObject notePrefab = notePrefabs[note.lane];
                 
                 GameObject activeNote = Instantiate(notePrefab);
-                Vector3 pos = ldm.CalcNotePosition(note.lane, note.beatPos);
-                activeNote.transform.position = pos;
-                activeNote.transform.localScale = new Vector3(NOTE_WIDTH, NOTE_WIDTH, 1f);
+                activeNote.transform.position = ldm.CalcNotePosition(note.lane, note.beatPos);
+                activeNote.transform.localScale = ldm.CalcNoteScale();
 
                 NoteHandler nh = activeNote.GetComponent<NoteHandler>();
                 nh.beatPos = note.beatPos;

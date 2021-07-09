@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class LoopDisplayHandler : MonoBehaviour
 {
+    public const int LANE_COUNT = 4;
+    
     const float RADIUS = 4f;
+    const float LANE_WIDTH = 0.75f;
+    const float TRACK_WIDTH = LANE_COUNT * LANE_WIDTH; // NOTE: Make sure TRACK_WIDTH <= RADIUS
+    const float INNER_GAP = RADIUS - TRACK_WIDTH;
+    const float NOTE_WIDTH = 0.7f;
     const float SUB_BEAT_LINE_WIDTH = 0.025f;
     const float LANE_LINE_WIDTH = 0.025f;
     const int LANE_LINE_SUBDIVISIONS = 360;
 
-    bool initialized = false;
     int beatsPerBar = 0;
-    int laneCount = 0;
-    float laneWidth = 0f;
-    float trackWidth = 0f;
-    float innerGap = 0f;
-
+    
     public Color lineColor;
     public Sprite circleSprite;
     public Material lineMaterial;
@@ -26,6 +27,11 @@ public class LoopDisplayHandler : MonoBehaviour
     void Awake()
     {
         metronomeLine = transform.Find("Metronome Line").GetComponent<LineRenderer>();
+    }
+
+    void Start()
+    {
+        MakeLaneLines();
     }
 
     Vector3 CalcLinePosition(float beatPos)
@@ -39,21 +45,32 @@ public class LoopDisplayHandler : MonoBehaviour
     
     public Vector3 CalcNotePosition(int lane, float beatPos)
     {
-        Debug.Assert(initialized && lane <= laneCount && beatPos < beatsPerBar);
+        Debug.Assert(beatsPerBar != 0 && beatPos < beatsPerBar);
 
-        float lanePercent = (float)lane / laneCount;
-        float trackR = lanePercent * trackWidth;
-        float r = trackR + innerGap;
-        r += laneWidth / 2;
+        float lanePercent = (float)lane / LANE_COUNT;
+        float trackR = lanePercent * TRACK_WIDTH;
+        float r = trackR + INNER_GAP;
+        r += LANE_WIDTH / 2f;
+        Debug.Assert(Mathf.Approximately(transform.localScale.x, transform.localScale.y));
+        r *= transform.localScale.x;
 
         float barPercent = beatPos / beatsPerBar;
         float angle = (barPercent + 0.25f) * 2f * Mathf.PI;
         float x = r * Mathf.Cos(angle);
+        x += transform.position.x;
         float y = r * Mathf.Sin(angle);
+        y += transform.position.y;
 
         return new Vector3(x, y, 0);
     }
-    
+
+    public Vector3 CalcNoteScale()
+    {
+        Debug.Assert(Mathf.Approximately(transform.localScale.x, transform.localScale.y));
+        float scale = NOTE_WIDTH * transform.localScale.x;
+        return new Vector3(scale, scale, 1);
+    }
+
     public void SetMetronome(float beatPos)
     {
         Debug.Assert(beatsPerBar != 0 && beatPos < beatsPerBar);
@@ -66,24 +83,10 @@ public class LoopDisplayHandler : MonoBehaviour
         metronomeLine.enabled = false;
     }
 
-    public void Initialize(int beatsPerBar, int laneCount = 0, float laneWidth = 0f)
+    public void Initialize(int beatsPerBar)
     {
         this.beatsPerBar = beatsPerBar;
         MakeBeatLines();
-
-        if (laneCount != 0 && laneWidth != 0f)
-        {
-            this.laneCount = laneCount;
-            this.laneWidth = laneWidth;
-
-            trackWidth = laneCount * laneWidth;
-            Debug.Assert(trackWidth <= RADIUS);
-            innerGap = RADIUS - trackWidth;
-
-            MakeLaneLines();
-
-            initialized = true;
-        }
     }
 
     void MakeBeatLines()
@@ -96,19 +99,14 @@ public class LoopDisplayHandler : MonoBehaviour
             line.transform.localScale = Vector3.one;
 
             LineRenderer lr = line.AddComponent<LineRenderer>();
-            lr.startColor = lr.endColor = lineColor;
-            lr.material = lineMaterial;
-            lr.sortingLayerName = "Track";
-            lr.sortingOrder = 100;
-            lr.startWidth = lr.endWidth = SUB_BEAT_LINE_WIDTH;
-            lr.useWorldSpace = false;
+            GlobalManager.FormatLine(ref lr, lineColor, lineMaterial, "Track", 100, SUB_BEAT_LINE_WIDTH);
             lr.SetPosition(1, CalcLinePosition(i));
         }
     }
 
     void MakeLaneLines()
     {
-        for (int i = laneCount; i > 0; i--)
+        for (int i = LANE_COUNT; i > 0; i--)
         {
             GameObject line = new GameObject("Lane Line " + i);
             line.transform.parent = transform;
@@ -116,18 +114,13 @@ public class LoopDisplayHandler : MonoBehaviour
             line.transform.localScale = Vector3.one;
 
             LineRenderer lr = line.AddComponent<LineRenderer>();
-            lr.startColor = lr.endColor = lineColor;
-            lr.material = lineMaterial;
-            lr.sortingLayerName = "Track";
-            lr.sortingOrder = 100;
+            GlobalManager.FormatLine(ref lr, lineColor, lineMaterial, "Track", 100, LANE_LINE_WIDTH);
             lr.loop = true;
-            lr.startWidth = lr.endWidth = LANE_LINE_WIDTH;
-            lr.useWorldSpace = false;
             lr.positionCount = LANE_LINE_SUBDIVISIONS;
 
-            float lanePercent = (float)i / laneCount;
-            float trackR = lanePercent * trackWidth;
-            float r = trackR + innerGap;
+            float lanePercent = (float)i / LANE_COUNT;
+            float trackR = lanePercent * TRACK_WIDTH;
+            float r = trackR + INNER_GAP;
             Vector3[] pos = new Vector3[LANE_LINE_SUBDIVISIONS];
             for (int angle = 0; angle < LANE_LINE_SUBDIVISIONS; angle++)
             {
@@ -139,7 +132,7 @@ public class LoopDisplayHandler : MonoBehaviour
             lr.SetPositions(pos);
         }
 
-        if (innerGap < Mathf.Epsilon)
+        if (Mathf.Approximately(INNER_GAP, 0f))
         {
             GameObject dot = new GameObject("Center Dot");
             dot.transform.parent = transform;
@@ -161,16 +154,11 @@ public class LoopDisplayHandler : MonoBehaviour
             line.transform.localScale = Vector3.one;
 
             LineRenderer lr = line.AddComponent<LineRenderer>();
-            lr.startColor = lr.endColor = lineColor;
-            lr.material = lineMaterial;
-            lr.sortingLayerName = "Track";
-            lr.sortingOrder = 100;
+            GlobalManager.FormatLine(ref lr, lineColor, lineMaterial, "Track", 100, LANE_LINE_WIDTH);
             lr.loop = true;
-            lr.startWidth = lr.endWidth = LANE_LINE_WIDTH;
-            lr.useWorldSpace = false;
             lr.positionCount = LANE_LINE_SUBDIVISIONS;
 
-            float r = innerGap;
+            float r = INNER_GAP;
             Vector3[] pos = new Vector3[LANE_LINE_SUBDIVISIONS];
             for (int angle = 0; angle < LANE_LINE_SUBDIVISIONS; angle++)
             {

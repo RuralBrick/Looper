@@ -9,7 +9,10 @@ public class SongDisplayManager : MonoBehaviour
     const float DISPLAY_HEIGHT = 1.5f;
     const int NUM_BUFFER_BARS = 2;
     const float BAR_LINE_WIDTH = 0.025f;
+    const float NOTE_LINE_WIDTH = 0.05f;
+    const float HIT_NOTE_LENGTH = 0.1f;
 
+    int beatsPerBar;
     float[] samples;
     float samplesPerBar;
     float samplesPerSecond;
@@ -20,6 +23,15 @@ public class SongDisplayManager : MonoBehaviour
 
     LineRenderer waveform;
     GameObject window;
+
+    public Color[] laneColors = new Color[LoopDisplayHandler.LANE_COUNT];
+
+    struct NoteLine
+    {
+        public LineRenderer duration;
+        public List<LineRenderer> hits;
+    }
+    List<NoteLine> noteLines = new List<NoteLine>();
 
     void Awake()
     {
@@ -41,14 +53,14 @@ public class SongDisplayManager : MonoBehaviour
         return 2 * NUM_BUFFER_BARS + 1;
     }
 
+    float Right { get => DISPLAY_WIDTH / 2f; }
+    float Left { get => -(DISPLAY_WIDTH / 2f); }
+    float Top { get => DISPLAY_HEIGHT / 2f; }
+    float Bottom { get => -(DISPLAY_HEIGHT / 2f); }
+    float BarWidth { get => DISPLAY_WIDTH / BarsDisplayed(); }
+    
     void MakeBarLines()
     {
-        float left = -(DISPLAY_WIDTH / 2f);
-        float barWidth = DISPLAY_WIDTH / BarsDisplayed();
-
-        float top = DISPLAY_HEIGHT / 2f;
-        float bottom = -(DISPLAY_HEIGHT / 2f);
-
         for (int i = 1; i < BarsDisplayed(); i++)
         {
             GameObject line = new GameObject("Bar Line " + i);
@@ -57,20 +69,17 @@ public class SongDisplayManager : MonoBehaviour
             line.transform.localScale = Vector3.one;
 
             LineRenderer lr = line.AddComponent<LineRenderer>();
-            lr.startColor = lr.endColor = lineColor;
-            lr.material = lineMaterial;
-            lr.sortingLayerName = "Track";
-            lr.sortingOrder = 105;
-            lr.startWidth = lr.endWidth = BAR_LINE_WIDTH;
-            lr.useWorldSpace = false;
+            GlobalManager.FormatLine(ref lr, lineColor, lineMaterial, "Track", 105, BAR_LINE_WIDTH);
 
-            float x = left + i * barWidth;
-            lr.SetPositions(new Vector3[] { new Vector3(x, top, 0), new Vector3(x, bottom, 0) });
+            float x = Left + i * BarWidth;
+            lr.SetPositions(new Vector3[] { new Vector3(x, Top, 0), new Vector3(x, Bottom, 0) });
         }
     }
 
     public void Initialize(Song s)
     {
+        beatsPerBar = s.beatsPerBar;
+
         samples = new float[s.file.samples * s.file.channels];
         s.file.GetData(samples, 0);
 
@@ -78,17 +87,18 @@ public class SongDisplayManager : MonoBehaviour
         samplesPerSecond = s.file.frequency;
     }
 
+    float HalfHeight { get => DISPLAY_HEIGHT / 2f; }
+    
     void UpdateWaveform(float[] samples)
     {
-        Vector3[] positions = new Vector3[samples.Length];
-        
-        float left = -(DISPLAY_WIDTH / 2f);
-        float halfHeight = DISPLAY_HEIGHT / 2f;
         float unitLength = DISPLAY_WIDTH / samples.Length;
+
+        Vector3[] positions = new Vector3[samples.Length];
+
         for (int i = 0; i < samples.Length; i++)
         {
-            float x = left + i * unitLength;
-            float y = samples[i] * halfHeight;
+            float x = Left + i * unitLength;
+            float y = samples[i] * HalfHeight;
             positions[i] = new Vector3(x, y, 0);
         }
         
@@ -96,13 +106,13 @@ public class SongDisplayManager : MonoBehaviour
         waveform.SetPositions(positions);
     }
 
-    public void DisplayBar(int bar)
+    public void DisplayBar()
     {
         float[] displaySamples = new float[(int)(BarsDisplayed() * samplesPerBar)];
 
-        int startBar = bar - NUM_BUFFER_BARS;
+        int startBar = EditorManager.currentBar - NUM_BUFFER_BARS;
         int start = (int)(startBar * samplesPerBar - offsetSamples);
-        int endBar = bar + NUM_BUFFER_BARS + 1;
+        int endBar = EditorManager.currentBar + NUM_BUFFER_BARS + 1;
         int end = (int)(endBar * samplesPerBar - offsetSamples) - 1;
         end = end < samples.Length ? end : samples.Length;
 
@@ -126,9 +136,95 @@ public class SongDisplayManager : MonoBehaviour
         UpdateWaveform(displaySamples);
     }
 
-    public void SetOffset(int bar, float newOffset)
+    public void SetOffset(float newOffset)
     {
         offsetSamples = newOffset * samplesPerSecond;
-        DisplayBar(bar);
+        DisplayBar();
+    }
+
+    bool NoteInPhrase(float start, float stop)
+    {
+        float phraseStart = (EditorManager.currentBar - NUM_BUFFER_BARS) * beatsPerBar;
+        float phraseEnd = (EditorManager.currentBar + NUM_BUFFER_BARS) * beatsPerBar;
+        return (phraseStart < stop - Mathf.Epsilon) && (start < phraseEnd - Mathf.Epsilon);
+    }
+
+    float LaneToY { get => DISPLAY_HEIGHT / (LoopDisplayHandler.LANE_COUNT + 1); }
+    float CalcLaneY(int lane)
+    {
+        float disp = (lane + 1) * LaneToY;
+        return Bottom + disp;
+    }
+
+    float BeatToX { get => DISPLAY_WIDTH / (beatsPerBar * BarsDisplayed()); }
+    float BeatPosToX { get => BarWidth / beatsPerBar; }
+
+    public void SpawnNoteLines(List<Ref<Note>> notes)
+    {
+        for (int i = noteLines.Count - 1; i >= 0; i--)
+        {
+            foreach (LineRenderer hit in noteLines[i].hits)
+                Destroy(hit.gameObject);
+            Destroy(noteLines[i].duration.gameObject);
+            noteLines.RemoveAt(i);
+        }
+
+        foreach (Ref<Note> n in notes)
+        {
+            if (NoteInPhrase(n.Value.start, n.Value.stop))
+            {
+                NoteLine newNoteLine = new NoteLine();
+
+                GameObject durationObj = new GameObject("Note Line");
+                durationObj.transform.parent = transform;
+                durationObj.transform.localPosition = new Vector3(Left, CalcLaneY(n.Value.lane));
+
+                newNoteLine.duration = durationObj.AddComponent<LineRenderer>();
+                GlobalManager.FormatLine(ref newNoteLine.duration, laneColors[n.Value.lane], lineMaterial, "Track", 150, NOTE_LINE_WIDTH);
+
+                int leftBar = EditorManager.currentBar - NUM_BUFFER_BARS;
+                float leftBeat = leftBar * beatsPerBar;
+                float startBeatOffsetFromLeft = n.Value.start - leftBeat;
+                float startOffsetFromLeft = startBeatOffsetFromLeft * BeatToX;
+                float durationStart = startOffsetFromLeft < 0f ? 0f : startOffsetFromLeft;
+                Vector3 durationLeft = new Vector3(durationStart, 0, 0);
+
+                float stopBeatOffsetFromLeft = n.Value.stop - leftBeat;
+                float stopOffsetFromLeft = stopBeatOffsetFromLeft * BeatToX;
+                float durationStop = stopOffsetFromLeft > DISPLAY_WIDTH ? DISPLAY_WIDTH : stopOffsetFromLeft;
+                Vector3 durationRight = new Vector3(durationStop, 0, 0);
+
+                newNoteLine.duration.SetPositions(new Vector3[] { durationLeft, durationRight });
+
+
+                newNoteLine.hits = new List<LineRenderer>();
+
+                Color hitColor = Color.HSVToRGB(n.Value.beatPos / beatsPerBar, 1f, 1f);
+
+                float firstHit = n.Value.beatPos * BeatPosToX;
+
+                while (firstHit < DISPLAY_WIDTH && firstHit < durationStart)
+                    firstHit += BarWidth;
+                for (float x = firstHit; x < durationStop; x += BarWidth)
+                {
+                    GameObject hitObj = new GameObject("Hit Mark");
+                    hitObj.transform.parent = durationObj.transform;
+                    hitObj.transform.localPosition = Vector3.zero;
+
+                    LineRenderer newHit = hitObj.AddComponent<LineRenderer>();
+                    GlobalManager.FormatLine(ref newHit, hitColor, lineMaterial, "Track", 155, NOTE_LINE_WIDTH);
+
+                    Vector3 hitLeft = new Vector3(x, 0, 0);
+                    Vector3 hitRight = new Vector3(x + HIT_NOTE_LENGTH, 0, 0);
+
+                    newHit.SetPositions(new Vector3[] { hitLeft, hitRight });
+
+                    newNoteLine.hits.Add(newHit);
+                }
+
+
+                noteLines.Add(newNoteLine);
+            }
+        }
     }
 }
