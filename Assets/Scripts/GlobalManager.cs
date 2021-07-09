@@ -46,9 +46,46 @@ public class GlobalManager : MonoBehaviour
         SceneManager.sceneLoaded += SetupScenes;
         SceneManager.sceneUnloaded += TeardownScenes;
         // HACK
-        SetupCalibrationScene();
+        SetupGameScene();
         // end HACK
     }
+
+    #region Helper
+    public static void FormatLine(ref LineRenderer line, Color color, Material material, 
+        string sortingLayer, int sortingOrder, float width, bool useWorldSpace = false)
+    {
+        line.startColor = line.endColor = color;
+        line.material = material;
+        line.sortingLayerName = sortingLayer;
+        line.sortingOrder = sortingOrder;
+        line.startWidth = line.endWidth = width;
+        line.useWorldSpace = useWorldSpace;
+    }
+
+    public void SaveSong(Song s, Note[] notes)
+    {
+        // TODO: Save to SongLibrary too
+
+        tp.SaveTrack(notes, s.trackFile);
+    }
+
+    public Note[] LoadTrack(string fileName)
+    {
+        Note[] track = tp.LoadTrack(fileName);
+
+        if (track == null)
+            return new Note[0];
+
+        return track;
+    }
+    #endregion
+
+    #region Input
+    public Vector3 MousePosition()
+    {
+        return im.mousePos;
+    }
+    #endregion
 
     #region Scenes
     public static void ChangeScene(string sceneName)

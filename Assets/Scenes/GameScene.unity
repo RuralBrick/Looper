@@ -354,6 +354,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[0].trackFile
+      value: testLooper
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.data[0].beatsPerBar
       value: 4
       objectReference: {fileID: 0}

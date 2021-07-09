@@ -12,6 +12,7 @@ public class Song
     public int beatsPerBar = 4;
     public int beatUnit = 4;
     public float tempo;
+    public string trackFile;
 }
 
 public class SongLibrary : MonoBehaviour
