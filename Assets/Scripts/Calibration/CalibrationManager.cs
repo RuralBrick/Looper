@@ -14,6 +14,8 @@ public class CalibrationManager : MonoBehaviour
     float currentTime;
     float syncOffset;
     float hitOffset;
+    List<float> offsetData;
+
     bool syncConfirmed = false;
 
     Text instructionsText;
@@ -34,8 +36,8 @@ public class CalibrationManager : MonoBehaviour
 
     void Start()
     {
-        syncOffset = 0f;
-        hitOffset = 0f;
+        syncOffset = GlobalManager.instance.syncOffset;
+        hitOffset = GlobalManager.instance.hitOffset;
         syncConfirmed = false;
 
         ldm.Initialize(4);
@@ -86,14 +88,48 @@ public class CalibrationManager : MonoBehaviour
         syncSlider.value = syncOffset;
     }
 
-    public void ConfirmSync()
+    void ConfirmSync()
     {
-        Debug.Log(syncOffset);
+        Debug.Log("Sync: " + syncOffset);
         GameObject.Find("Sync Controls").SetActive(false);
 
         instructionsText.text = instructions[1];
 
+        offsetData = new List<float>();
         syncConfirmed = true;
+    }
+
+    float CalcHitOffset()
+    {
+        if (offsetData == null)
+            return 0f;
+
+        float sum = 0f;
+        foreach (float o in offsetData)
+            sum += o;
+        return sum / offsetData.Count;
+    }
+
+    void ConfirmCalibration()
+    {
+        hitOffset = CalcHitOffset();
+
+        Debug.Log("Hits: " + hitOffset);
+
+        GlobalManager.instance.syncOffset = syncOffset;
+        GlobalManager.instance.hitOffset = hitOffset;
+
+        Debug.Log("Calibration finished");
+
+        // TODO: Switch scene
+    }
+
+    public void Confirm()
+    {
+        if (!syncConfirmed)
+            ConfirmSync();
+        else
+            ConfirmCalibration();
     }
 
     public void Hit(int lane)
@@ -103,16 +139,11 @@ public class CalibrationManager : MonoBehaviour
         if (syncConfirmed)
         {
             float adjustedTime = currentTime - syncOffset;
-
-            float plusCurrent = currentTime + halfBeat;
             float plusAdjusted = adjustedTime + halfBeat;
-            float modCurrent = plusCurrent % SECONDS_PER_BEAT;
             float modAjusted = plusAdjusted % SECONDS_PER_BEAT;
-            float offset1 = modCurrent - halfBeat;
-            float offset2 = modAjusted - halfBeat;
+            float offset = modAjusted - halfBeat;
 
-            Debug.Log($"Offset 1: {offset1}\n" +
-                $"Offset 2: {offset2}");
+            offsetData.Add(offset);
         }
     }
 }

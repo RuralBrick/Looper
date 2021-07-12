@@ -330,6 +330,14 @@ PrefabInstance:
       value: Global Manager
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: hitOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: syncOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: calibration
       value: 0.05
       objectReference: {fileID: 0}

@@ -15,10 +15,8 @@ public class GlobalManager : MonoBehaviour
     public delegate void LaneInput(int lane);
     public LaneInput LanePressed = delegate { };
 
-    [Range(-0.05f, 0.05f)]
-    public float calibration = 0f;
-
-    string currentScene;
+    public float syncOffset = 0f;
+    public float hitOffset = 0f;
 
     SongManager sngm;
     EditorManager em;
@@ -94,7 +92,6 @@ public class GlobalManager : MonoBehaviour
             case "EditorScene": SetupEditorScene(); break;
             case "CalibrationScene": SetupCalibrationScene(); break;
         }
-        currentScene = scene.name;
     }
 
     public void TeardownScenes(Scene scene)
