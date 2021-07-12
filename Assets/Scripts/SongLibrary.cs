@@ -12,7 +12,21 @@ public class Song
     public int beatsPerBar = 4;
     public int beatUnit = 4;
     public float tempo;
-    public string trackFile;
+    public TextAsset trackFile;
+
+    public Note[] Track
+    {
+        get
+        {
+            if (trackFile)
+                return GlobalManager.instance.ParseTrack(trackFile);
+            return new Note[0];
+        }
+    }
+
+    public string TrackName {
+        get => trackFile ? trackFile.name : "";
+    }
 }
 
 public class SongLibrary : MonoBehaviour
@@ -24,7 +38,7 @@ public class SongLibrary : MonoBehaviour
         Song s = Array.Find(songs, song => song.title == title);
         if (s == null)
         {
-            Debug.LogWarningFormat($"Song {title} not found");
+            Debug.LogWarning($"Song {title} not found");
             return null;
         }
         return s;

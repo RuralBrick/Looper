@@ -111,7 +111,7 @@ public class CalibrationManager : MonoBehaviour
             float offset1 = modCurrent - halfBeat;
             float offset2 = modAjusted - halfBeat;
 
-            Debug.LogFormat($"Offset 1: {offset1}\n" +
+            Debug.Log($"Offset 1: {offset1}\n" +
                 $"Offset 2: {offset2}");
         }
     }

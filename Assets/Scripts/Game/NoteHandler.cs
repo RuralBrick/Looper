@@ -4,22 +4,46 @@ using UnityEngine;
 
 public class NoteHandler : MonoBehaviour
 {
+    const float SECONDS_PER_MINUTE = 60f;
     const float SIZE_INCREASE = 1.1f;
     const float SIZE_CHANGE_TIME = 0.1f;
 
-    public float beatPos;
-    public float end;
-
     SpriteRenderer sr;
+
+    float stop;
+    float fadeTime;
+    List<float> hits;
 
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
     }
 
-    void Start()
+    public static bool ShouldSpawn(float beat, float start)
     {
+        return (start - beat) < 1f;
+    }
+
+    public void Initialize(Note n, int beatsPerBar, float tempo)
+    {
+        stop = n.stop;
+        fadeTime = SECONDS_PER_MINUTE / tempo;
+
+        float startBar = Mathf.Floor(n.start / beatsPerBar);
+        float firstHit = startBar * beatsPerBar + n.beatPos;
+        if (n.start % beatsPerBar > n.beatPos) firstHit += beatsPerBar;
+
+        hits = new List<float>();
+
+        for (float h = firstHit; h < n.stop; h += beatsPerBar)
+            hits.Add(h);
+
         StartCoroutine(FadeIn());
+    }
+
+    public bool ShouldDespawn(float beat)
+    {
+        return beat > stop;
     }
 
     public void Disappear()
@@ -27,49 +51,79 @@ public class NoteHandler : MonoBehaviour
         StartCoroutine(FadeOut());
     }
 
-    public void GetHit()
+    // TODO: Figure out misses
+
+    public bool GetHit(float beat, SongManager.HitRange[] hitRanges, out SongManager.HitRangeType hit, out bool late)
     {
-        // TODO: Prevent multiple hits on same beat
-        StartCoroutine(Pop());
+        for (int i = 0; i < hits.Count; i++)
+        {
+            float diff = beat - hits[i];
+            float dist = Mathf.Abs(diff);
+
+            for (int j = 0; j < hitRanges.Length; j++)
+            {
+                if (dist <= hitRanges[j].margin)
+                {
+                    hit = hitRanges[j].type;
+                    late = diff > 0;
+                    StartCoroutine(Pop());
+                    hits.RemoveAt(i);
+                    return true;
+                }
+            }
+        }
+
+        hit = SongManager.HitRangeType.None;
+        late = false;
+
+        return false;
     }
 
     IEnumerator FadeIn()
     {
         Color color = sr.color;
-        float alpha = 0f;
-        color.a = alpha;
+        color.a = 0f;
         sr.color = color;
-        while (alpha < 1f)
+
+        yield return new WaitForEndOfFrame();
+
+        float timePassed = 0f;
+
+        while (timePassed < fadeTime)
         {
-            // HACK
-            alpha += Time.deltaTime;
-            if (alpha > 1f)
-                alpha = 1f;
-            color.a = alpha;
+            timePassed += Time.deltaTime;
+            color.a = timePassed / fadeTime;
             sr.color = color;
-            // end HACK
             yield return null;
         }
+
+        color.a = 1f;
+        sr.color = color;
+
+        yield return null;
     }
 
     IEnumerator FadeOut()
     {
         Color color = sr.color;
-        float alpha = 1f;
-        color.a = alpha;
+        color.a = 1f;
         sr.color = color;
-        while (alpha > 0f)
+
+        yield return new WaitForEndOfFrame();
+
+        float timeLeft = fadeTime;
+
+        while (timeLeft > 0f)
         {
-            // HACK
-            alpha -= Time.deltaTime;
-            if (alpha < 0f)
-                alpha = 0f;
-            color.a = alpha;
+            timeLeft -= Time.deltaTime;
+            color.a = timeLeft / fadeTime;
             sr.color = color;
-            // end HACK
             yield return null;
         }
+
         Destroy(gameObject);
+
+        yield return null;
     }
 
     IEnumerator Pop()

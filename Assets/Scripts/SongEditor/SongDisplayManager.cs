@@ -145,7 +145,7 @@ public class SongDisplayManager : MonoBehaviour
     bool NoteInPhrase(float start, float stop)
     {
         float phraseStart = (EditorManager.currentBar - NUM_BUFFER_BARS) * beatsPerBar;
-        float phraseEnd = (EditorManager.currentBar + NUM_BUFFER_BARS) * beatsPerBar;
+        float phraseEnd = (EditorManager.currentBar + NUM_BUFFER_BARS + 1) * beatsPerBar;
         return (phraseStart < stop - Mathf.Epsilon) && (start < phraseEnd - Mathf.Epsilon);
     }
 
@@ -163,8 +163,6 @@ public class SongDisplayManager : MonoBehaviour
     {
         for (int i = noteLines.Count - 1; i >= 0; i--)
         {
-            foreach (LineRenderer hit in noteLines[i].hits)
-                Destroy(hit.gameObject);
             Destroy(noteLines[i].duration.gameObject);
             noteLines.RemoveAt(i);
         }

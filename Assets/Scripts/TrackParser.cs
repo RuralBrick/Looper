@@ -15,24 +15,39 @@ public struct Note
 
 public class TrackParser : MonoBehaviour
 {
+    string tracksPath;
+
+    void Awake()
+    {
+        tracksPath = Application.dataPath + "/Tracks";
+    }
+
     public void SaveTrack(Note[] notes, string fileName)
     {
-        string filePath = Application.persistentDataPath + "/" + fileName + ".loop";
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            Debug.LogWarning("Track name cannot be blank");
+            return;
+        }
+
+        string filePath = tracksPath + "/" + fileName + ".bytes";
         FileStream fs = new FileStream(filePath, FileMode.Create);
 
         BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(fs, notes);
 
         fs.Close();
+
+        Debug.Log($"{fileName}.bytes saved");
     }
 
     public Note[] LoadTrack(string fileName)
     {
-        string filePath = Application.persistentDataPath + "/" + fileName + ".loop";
+        string filePath = tracksPath + "/" + fileName + ".bytes";
 
         if (!File.Exists(filePath))
         {
-            Debug.LogWarningFormat($"File {fileName} not found");
+            Debug.LogWarning($"File {fileName} not found");
             return null;
         }
 
@@ -42,6 +57,20 @@ public class TrackParser : MonoBehaviour
         Note[] notes = bf.Deserialize(fs) as Note[];
 
         fs.Close();
+
+        Debug.Log($"{fileName}.bytes loaded");
+
+        return notes;
+    }
+
+    public Note[] ParseTrack(TextAsset trackFile)
+    {
+        MemoryStream ms = new MemoryStream(trackFile.bytes);
+
+        BinaryFormatter bf = new BinaryFormatter();
+        Note[] notes = bf.Deserialize(ms) as Note[];
+
+        ms.Close();
 
         return notes;
     }
