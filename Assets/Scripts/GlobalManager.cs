@@ -45,10 +45,10 @@ public class GlobalManager : MonoBehaviour
     {
         SceneManager.sceneLoaded += SetupScenes;
         SceneManager.sceneUnloaded += TeardownScenes;
-        // HACK
-        SetupGameScene();
-        // end HACK
+        SetupScenes(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
+
+    // TODO: Have hit show up ON stop
 
     #region Helper
     public static void FormatLine(ref LineRenderer line, Color color, Material material, 
@@ -62,21 +62,14 @@ public class GlobalManager : MonoBehaviour
         line.useWorldSpace = useWorldSpace;
     }
 
-    public void SaveSong(Song s, Note[] notes)
+    public void SaveTrack(Note[] notes, string fileName)
     {
-        // TODO: Save to SongLibrary too
-
-        tp.SaveTrack(notes, s.trackFile);
+        tp.SaveTrack(notes, fileName);
     }
 
-    public Note[] LoadTrack(string fileName)
+    public Note[] ParseTrack(TextAsset trackFile)
     {
-        Note[] track = tp.LoadTrack(fileName);
-
-        if (track == null)
-            return new Note[0];
-
-        return track;
+        return tp.ParseTrack(trackFile);
     }
     #endregion
 

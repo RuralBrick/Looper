@@ -6,13 +6,23 @@ public class SongManager : MonoBehaviour
 {
     const float SECONDS_PER_MINUTE = 60f;
     const float BASE_SONG_WAIT = 3f;
-    const float PERFECT_MARGIN = 0.075f;
-    const float GREAT_MARGIN = 0.25f;
 
     float beat = 0;
     int beatsPerBar = 0;
     float tempo = 0;
     float songOffset = 0f;
+
+    public enum HitRangeType { None, Perfect, Great }
+    public struct HitRange
+    {
+        public float margin;
+        public HitRangeType type;
+    }
+    HitRange[] hitRanges =
+    {
+        new HitRange{ margin = 0.075f, type = HitRangeType.Perfect },
+        new HitRange{ margin = 0.25f, type = HitRangeType.Great }
+    };
 
     List<Note> notes = new List<Note>();
     List<NoteHandler>[] activeNotes = new List<NoteHandler>[LoopDisplayHandler.LANE_COUNT];
@@ -42,10 +52,10 @@ public class SongManager : MonoBehaviour
         beatsPerBar = s.beatsPerBar;
         tempo = s.tempo;
         songOffset = s.offset;
-
-        foreach (Note n in GlobalManager.instance.LoadTrack(s.trackFile))
+        
+        foreach (Note n in s.Track)
             notes.Add(n);
-
+        
         ldm.Initialize(beatsPerBar);
 
         StartSong();
@@ -64,13 +74,13 @@ public class SongManager : MonoBehaviour
     {
         return beat % beatsPerBar;
     }
-    
+
     void SpawnNotes()
     {
         for (int i = notes.Count - 1; i >= 0; i--)
         {
             Note note = notes[i];
-            if ((note.start - beat) < beatsPerBar)
+            if (NoteHandler.ShouldSpawn(beat, note.start))
             {
                 GameObject notePrefab = notePrefabs[note.lane];
                 
@@ -79,8 +89,7 @@ public class SongManager : MonoBehaviour
                 activeNote.transform.localScale = ldm.CalcNoteScale();
 
                 NoteHandler nh = activeNote.GetComponent<NoteHandler>();
-                nh.beatPos = note.beatPos;
-                nh.end = note.stop;
+                nh.Initialize(note, beatsPerBar, tempo);
 
                 activeNotes[note.lane].Add(nh);
                 notes.RemoveAt(i);
@@ -95,7 +104,7 @@ public class SongManager : MonoBehaviour
             for (int i = lane.Count - 1; i >= 0; i--)
             {
                 NoteHandler nh = lane[i];
-                if (beat > nh.end)
+                if (nh.ShouldDespawn(beat))
                 {
                     nh.Disappear();
                     lane.RemoveAt(i);
@@ -108,20 +117,19 @@ public class SongManager : MonoBehaviour
     {
         foreach (NoteHandler nh in activeNotes[lane])
         {
-            float diff = CurrentBeatPos() - nh.beatPos;
-            bool late = diff > 0;
-            float dist = Mathf.Abs(diff);
-
-            if (dist <= PERFECT_MARGIN)
+            HitRangeType hitType;
+            bool late;
+            if (nh.GetHit(beat, hitRanges, out hitType, out late))
             {
-                nh.GetHit();
-                Debug.Log("Perfect");
-            }
-            else if (dist <= GREAT_MARGIN)
-            {
-                nh.GetHit();
-                Debug.Log("Great");
-                Debug.Log(late ? "Late" : "Not late");
+                switch (hitType)
+                {
+                    case HitRangeType.Perfect:
+                        Debug.Log("Perfect");
+                        break;
+                    case HitRangeType.Great:
+                        Debug.Log("Great, " + (late ? "Late" : "Early"));
+                        break;
+                }
             }
         }
     }

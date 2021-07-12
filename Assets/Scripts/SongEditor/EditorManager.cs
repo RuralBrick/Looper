@@ -11,7 +11,10 @@ public class Ref<T> where T : struct
 
 public class EditorManager : MonoBehaviour
 {
+    const float NEW_NOTE_BUFFER = 1f;
+
     Song currentSong;
+    string currentTrackName;
     public static int currentBar;
 
     List<Ref<Note>> notes = new List<Ref<Note>>();
@@ -84,20 +87,21 @@ public class EditorManager : MonoBehaviour
         currentSong = s;
         currentSong.beatsPerBar = s.beatsPerBar;
         currentSong.beatUnit = s.beatUnit;
-
-        foreach (Note n in GlobalManager.instance.LoadTrack(s.trackFile))
+        
+        foreach (Note n in s.Track)
         {
             Ref<Note> newNoteRef = new Ref<Note>();
             newNoteRef.Value = n;
             notes.Add(newNoteRef);
         }
-
+        
         ldm.Initialize(s.beatsPerBar);
         sdm.Initialize(s);
 
         GameObject.Find("Title Field").transform.GetComponent<InputField>().text = s.title;
         offsetField.text = s.offset.ToString();
         offsetSlider.value = s.offset;
+        GameObject.Find("Track Name Field").transform.GetComponent<InputField>().text = s.TrackName;
 
         CurrentBar = 0;
     }
@@ -109,7 +113,7 @@ public class EditorManager : MonoBehaviour
         for (int i = 0; i < notes.Count; i++)
             track[i] = notes[i].Value;
 
-        GlobalManager.instance.SaveSong(currentSong, track);
+        GlobalManager.instance.SaveTrack(track, currentTrackName);
     }
 
     public void DisplayNextBar()
@@ -157,7 +161,7 @@ public class EditorManager : MonoBehaviour
 
     public void SetTrackName(string trackName)
     {
-        currentSong.trackFile = trackName;
+        currentTrackName = trackName;
     }
 
     void SpawnEditNotes()
@@ -205,8 +209,9 @@ public class EditorManager : MonoBehaviour
         Note newNote = new Note();
         newNote.lane = lane;
         newNote.beatPos = beatPos;
-        newNote.start = currentBar * currentSong.beatsPerBar;
-        newNote.stop = newNote.start + currentSong.beatsPerBar;
+        float noteBeat = currentBar * currentSong.beatsPerBar + beatPos;
+        newNote.start = noteBeat - NEW_NOTE_BUFFER;
+        newNote.stop = noteBeat + NEW_NOTE_BUFFER;
 
         Ref<Note> noteRef = new Ref<Note>();
         noteRef.Value = newNote;
@@ -246,7 +251,7 @@ public class EditorManager : MonoBehaviour
         float start;
         if (float.TryParse(startText, out start))
         {
-            if (start < 0 || start >= selectedNote.noteRef.Value.stop - Mathf.Epsilon)
+            if (start < -currentSong.beatsPerBar || start >= selectedNote.noteRef.Value.stop - Mathf.Epsilon)
             {
                 nih.SetStart(selectedNote.noteRef.Value.start);
                 return;
@@ -335,7 +340,7 @@ public class EditorManager : MonoBehaviour
         NoteButton selectedNote = Array.Find(noteValButtons, noteButton => noteButton.noteVal == noteVal);
         if (selectedNote.noteVal == 0 || selectedNote.noteButton == null)
         {
-            Debug.LogWarningFormat($"Note button {noteVal} not found");
+            Debug.LogWarning($"Note button {noteVal} not found");
             return;
         }
         if (currentNoteVal.noteButton != null) currentNoteVal.noteButton.interactable = true;
