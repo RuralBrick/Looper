@@ -61,20 +61,6 @@ public class SongManager : MonoBehaviour
         StartSong();
     }
 
-    public void StartSong()
-    {
-        if (song != null && beatsPerBar != 0 && tempo != 0)
-        {
-            StartCoroutine(PlaySong());
-            metCoroutine = StartCoroutine(KeepTime());
-        }
-    }
-
-    float CurrentBeatPos()
-    {
-        return beat % beatsPerBar;
-    }
-
     void SpawnNotes()
     {
         for (int i = notes.Count - 1; i >= 0; i--)
@@ -113,13 +99,18 @@ public class SongManager : MonoBehaviour
         }
     }
 
+    float TimeToBeat
+    {
+        get => tempo / SECONDS_PER_MINUTE;
+    }
+
     public void CheckLane(int lane)
     {
         foreach (NoteHandler nh in activeNotes[lane])
         {
             HitRangeType hitType;
             bool late;
-            if (nh.GetHit(beat, hitRanges, out hitType, out late))
+            if (nh.GetHit(beat + GlobalManager.instance.hitOffset * TimeToBeat, hitRanges, out hitType, out late))
             {
                 switch (hitType)
                 {
@@ -136,15 +127,19 @@ public class SongManager : MonoBehaviour
 
     IEnumerator PlaySong()
     {
-        float wait = BASE_SONG_WAIT + songOffset;
+        float wait = BASE_SONG_WAIT + songOffset - GlobalManager.instance.syncOffset;
         yield return new WaitForSeconds(wait);
         song.Play();
     }
-    
+
+    float CurrentBeatPos()
+    {
+        return beat % beatsPerBar;
+    }
+
     IEnumerator KeepTime()
     {
-        float offset = BASE_SONG_WAIT + GlobalManager.instance.calibration;
-        beat = -offset * tempo / SECONDS_PER_MINUTE;
+        beat = -BASE_SONG_WAIT * TimeToBeat;
         ldm.SetMetronome(CurrentBeatPos());
 
         yield return new WaitForEndOfFrame();
@@ -158,6 +153,15 @@ public class SongManager : MonoBehaviour
             ClearNotes();
 
             yield return null;
+        }
+    }
+
+    void StartSong()
+    {
+        if (song != null && beatsPerBar != 0 && tempo != 0)
+        {
+            StartCoroutine(PlaySong());
+            metCoroutine = StartCoroutine(KeepTime());
         }
     }
 }
