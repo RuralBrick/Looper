@@ -5,6 +5,7 @@ using UnityEngine;
 public class NoteHandler : MonoBehaviour
 {
     const float SECONDS_PER_MINUTE = 60f;
+    const float BEATS_ANTICIPATION = 2f;
     const float SIZE_INCREASE = 1.1f;
     const float SIZE_CHANGE_TIME = 0.1f;
 
@@ -21,13 +22,13 @@ public class NoteHandler : MonoBehaviour
 
     public static bool ShouldSpawn(float beat, float start)
     {
-        return (start - beat) < 1f;
+        return (start - beat) < BEATS_ANTICIPATION;
     }
 
     public void Initialize(Note n, int beatsPerBar, float tempo)
     {
         stop = n.stop;
-        fadeTime = SECONDS_PER_MINUTE / tempo;
+        fadeTime = BEATS_ANTICIPATION * SECONDS_PER_MINUTE / tempo;
 
         float startBar = Mathf.Floor(n.start / beatsPerBar);
         float firstHit = startBar * beatsPerBar + n.beatPos;
@@ -35,8 +36,10 @@ public class NoteHandler : MonoBehaviour
 
         hits = new List<float>();
 
-        for (float h = firstHit; h < n.stop; h += beatsPerBar)
+        for (float h = firstHit; h <= n.stop; h += beatsPerBar)
             hits.Add(h);
+
+        Debug.Log(string.Join(", ", hits));
 
         StartCoroutine(FadeIn());
     }

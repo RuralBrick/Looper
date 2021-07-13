@@ -11,7 +11,9 @@ public class Ref<T> where T : struct
 
 public class EditorManager : MonoBehaviour
 {
+    const int PHRASE_SCROLL_AMOUNT = 4;
     const float NEW_NOTE_BUFFER = 1f;
+    const int NEW_NOTE_BARS = 4;
 
     Song currentSong;
     string currentTrackName;
@@ -116,6 +118,8 @@ public class EditorManager : MonoBehaviour
         GlobalManager.instance.SaveTrack(track, currentTrackName);
     }
 
+    // TODO: Display bar/beat number
+
     public void DisplayNextBar()
     {
         CurrentBar++;
@@ -128,12 +132,12 @@ public class EditorManager : MonoBehaviour
 
     public void DisplayNextPhrase()
     {
-        CurrentBar += SongDisplayManager.BarsDisplayed();
+        CurrentBar += PHRASE_SCROLL_AMOUNT;
     }
 
     public void DisplayPrevPhrase()
     {
-        CurrentBar -= SongDisplayManager.BarsDisplayed(); 
+        CurrentBar -= PHRASE_SCROLL_AMOUNT; 
     }
 
     public void SetTitle(string title)
@@ -193,7 +197,7 @@ public class EditorManager : MonoBehaviour
     {
         float barStart = currentBar * currentSong.beatsPerBar;
         float barEnd = barStart + currentSong.beatsPerBar;
-        return (barStart < stop - Mathf.Epsilon) && (start < barEnd - Mathf.Epsilon);
+        return barStart <= stop && start < barEnd;
     }
 
     public void AddNote(int lane, float beatPos)
@@ -209,9 +213,10 @@ public class EditorManager : MonoBehaviour
         Note newNote = new Note();
         newNote.lane = lane;
         newNote.beatPos = beatPos;
-        float noteBeat = currentBar * currentSong.beatsPerBar + beatPos;
-        newNote.start = noteBeat - NEW_NOTE_BUFFER;
-        newNote.stop = noteBeat + NEW_NOTE_BUFFER;
+        float barBeat = currentBar * currentSong.beatsPerBar;
+        float noteBeat = barBeat + beatPos;
+        newNote.start = barBeat;
+        newNote.stop = noteBeat + (NEW_NOTE_BARS - 1) * currentSong.beatsPerBar;
 
         Ref<Note> noteRef = new Ref<Note>();
         noteRef.Value = newNote;
@@ -246,18 +251,34 @@ public class EditorManager : MonoBehaviour
         selectedNote.enh = null;
     }
 
+    bool BeatPosInRange(float start, float stop, float beatPos)
+    {
+        float offset = (start + currentSong.beatsPerBar) % currentSong.beatsPerBar;
+        float adjustedBeatPos = (beatPos + currentSong.beatsPerBar - offset) % currentSong.beatsPerBar;
+        float rangeStart = 0f; // NOTE: start - start
+        float rangeEnd = stop - start;
+        return rangeStart <= adjustedBeatPos && adjustedBeatPos <= rangeEnd;
+    }
+
+    bool StartValid(Note n, float start)
+    {
+        float firstPreZeroBeat = n.beatPos - currentSong.beatsPerBar;
+        return start > firstPreZeroBeat && start <= n.stop && BeatPosInRange(start, n.stop, n.beatPos);
+    }
+
     public void SetSelectedNoteStart(string startText)
     {
         float start;
         if (float.TryParse(startText, out start))
         {
-            if (start < -currentSong.beatsPerBar || start >= selectedNote.noteRef.Value.stop - Mathf.Epsilon)
+            Note info = selectedNote.noteRef.Value;
+            
+            if (!StartValid(info, start))
             {
-                nih.SetStart(selectedNote.noteRef.Value.start);
+                nih.SetStart(info.start);
                 return;
             }
 
-            Note info = selectedNote.noteRef.Value;
             info.start = start;
             selectedNote.noteRef.Value = info;
 
@@ -269,18 +290,24 @@ public class EditorManager : MonoBehaviour
         }
     }
 
+    bool StopValid(Note n, float stop)
+    {
+        return stop >= 0 && stop >= n.start && BeatPosInRange(n.start, stop, n.beatPos);
+    }
+
     public void SetSelectedNoteStop(string stopText)
     {
         float stop;
         if (float.TryParse(stopText, out stop))
         {
-            if (stop < 0 || stop <= selectedNote.noteRef.Value.start + Mathf.Epsilon)
+            Note info = selectedNote.noteRef.Value;
+            
+            if (!StopValid(info, stop))
             {
-                nih.SetStop(selectedNote.noteRef.Value.stop);
+                nih.SetStop(info.stop);
                 return;
             }
 
-            Note info = selectedNote.noteRef.Value;
             info.stop = stop;
             selectedNote.noteRef.Value = info;
 
@@ -317,7 +344,7 @@ public class EditorManager : MonoBehaviour
             return;
 
         float noteLength = (float)currentSong.beatUnit / currentNoteVal.noteVal;
-        noteLength = usingTriplet ? noteLength * 2f / 3f : noteLength;
+        if (usingTriplet) noteLength *= 2/3f;
 
         for(int lane = 0; lane < LoopDisplayHandler.LANE_COUNT; lane++)
             for (float beat = 0; beat < currentSong.beatsPerBar; beat += noteLength)
