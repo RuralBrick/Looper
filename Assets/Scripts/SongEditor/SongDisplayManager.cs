@@ -114,7 +114,7 @@ public class SongDisplayManager : MonoBehaviour
         int start = (int)(startBar * samplesPerBar - offsetSamples);
         int endBar = EditorManager.currentBar + NUM_BUFFER_BARS + 1;
         int end = (int)(endBar * samplesPerBar - offsetSamples) - 1;
-        end = end < samples.Length ? end : samples.Length;
+        if (end > samples.Length) end = samples.Length;
 
         int i = start;
         int j = 0;
@@ -146,7 +146,7 @@ public class SongDisplayManager : MonoBehaviour
     {
         float phraseStart = (EditorManager.currentBar - NUM_BUFFER_BARS) * beatsPerBar;
         float phraseEnd = (EditorManager.currentBar + NUM_BUFFER_BARS + 1) * beatsPerBar;
-        return (phraseStart < stop - Mathf.Epsilon) && (start < phraseEnd - Mathf.Epsilon);
+        return phraseStart <= stop && start < phraseEnd;
     }
 
     float LaneToY { get => DISPLAY_HEIGHT / (LoopDisplayHandler.LANE_COUNT + 1); }
@@ -203,7 +203,7 @@ public class SongDisplayManager : MonoBehaviour
 
                 while (firstHit < DISPLAY_WIDTH && firstHit < durationStart)
                     firstHit += BarWidth;
-                for (float x = firstHit; x < durationStop; x += BarWidth)
+                for (float x = firstHit; x <= durationStop && x < DISPLAY_WIDTH; x += BarWidth)
                 {
                     GameObject hitObj = new GameObject("Hit Mark");
                     hitObj.transform.parent = durationObj.transform;
@@ -213,7 +213,10 @@ public class SongDisplayManager : MonoBehaviour
                     GlobalManager.FormatLine(ref newHit, hitColor, lineMaterial, "Track", 155, NOTE_LINE_WIDTH);
 
                     Vector3 hitLeft = new Vector3(x, 0, 0);
-                    Vector3 hitRight = new Vector3(x + HIT_NOTE_LENGTH, 0, 0);
+
+                    float right = x + HIT_NOTE_LENGTH;
+                    if (right > DISPLAY_WIDTH) right = DISPLAY_WIDTH;
+                    Vector3 hitRight = new Vector3(right, 0, 0);
 
                     newHit.SetPositions(new Vector3[] { hitLeft, hitRight });
 

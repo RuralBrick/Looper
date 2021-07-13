@@ -46,8 +46,6 @@ public class GlobalManager : MonoBehaviour
         SetupScenes(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
-    // TODO: Have hit show up ON stop
-
     #region Helper
     public static void FormatLine(ref LineRenderer line, Color color, Material material, 
         string sortingLayer, int sortingOrder, float width, bool useWorldSpace = false)
@@ -59,6 +57,8 @@ public class GlobalManager : MonoBehaviour
         line.startWidth = line.endWidth = width;
         line.useWorldSpace = useWorldSpace;
     }
+
+    // TODO: Save song to SongLibrary
 
     public void SaveTrack(Note[] notes, string fileName)
     {
