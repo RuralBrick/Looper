@@ -75,12 +75,13 @@ public class EditorManager : MonoBehaviour
             else currentBar = value;
 
             if (selectedNote.noteRef != null &&
-                !NoteInBar(selectedNote.noteRef.Value.start, selectedNote.noteRef.Value.stop))
+                !NoteInBar(selectedNote.noteRef.Value.start,
+                           selectedNote.noteRef.Value.stop,
+                           selectedNote.noteRef.Value.beatPos))
                 DeselectNote();
-            SpawnEditNotes();
-            sdm.SpawnNoteLines(notes);
 
-            sdm.DisplayBar();
+            SpawnEditNotes();
+            sdm.DisplayBar(notes);
         }
     }
 
@@ -89,6 +90,7 @@ public class EditorManager : MonoBehaviour
         currentSong = s;
         currentSong.beatsPerBar = s.beatsPerBar;
         currentSong.beatUnit = s.beatUnit;
+        currentTrackName = s.TrackName;
         
         foreach (Note n in s.Track)
         {
@@ -103,7 +105,7 @@ public class EditorManager : MonoBehaviour
         GameObject.Find("Title Field").transform.GetComponent<InputField>().text = s.title;
         offsetField.text = s.offset.ToString();
         offsetSlider.value = s.offset;
-        GameObject.Find("Track Name Field").transform.GetComponent<InputField>().text = s.TrackName;
+        GameObject.Find("Track Name Field").transform.GetComponent<InputField>().text = currentTrackName;
 
         CurrentBar = 0;
     }
@@ -117,8 +119,6 @@ public class EditorManager : MonoBehaviour
 
         GlobalManager.instance.SaveTrack(track, currentTrackName);
     }
-
-    // TODO: Display bar/beat number
 
     public void DisplayNextBar()
     {
@@ -139,6 +139,8 @@ public class EditorManager : MonoBehaviour
     {
         CurrentBar -= PHRASE_SCROLL_AMOUNT; 
     }
+
+    // TODO: Set beatsPerBar, beatUnit, tempo
 
     public void SetTitle(string title)
     {
@@ -168,6 +170,14 @@ public class EditorManager : MonoBehaviour
         currentTrackName = trackName;
     }
 
+    bool NoteInBar(float start, float stop, float beatPos)
+    {
+        float barBeat = currentBar * currentSong.beatsPerBar;
+        float rangeStart = start - barBeat;
+        float rangeEnd = stop - barBeat;
+        return rangeStart <= beatPos && beatPos <= rangeEnd;
+    }
+
     void SpawnEditNotes()
     {
         for (int i = barNotes.Count - 1; i >= 0; i--)
@@ -178,7 +188,7 @@ public class EditorManager : MonoBehaviour
 
         foreach (Ref<Note> n in notes)
         {
-            if (NoteInBar(n.Value.start, n.Value.stop))
+            if (NoteInBar(n.Value.start, n.Value.stop, n.Value.beatPos))
             {
                 GameObject newEditNote = Instantiate(editNotePrefabs[n.Value.lane]);
                 newEditNote.transform.position = ldm.CalcNotePosition(n.Value.lane, n.Value.beatPos);
@@ -193,40 +203,13 @@ public class EditorManager : MonoBehaviour
         }
     }
 
-    bool NoteInBar(float start, float stop)
+    void UpdateNoteDisplay()
     {
-        float barStart = currentBar * currentSong.beatsPerBar;
-        float barEnd = barStart + currentSong.beatsPerBar;
-        return barStart <= stop && start < barEnd;
-    }
-
-    public void AddNote(int lane, float beatPos)
-    {
-        foreach (Ref<Note> n in notes)
-        {
-            if (lane == n.Value.lane && 
-                Mathf.Approximately(beatPos, n.Value.beatPos) && 
-                NoteInBar(n.Value.start, n.Value.stop))
-                return;
-        }
-
-        Note newNote = new Note();
-        newNote.lane = lane;
-        newNote.beatPos = beatPos;
-        float barBeat = currentBar * currentSong.beatsPerBar;
-        float noteBeat = barBeat + beatPos;
-        newNote.start = barBeat;
-        newNote.stop = noteBeat + (NEW_NOTE_BARS - 1) * currentSong.beatsPerBar;
-
-        Ref<Note> noteRef = new Ref<Note>();
-        noteRef.Value = newNote;
-
-        notes.Add(noteRef);
-
         SpawnEditNotes();
-        SelectNote(barNotes.Find(enh => enh.info == noteRef));
         sdm.SpawnNoteLines(notes);
     }
+
+    // TODO: Try to save when switch note
 
     public void SelectNote(EditNoteHandler enh)
     {
@@ -251,12 +234,39 @@ public class EditorManager : MonoBehaviour
         selectedNote.enh = null;
     }
 
-    bool BeatPosInRange(float start, float stop, float beatPos)
+    public void AddNote(int lane, float beatPos)
+    {
+        foreach (Ref<Note> n in notes)
+        {
+            if (lane == n.Value.lane &&
+                Mathf.Approximately(beatPos, n.Value.beatPos) &&
+                NoteInBar(n.Value.start, n.Value.stop, n.Value.beatPos))
+                return;
+        }
+
+        Note newNote = new Note();
+        newNote.lane = lane;
+        newNote.beatPos = beatPos;
+        float barBeat = currentBar * currentSong.beatsPerBar;
+        float noteBeat = barBeat + beatPos;
+        newNote.start = barBeat;
+        newNote.stop = noteBeat;
+
+        Ref<Note> noteRef = new Ref<Note>();
+        noteRef.Value = newNote;
+
+        notes.Add(noteRef);
+
+        UpdateNoteDisplay();
+        SelectNote(barNotes.Find(enh => enh.info == noteRef));
+    }
+
+    bool BeatPosInRange(float start, float end, float beatPos)
     {
         float offset = (start + currentSong.beatsPerBar) % currentSong.beatsPerBar;
         float adjustedBeatPos = (beatPos + currentSong.beatsPerBar - offset) % currentSong.beatsPerBar;
         float rangeStart = 0f; // NOTE: start - start
-        float rangeEnd = stop - start;
+        float rangeEnd = end - start;
         return rangeStart <= adjustedBeatPos && adjustedBeatPos <= rangeEnd;
     }
 
@@ -265,6 +275,8 @@ public class EditorManager : MonoBehaviour
         float firstPreZeroBeat = n.beatPos - currentSong.beatsPerBar;
         return start > firstPreZeroBeat && start <= n.stop && BeatPosInRange(start, n.stop, n.beatPos);
     }
+
+    // TODO: Prevent note overlap (not same lane, beatPos, and range)
 
     public void SetSelectedNoteStart(string startText)
     {
@@ -282,11 +294,34 @@ public class EditorManager : MonoBehaviour
             info.start = start;
             selectedNote.noteRef.Value = info;
 
-            if (!NoteInBar(info.start, info.stop))
+            if (!NoteInBar(info.start, info.stop, info.beatPos))
                 DeselectNote();
 
-            SpawnEditNotes();
-            sdm.SpawnNoteLines(notes);
+            UpdateNoteDisplay();
+        }
+    }
+
+    public void AdjustSelectedNoteStart(string adjustText)
+    {
+        float adjust;
+        if (float.TryParse(adjustText, out adjust))
+        {
+            Note info = selectedNote.noteRef.Value;
+            float newStart = info.start + adjust;
+
+            if (!StartValid(info, newStart))
+                return;
+
+            info.start = newStart;
+            selectedNote.noteRef.Value = info;
+
+            nih.SetStart(newStart);
+            nih.ClearStartAdjust();
+
+            if (!NoteInBar(info.start, info.stop, info.beatPos))
+                DeselectNote();
+
+            UpdateNoteDisplay();
         }
     }
 
@@ -311,11 +346,34 @@ public class EditorManager : MonoBehaviour
             info.stop = stop;
             selectedNote.noteRef.Value = info;
 
-            if (!NoteInBar(info.start, info.stop))
+            if (!NoteInBar(info.start, info.stop, info.beatPos))
                 DeselectNote();
 
-            SpawnEditNotes();
-            sdm.SpawnNoteLines(notes);
+            UpdateNoteDisplay();
+        }
+    }
+
+    public void AdjustSelectedNoteStop(string adjustText)
+    {
+        float adjust;
+        if (float.TryParse(adjustText, out adjust))
+        {
+            Note info = selectedNote.noteRef.Value;
+            float newStop = info.stop + adjust;
+
+            if (!StopValid(info, newStop))
+                return;
+
+            info.stop = newStop;
+            selectedNote.noteRef.Value = info;
+
+            nih.SetStop(newStop);
+            nih.ClearStopAdjust();
+
+            if (!NoteInBar(info.start, info.stop, info.beatPos))
+                DeselectNote();
+
+            UpdateNoteDisplay();
         }
     }
 
@@ -328,8 +386,7 @@ public class EditorManager : MonoBehaviour
         selectedNote.noteRef = null;
         selectedNote.enh = null;
 
-        SpawnEditNotes();
-        sdm.SpawnNoteLines(notes);
+        UpdateNoteDisplay();
     }
 
     void SpawnPlaceholders()

@@ -44,6 +44,11 @@ public class SongManager : MonoBehaviour
         ldm = FindObjectOfType<LoopDisplayHandler>();
     }
 
+    void Start()
+    {
+        System.Array.Sort(hitRanges, (a, b) => a.margin.CompareTo(b.margin));
+    }
+
     public void LoadSong(Song s)
     {
         song = gameObject.AddComponent<AudioSource>();
@@ -86,22 +91,19 @@ public class SongManager : MonoBehaviour
     void ClearNotes()
     {
         foreach (List<NoteHandler> lane in activeNotes)
-        {
-            for (int i = lane.Count - 1; i >= 0; i--)
-            {
-                NoteHandler nh = lane[i];
+            foreach (NoteHandler nh in lane)
                 if (nh.ShouldDespawn(beat))
-                {
-                    nh.Disappear();
-                    lane.RemoveAt(i);
-                }
-            }
-        }
+                    nh.Disappear(lane.Remove);
     }
 
     float TimeToBeat
     {
         get => tempo / SECONDS_PER_MINUTE;
+    }
+
+    float HitBeatOffset
+    {
+        get => GlobalManager.instance.hitOffset * TimeToBeat;
     }
 
     public void CheckLane(int lane)
@@ -110,7 +112,8 @@ public class SongManager : MonoBehaviour
         {
             HitRangeType hitType;
             bool late;
-            if (nh.GetHit(beat + GlobalManager.instance.hitOffset * TimeToBeat, hitRanges, out hitType, out late))
+            float hitBeat = beat + HitBeatOffset;
+            if (nh.GetHit(hitBeat , hitRanges, out hitType, out late))
             {
                 switch (hitType)
                 {

@@ -15,6 +15,8 @@ public class NoteHandler : MonoBehaviour
     float fadeTime;
     List<float> hits;
 
+    Coroutine fadeOut;
+
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
@@ -39,8 +41,6 @@ public class NoteHandler : MonoBehaviour
         for (float h = firstHit; h <= n.stop; h += beatsPerBar)
             hits.Add(h);
 
-        Debug.Log(string.Join(", ", hits));
-
         StartCoroutine(FadeIn());
     }
 
@@ -49,20 +49,21 @@ public class NoteHandler : MonoBehaviour
         return beat > stop;
     }
 
-    public void Disappear()
+    public void Disappear(ListRemove listRemove)
     {
-        StartCoroutine(FadeOut());
+        if (fadeOut == null)
+            fadeOut = StartCoroutine(FadeOut(listRemove));
     }
 
     // TODO: Figure out misses
-
+    
     public bool GetHit(float beat, SongManager.HitRange[] hitRanges, out SongManager.HitRangeType hit, out bool late)
     {
         for (int i = 0; i < hits.Count; i++)
         {
             float diff = beat - hits[i];
             float dist = Mathf.Abs(diff);
-
+            
             for (int j = 0; j < hitRanges.Length; j++)
             {
                 if (dist <= hitRanges[j].margin)
@@ -75,7 +76,7 @@ public class NoteHandler : MonoBehaviour
                 }
             }
         }
-
+        
         hit = SongManager.HitRangeType.None;
         late = false;
 
@@ -106,7 +107,9 @@ public class NoteHandler : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator FadeOut()
+    public delegate bool ListRemove(NoteHandler nh);
+
+    IEnumerator FadeOut(ListRemove lastCall)
     {
         Color color = sr.color;
         color.a = 1f;
@@ -124,11 +127,13 @@ public class NoteHandler : MonoBehaviour
             yield return null;
         }
 
+        if (!lastCall(this))
+            Debug.LogWarning("Could not remove note handler");
         Destroy(gameObject);
 
         yield return null;
     }
-
+    
     IEnumerator Pop()
     {
         Vector3 origSize = transform.localScale;
@@ -137,5 +142,7 @@ public class NoteHandler : MonoBehaviour
         yield return new WaitForSeconds(SIZE_CHANGE_TIME);
 
         transform.localScale = origSize;
+
+        yield return null;
     }
 }

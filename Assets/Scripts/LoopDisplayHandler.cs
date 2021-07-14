@@ -5,6 +5,8 @@ using UnityEngine;
 public class LoopDisplayHandler : MonoBehaviour
 {
     public const int LANE_COUNT = 4;
+
+    public static bool clockwiseMetronome = true;
     
     const float RADIUS = 4f;
     const float LANE_WIDTH = 0.75f;
@@ -39,6 +41,7 @@ public class LoopDisplayHandler : MonoBehaviour
         float barPercent = beatPos / beatsPerBar;
         float angle = (barPercent + 0.25f) * 2f * Mathf.PI;
         float x = RADIUS * Mathf.Cos(angle);
+        if (clockwiseMetronome) x *= -1;
         float y = RADIUS * Mathf.Sin(angle);
         return new Vector3(x, y, 0);
     }
@@ -57,6 +60,7 @@ public class LoopDisplayHandler : MonoBehaviour
         float barPercent = beatPos / beatsPerBar;
         float angle = (barPercent + 0.25f) * 2f * Mathf.PI;
         float x = r * Mathf.Cos(angle);
+        if (clockwiseMetronome) x *= -1;
         x += transform.position.x;
         float y = r * Mathf.Sin(angle);
         y += transform.position.y;
