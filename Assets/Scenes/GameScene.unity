@@ -330,6 +330,10 @@ PrefabInstance:
       value: Global Manager
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSong
+      value: Stay the Night (Nightcore)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: hitOffset
       value: 0
       objectReference: {fileID: 0}
@@ -343,12 +347,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.size
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.data[0].file
       value: 
       objectReference: {fileID: 8300000, guid: d6c96f82a2509984c80f298d775a28a4, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[1].file
+      value: 
+      objectReference: {fileID: 8300000, guid: f7ccf7aa4ffd293449721527977bd1f1, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[2].file
+      value: 
+      objectReference: {fileID: 8300000, guid: 01c822233ae159c4488718c6fb25a532, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[3].file
+      value: 
+      objectReference: {fileID: 8300000, guid: 67f8e3c112418c14287ea2e387c0732a, type: 3}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.data[0].tempo
       value: 120
@@ -358,7 +374,55 @@ PrefabInstance:
       value: test track
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[1].tempo
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[1].title
+      value: town theme
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[2].tempo
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[2].title
+      value: Techno Motif
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[3].tempo
+      value: 151
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[3].title
+      value: Stay the Night (Nightcore)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[1].offset
+      value: -0.6785715
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[2].offset
+      value: -0.5357143
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[3].offset
+      value: -0.8928571
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.data[0].beatUnit
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[1].beatUnit
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[2].beatUnit
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[3].beatUnit
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
@@ -366,7 +430,31 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4900000, guid: 59753ad77e46ec54db66740836b3164d, type: 3}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[1].trackFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 1a63e42611c9e274da7e13298499e387, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[2].trackFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 4401d2d7a07747c4fa3be5a9dc27b25b, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[3].trackFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 9e8575cc43dbec648984a46ea1bc940b, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.data[0].beatsPerBar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[1].beatsPerBar
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[2].beatsPerBar
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: songs.Array.data[3].beatsPerBar
       value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -22,6 +22,10 @@ public class GlobalManager : MonoBehaviour
     EditorManager em;
     CalibrationManager cm;
 
+    // HACK
+    public string testSong;
+    // end HACK
+
     void Awake()
     {
         if (instance != null)
@@ -109,8 +113,11 @@ public class GlobalManager : MonoBehaviour
         sngm = FindObjectOfType<SongManager>();
         LanePressed += sngm.CheckLane;
 
-        Song s = sl.FindSong("test track");
-        sngm.LoadSong(s);
+        // HACK
+        Song s = sl.FindSong(testSong);
+        if (s != null)
+            sngm.LoadSong(s);
+        // end HACK
     }
 
     void TeardownGameScene()
@@ -123,8 +130,11 @@ public class GlobalManager : MonoBehaviour
     {
         em = FindObjectOfType<EditorManager>();
 
-        Song s = sl.FindSong("test track");
-        em.LoadSong(s);
+        // HACK
+        Song s = sl.FindSong(testSong);
+        if (s != null)
+            em.LoadSong(s);
+        // end HACK
     }
 
     void TeardownEditorScene()

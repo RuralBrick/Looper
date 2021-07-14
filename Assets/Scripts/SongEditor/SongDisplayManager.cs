@@ -5,10 +5,16 @@ using UnityEngine;
 public class SongDisplayManager : MonoBehaviour
 {
     const float SECONDS_PER_MINUTE = 60f;
-    const float DISPLAY_WIDTH = 10f;
-    const float DISPLAY_HEIGHT = 1.5f;
-    const int NUM_BUFFER_BARS = 2;
-    const float BAR_LINE_WIDTH = 0.025f;
+    const float RIGHT = 5f;
+    const float LEFT = -5f;
+    const float TOP = 0.75f;
+    const float BOTTOM = -0.75f;
+    const int NUM_BARS = 5;
+    const float DISPLAY_WIDTH = RIGHT - LEFT;
+    const float BAR_WIDTH = DISPLAY_WIDTH / NUM_BARS;
+    const float DISPLAY_HEIGHT = TOP - BOTTOM;
+    const float HALF_HEIGHT = DISPLAY_HEIGHT / 2f;
+    const float TARGET_SAMPLES_PER_BAR = 4801f;
     const float NOTE_LINE_WIDTH = 0.05f;
     const float HIT_NOTE_LENGTH = 0.1f;
 
@@ -18,14 +24,12 @@ public class SongDisplayManager : MonoBehaviour
     float samplesPerSecond;
     float offsetSamples;
 
-    public Color lineColor;
+    public Color[] laneColors = new Color[LoopDisplayHandler.LANE_COUNT];
     public Material lineMaterial;
 
     LineRenderer waveform;
-    GameObject window;
-
-    public Color[] laneColors = new Color[LoopDisplayHandler.LANE_COUNT];
-
+    public UnityEngine.UI.Text[] beatNumbers = new UnityEngine.UI.Text[6];
+    
     struct NoteLine
     {
         public LineRenderer duration;
@@ -36,84 +40,69 @@ public class SongDisplayManager : MonoBehaviour
     void Awake()
     {
         waveform = transform.Find("Song Waveform").GetComponent<LineRenderer>();
-        window = transform.Find("Window Mask").gameObject;
     }
 
     void Start()
     {
-        float winWidth = DISPLAY_WIDTH / BarsDisplayed();
-        float winHeight = DISPLAY_HEIGHT;
-        window.transform.localScale = new Vector3(winWidth, winHeight, 1);
-
-        MakeBarLines();
-    }
-
-    public static int BarsDisplayed()
-    {
-        return 2 * NUM_BUFFER_BARS + 1;
-    }
-
-    float Right { get => DISPLAY_WIDTH / 2f; }
-    float Left { get => -(DISPLAY_WIDTH / 2f); }
-    float Top { get => DISPLAY_HEIGHT / 2f; }
-    float Bottom { get => -(DISPLAY_HEIGHT / 2f); }
-    float BarWidth { get => DISPLAY_WIDTH / BarsDisplayed(); }
-    
-    void MakeBarLines()
-    {
-        for (int i = 1; i < BarsDisplayed(); i++)
-        {
-            GameObject line = new GameObject("Bar Line " + i);
-            line.transform.parent = transform;
-            line.transform.localPosition = Vector3.zero;
-            line.transform.localScale = Vector3.one;
-
-            LineRenderer lr = line.AddComponent<LineRenderer>();
-            GlobalManager.FormatLine(ref lr, lineColor, lineMaterial, "Track", 105, BAR_LINE_WIDTH);
-
-            float x = Left + i * BarWidth;
-            lr.SetPositions(new Vector3[] { new Vector3(x, Top, 0), new Vector3(x, Bottom, 0) });
-        }
+        waveform.enabled = false;
     }
 
     public void Initialize(Song s)
     {
         beatsPerBar = s.beatsPerBar;
 
-        samples = new float[s.file.samples * s.file.channels];
-        s.file.GetData(samples, 0);
+        float[] allSamples = new float[s.file.samples * s.file.channels];
+        s.file.GetData(allSamples, 0);
 
-        samplesPerBar = s.beatsPerBar * s.file.frequency * SECONDS_PER_MINUTE / s.tempo;
-        samplesPerSecond = s.file.frequency;
+        float fullSamplesPerBar = s.beatsPerBar * s.file.frequency * s.file.channels * SECONDS_PER_MINUTE / s.tempo;
+        int divisor = (int)(fullSamplesPerBar / TARGET_SAMPLES_PER_BAR);
+
+        List<float> selectedSamples = new List<float>();
+        for (int i = 0; i < allSamples.Length; i += divisor)
+            selectedSamples.Add(allSamples[i]);
+
+        samples = selectedSamples.ToArray();
+        samplesPerBar = fullSamplesPerBar / divisor;
+        samplesPerSecond = s.file.frequency * s.file.channels / divisor;
     }
 
-    float HalfHeight { get => DISPLAY_HEIGHT / 2f; }
-    
-    void UpdateWaveform(float[] samples)
+    public void DisplayBar(List<Ref<Note>> notes)
     {
-        float unitLength = DISPLAY_WIDTH / samples.Length;
+        UpdateBeatNumbers();
+        UpdateWaveform();
+        SpawnNoteLines(notes);
+    }
 
-        Vector3[] positions = new Vector3[samples.Length];
+    public void WaveformActive(bool state)
+    {
+        waveform.enabled = state;
+    }
 
-        for (int i = 0; i < samples.Length; i++)
+    public void SetOffset(float newOffset)
+    {
+        offsetSamples = newOffset * samplesPerSecond;
+        UpdateWaveform();
+    }
+
+    int LeftBar { get => EditorManager.currentBar - 2; }
+    int RightBar { get => EditorManager.currentBar + 3; }
+
+    void UpdateBeatNumbers()
+    {
+        for (int i = 0; i < beatNumbers.Length; i++)
         {
-            float x = Left + i * unitLength;
-            float y = samples[i] * HalfHeight;
-            positions[i] = new Vector3(x, y, 0);
+            int bar = LeftBar + i;
+            int beat = bar * beatsPerBar;
+            beatNumbers[i].text = beat.ToString();
         }
-        
-        waveform.positionCount = samples.Length;
-        waveform.SetPositions(positions);
     }
 
-    public void DisplayBar()
+    void UpdateWaveform()
     {
-        float[] displaySamples = new float[(int)(BarsDisplayed() * samplesPerBar)];
+        float[] displaySamples = new float[(int)(NUM_BARS * samplesPerBar)];
 
-        int startBar = EditorManager.currentBar - NUM_BUFFER_BARS;
-        int start = (int)(startBar * samplesPerBar - offsetSamples);
-        int endBar = EditorManager.currentBar + NUM_BUFFER_BARS + 1;
-        int end = (int)(endBar * samplesPerBar - offsetSamples) - 1;
+        int start = (int)(LeftBar * samplesPerBar - offsetSamples);
+        int end = (int)(RightBar * samplesPerBar - offsetSamples) - 1;
         if (end > samples.Length) end = samples.Length;
 
         int i = start;
@@ -133,31 +122,36 @@ public class SongDisplayManager : MonoBehaviour
             displaySamples[j] = 0f;
         }
 
-        UpdateWaveform(displaySamples);
-    }
+        Vector3[] positions = new Vector3[displaySamples.Length];
 
-    public void SetOffset(float newOffset)
-    {
-        offsetSamples = newOffset * samplesPerSecond;
-        DisplayBar();
+        float unitLength = DISPLAY_WIDTH / displaySamples.Length;
+
+        for (i = 0; i < displaySamples.Length; i++)
+        {
+            float x = LEFT + i * unitLength;
+            float y = displaySamples[i] * HALF_HEIGHT;
+            positions[i] = new Vector3(x, y, 0);
+        }
+        
+        waveform.positionCount = displaySamples.Length;
+        waveform.SetPositions(positions);
     }
 
     bool NoteInPhrase(float start, float stop)
     {
-        float phraseStart = (EditorManager.currentBar - NUM_BUFFER_BARS) * beatsPerBar;
-        float phraseEnd = (EditorManager.currentBar + NUM_BUFFER_BARS + 1) * beatsPerBar;
+        float phraseStart = LeftBar * beatsPerBar;
+        float phraseEnd = RightBar * beatsPerBar;
         return phraseStart <= stop && start < phraseEnd;
     }
 
+    float BeatToX { get => DISPLAY_WIDTH / (beatsPerBar * NUM_BARS); }
+    float BeatPosToX { get => BAR_WIDTH / beatsPerBar; }
     float LaneToY { get => DISPLAY_HEIGHT / (LoopDisplayHandler.LANE_COUNT + 1); }
     float CalcLaneY(int lane)
     {
         float disp = (lane + 1) * LaneToY;
-        return Bottom + disp;
+        return BOTTOM + disp;
     }
-
-    float BeatToX { get => DISPLAY_WIDTH / (beatsPerBar * BarsDisplayed()); }
-    float BeatPosToX { get => BarWidth / beatsPerBar; }
 
     public void SpawnNoteLines(List<Ref<Note>> notes)
     {
@@ -175,13 +169,12 @@ public class SongDisplayManager : MonoBehaviour
 
                 GameObject durationObj = new GameObject("Note Line");
                 durationObj.transform.parent = transform;
-                durationObj.transform.localPosition = new Vector3(Left, CalcLaneY(n.Value.lane));
+                durationObj.transform.localPosition = new Vector3(LEFT, CalcLaneY(n.Value.lane));
 
                 newNoteLine.duration = durationObj.AddComponent<LineRenderer>();
                 GlobalManager.FormatLine(ref newNoteLine.duration, laneColors[n.Value.lane], lineMaterial, "Track", 150, NOTE_LINE_WIDTH);
 
-                int leftBar = EditorManager.currentBar - NUM_BUFFER_BARS;
-                float leftBeat = leftBar * beatsPerBar;
+                float leftBeat = LeftBar * beatsPerBar;
                 float startBeatOffsetFromLeft = n.Value.start - leftBeat;
                 float startOffsetFromLeft = startBeatOffsetFromLeft * BeatToX;
                 float durationStart = startOffsetFromLeft < 0f ? 0f : startOffsetFromLeft;
@@ -202,8 +195,8 @@ public class SongDisplayManager : MonoBehaviour
                 float firstHit = n.Value.beatPos * BeatPosToX;
 
                 while (firstHit < DISPLAY_WIDTH && firstHit < durationStart)
-                    firstHit += BarWidth;
-                for (float x = firstHit; x <= durationStop && x < DISPLAY_WIDTH; x += BarWidth)
+                    firstHit += BAR_WIDTH;
+                for (float x = firstHit; x <= durationStop && x < DISPLAY_WIDTH; x += BAR_WIDTH)
                 {
                     GameObject hitObj = new GameObject("Hit Mark");
                     hitObj.transform.parent = durationObj.transform;
