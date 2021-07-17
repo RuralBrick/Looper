@@ -350,6 +350,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.data[0].file
       value: 
       objectReference: {fileID: 8300000, guid: d6c96f82a2509984c80f298d775a28a4, type: 3}
@@ -426,6 +430,14 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[0].file
+      value: 
+      objectReference: {fileID: 8300000, guid: b9528e6742c4bad40b6484c45b3aa236, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[1].file
+      value: 
+      objectReference: {fileID: 8300000, guid: 67f8e3c112418c14287ea2e387c0732a, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.data[0].trackFile
       value: 
       objectReference: {fileID: 4900000, guid: 59753ad77e46ec54db66740836b3164d, type: 3}
@@ -442,6 +454,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4900000, guid: 9e8575cc43dbec648984a46ea1bc940b, type: 3}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[0].tempo
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[0].title
+      value: test track
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[1].tempo
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[1].title
+      value: Stay the Night (Nightcore)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.data[0].beatsPerBar
       value: 4
       objectReference: {fileID: 0}
@@ -455,6 +483,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.data[3].beatsPerBar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[0].beatUnit
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[1].beatUnit
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[0].trackFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 59753ad77e46ec54db66740836b3164d, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[1].trackFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 59753ad77e46ec54db66740836b3164d, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[0].beatsPerBar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: testSongs.Array.data[1].beatsPerBar
       value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []

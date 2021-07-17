@@ -48,6 +48,18 @@ public class GlobalManager : MonoBehaviour
         SceneManager.sceneLoaded += SetupScenes;
         SceneManager.sceneUnloaded += TeardownScenes;
         SetupScenes(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+        // HACK
+        /*TestSong temp = sl.FindTestSong("test track");
+        Song save = new Song();
+        save.title = temp.title;
+        save.File = temp.file;
+        save.offset = temp.offset;
+        save.beatsPerBar = temp.beatsPerBar;
+        save.beatUnit = temp.beatUnit;
+        save.tempo = temp.tempo;
+        save.track = temp.Track;
+        sl.SaveSong(save, "test-track-save");*/
+        // end HACK
     }
 
     #region Helper
@@ -67,6 +79,11 @@ public class GlobalManager : MonoBehaviour
     public void SaveTrack(Note[] notes, string fileName)
     {
         tp.SaveTrack(notes, fileName);
+    }
+
+    public void SaveSong(Song s, string fileName)
+    {
+        sl.SaveSong(s, fileName);
     }
 
     public Note[] ParseTrack(TextAsset trackFile)
@@ -108,13 +125,15 @@ public class GlobalManager : MonoBehaviour
         }
     }
 
+    // TODO: Color code note prefabs
+
     void SetupGameScene()
     {
         sngm = FindObjectOfType<SongManager>();
         LanePressed += sngm.CheckLane;
 
         // HACK
-        Song s = sl.FindSong(testSong);
+        (string fn, Song s) = sl.FindSong("Techno Motif");
         if (s != null)
             sngm.LoadSong(s);
         // end HACK
@@ -131,9 +150,17 @@ public class GlobalManager : MonoBehaviour
         em = FindObjectOfType<EditorManager>();
 
         // HACK
-        Song s = sl.FindSong(testSong);
+        /*TestSong temp = sl.FindTestSong("Techno Motif");
+        if (temp != null)
+        {
+            Song s = new Song();
+            (s.title, s.Clip, s.offset, s.beatsPerBar, s.beatUnit, s.tempo, s.track) =
+                (temp.title, temp.file, temp.offset, temp.beatsPerBar, temp.beatUnit, temp.tempo, temp.Track);
+            em.LoadSong(s, "");
+        }*/
+        (string fn, Song s) = sl.FindSong("Techno Motif");
         if (s != null)
-            em.LoadSong(s);
+            em.LoadSong(s, fn);
         // end HACK
     }
 

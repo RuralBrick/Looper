@@ -15,8 +15,11 @@ public class EditorManager : MonoBehaviour
     const float NEW_NOTE_BUFFER = 1f;
     const int NEW_NOTE_BARS = 4;
 
-    Song currentSong;
+    TestSong currentTestSong;
     string currentTrackName;
+
+    Song currentSong;
+    string currentFileName;
     public static int currentBar;
 
     List<Ref<Note>> notes = new List<Ref<Note>>();
@@ -43,6 +46,9 @@ public class EditorManager : MonoBehaviour
 
     InputField offsetField;
     Slider offsetSlider;
+    InputField beatsPerBarField;
+    InputField beatUnitField;
+    InputField tempoField;
     NoteInfoHandler nih;
     List<PlaceholderHandler> placeholders = new List<PlaceholderHandler>();
 
@@ -56,6 +62,9 @@ public class EditorManager : MonoBehaviour
         sdm = FindObjectOfType<SongDisplayManager>();
         offsetField = GameObject.Find("Offset Field").transform.GetComponent<InputField>();
         offsetSlider = GameObject.Find("Offset Slider").transform.GetComponent<Slider>();
+        beatsPerBarField = GameObject.Find("Beats Per Bar Field").transform.GetComponent<InputField>();
+        beatUnitField = GameObject.Find("Beat Unit Field").transform.GetComponent<InputField>();
+        tempoField = GameObject.Find("Tempo Field").transform.GetComponent<InputField>();
         nih = FindObjectOfType<NoteInfoHandler>();
     }
 
@@ -85,11 +94,40 @@ public class EditorManager : MonoBehaviour
         }
     }
 
-    public void LoadSong(Song s)
+    void Initialize()
     {
-        currentSong = s;
-        currentSong.beatsPerBar = s.beatsPerBar;
-        currentSong.beatUnit = s.beatUnit;
+        foreach (Note n in currentSong.track)
+        {
+            Ref<Note> newNoteRef = new Ref<Note>();
+            newNoteRef.Value = n;
+            notes.Add(newNoteRef);
+        }
+
+        ldm.Initialize(currentSong.beatsPerBar);
+        sdm.Initialize(currentSong);
+
+        GameObject.Find("Title Field").transform.GetComponent<InputField>().text = currentSong.title;
+        offsetField.text = currentSong.offset.ToString();
+        offsetSlider.value = currentSong.offset;
+        beatsPerBarField.text = currentSong.beatsPerBar.ToString();
+        beatUnitField.text = currentSong.beatUnit.ToString();
+        tempoField.text = currentSong.tempo.ToString();
+        GameObject.Find("File Name Field").transform.GetComponent<InputField>().text = currentFileName;
+
+        CurrentBar = 0;
+    }
+
+    public void InitializeEmpty()
+    {
+        currentSong = new Song();
+        currentFileName = "";
+
+        Initialize();
+    }
+
+    public void LoadSong(TestSong s)
+    {
+        currentTestSong = s;
         currentTrackName = s.TrackName;
         
         foreach (Note n in s.Track)
@@ -105,47 +143,28 @@ public class EditorManager : MonoBehaviour
         GameObject.Find("Title Field").transform.GetComponent<InputField>().text = s.title;
         offsetField.text = s.offset.ToString();
         offsetSlider.value = s.offset;
+        beatsPerBarField.text = s.beatsPerBar.ToString();
+        beatUnitField.text = s.beatUnit.ToString();
+        tempoField.text = s.tempo.ToString();
         GameObject.Find("Track Name Field").transform.GetComponent<InputField>().text = currentTrackName;
 
         CurrentBar = 0;
     }
 
-    public void SaveSong()
+    public void LoadSong(Song s, string fileName)
     {
-        Note[] track = new Note[notes.Count];
+        currentSong = s;
+        currentFileName = fileName;
 
-        for (int i = 0; i < notes.Count; i++)
-            track[i] = notes[i].Value;
-
-        GlobalManager.instance.SaveTrack(track, currentTrackName);
+        Initialize();
     }
-
-    public void DisplayNextBar()
-    {
-        CurrentBar++;
-    }
-
-    public void DisplayPrevBar()
-    {
-        CurrentBar--;
-    }
-
-    public void DisplayNextPhrase()
-    {
-        CurrentBar += PHRASE_SCROLL_AMOUNT;
-    }
-
-    public void DisplayPrevPhrase()
-    {
-        CurrentBar -= PHRASE_SCROLL_AMOUNT; 
-    }
-
-    // TODO: Set beatsPerBar, beatUnit, tempo
 
     public void SetTitle(string title)
     {
         currentSong.title = title;
     }
+
+    // TODO: Upload audio clip field
 
     public void SetOffset(string textOffset)
     {
@@ -165,9 +184,86 @@ public class EditorManager : MonoBehaviour
         sdm.SetOffset(newOffset);
     }
 
+    public void SetBeatsPerBar(string beatsPerBarText)
+    {
+        int beatsPerBar;
+        if (int.TryParse(beatsPerBarText, out beatsPerBar) && beatsPerBar > 0)
+        {
+            currentSong.beatsPerBar = beatsPerBar;
+            // TODO: Reinitialize ldm and sdm and respawn placeholders
+        }
+        else
+        {
+            beatsPerBarField.text = currentSong.beatsPerBar.ToString();
+        }
+    }
+
+    public void SetBeatUnit(string beatUnitText)
+    {
+        int beatUnit;
+        if (int.TryParse(beatUnitText, out beatUnit) && beatUnit > 0)
+        {
+            currentSong.beatUnit = beatUnit;
+            // TODO: Reinitialize ldm and sdm and respawn placeholders
+        }
+        else
+        {
+            beatUnitField.text = currentSong.beatUnit.ToString();
+        }
+    }
+
+    public void SetTempo(string tempoText)
+    {
+        float tempo;
+        if (float.TryParse(tempoText, out tempo) && tempo > 0)
+        {
+            currentSong.tempo = tempo;
+            // TODO: Reinitialize sdm
+        }
+        else
+        {
+            tempoField.text = currentSong.tempo.ToString();
+        }
+    }
+
     public void SetTrackName(string trackName)
     {
         currentTrackName = trackName;
+    }
+
+    public void SetFileName(string fileName)
+    {
+        currentFileName = fileName;
+    }
+
+    public void SaveSong()
+    {
+        currentSong.track = new Note[notes.Count];
+        
+        for (int i = 0; i < notes.Count; i++)
+            currentSong.track[i] = notes[i].Value;
+
+        GlobalManager.instance.SaveSong(currentSong, currentFileName);
+    }
+
+    public void DisplayNextBar()
+    {
+        CurrentBar++;
+    }
+
+    public void DisplayPrevBar()
+    {
+        CurrentBar--;
+    }
+
+    public void DisplayNextPhrase()
+    {
+        CurrentBar += PHRASE_SCROLL_AMOUNT;
+    }
+
+    public void DisplayPrevPhrase()
+    {
+        CurrentBar -= PHRASE_SCROLL_AMOUNT;
     }
 
     bool NoteInBar(float start, float stop, float beatPos)
