@@ -27,6 +27,7 @@ public class SongManager : MonoBehaviour
     List<Note> notes = new List<Note>();
     List<NoteHandler>[] activeNotes = new List<NoteHandler>[LoopDisplayHandler.LANE_COUNT];
 
+    // TODO: Figure out stereo support?
     AudioSource song;
     Coroutine metCoroutine;
     LoopDisplayHandler ldm;
@@ -49,7 +50,7 @@ public class SongManager : MonoBehaviour
         System.Array.Sort(hitRanges, (a, b) => a.margin.CompareTo(b.margin));
     }
 
-    public void LoadSong(Song s)
+    public void LoadSong(TestSong s)
     {
         song = gameObject.AddComponent<AudioSource>();
         song.clip = s.file;
@@ -61,6 +62,23 @@ public class SongManager : MonoBehaviour
         foreach (Note n in s.Track)
             notes.Add(n);
         
+        ldm.Initialize(beatsPerBar);
+
+        StartSong();
+    }
+
+    public void LoadSong(Song s)
+    {
+        song = gameObject.AddComponent<AudioSource>();
+        song.clip = s.Clip;
+
+        beatsPerBar = s.beatsPerBar;
+        tempo = s.tempo;
+        songOffset = s.offset;
+
+        foreach (Note n in s.track)
+            notes.Add(n);
+
         ldm.Initialize(beatsPerBar);
 
         StartSong();

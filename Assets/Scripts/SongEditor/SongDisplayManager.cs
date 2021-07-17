@@ -47,7 +47,7 @@ public class SongDisplayManager : MonoBehaviour
         waveform.enabled = false;
     }
 
-    public void Initialize(Song s)
+    public void Initialize(TestSong s)
     {
         beatsPerBar = s.beatsPerBar;
 
@@ -64,6 +64,27 @@ public class SongDisplayManager : MonoBehaviour
         samples = selectedSamples.ToArray();
         samplesPerBar = fullSamplesPerBar / divisor;
         samplesPerSecond = s.file.frequency * s.file.channels / divisor;
+    }
+
+    public void Initialize(Song s)
+    {
+        beatsPerBar = s.beatsPerBar;
+
+        AudioClip file = s.Clip;
+
+        float[] allSamples = new float[file.samples * file.channels];
+        s.Clip.GetData(allSamples, 0);
+
+        float fullSamplesPerBar = s.beatsPerBar * file.frequency * file.channels * SECONDS_PER_MINUTE / s.tempo;
+        int divisor = (int)(fullSamplesPerBar / TARGET_SAMPLES_PER_BAR);
+
+        List<float> selectedSamples = new List<float>();
+        for (int i = 0; i < allSamples.Length; i += divisor)
+            selectedSamples.Add(allSamples[i]);
+
+        samples = selectedSamples.ToArray();
+        samplesPerBar = fullSamplesPerBar / divisor;
+        samplesPerSecond = file.frequency * file.channels / divisor;
     }
 
     public void DisplayBar(List<Ref<Note>> notes)

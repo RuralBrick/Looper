@@ -19,7 +19,7 @@ public class TrackParser : MonoBehaviour
 
     void Awake()
     {
-        tracksPath = Application.dataPath + "/Tracks";
+        tracksPath = $"{Application.dataPath}/Tracks";
     }
 
     public void SaveTrack(Note[] notes, string fileName)
@@ -30,7 +30,7 @@ public class TrackParser : MonoBehaviour
             return;
         }
 
-        string filePath = tracksPath + "/" + fileName + ".bytes";
+        string filePath = $"{tracksPath}/{fileName}.bytes";
         FileStream fs = new FileStream(filePath, FileMode.Create);
 
         BinaryFormatter bf = new BinaryFormatter();
@@ -43,7 +43,7 @@ public class TrackParser : MonoBehaviour
 
     public Note[] LoadTrack(string fileName)
     {
-        string filePath = tracksPath + "/" + fileName + ".bytes";
+        string filePath = $"{tracksPath}/{fileName}.bytes";
 
         if (!File.Exists(filePath))
         {
