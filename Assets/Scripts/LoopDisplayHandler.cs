@@ -25,6 +25,7 @@ public class LoopDisplayHandler : MonoBehaviour
     public Material spriteMaterial;
 
     LineRenderer metronomeLine;
+    List<LineRenderer> beatLines = new List<LineRenderer>();
     
     void Awake()
     {
@@ -36,16 +37,12 @@ public class LoopDisplayHandler : MonoBehaviour
         MakeLaneLines();
     }
 
-    Vector3 CalcLinePosition(float beatPos)
+    public void Initialize(int beatsPerBar)
     {
-        float barPercent = beatPos / beatsPerBar;
-        float angle = (barPercent + 0.25f) * 2f * Mathf.PI;
-        float x = RADIUS * Mathf.Cos(angle);
-        if (clockwiseMetronome) x *= -1;
-        float y = RADIUS * Mathf.Sin(angle);
-        return new Vector3(x, y, 0);
+        this.beatsPerBar = beatsPerBar;
+        MakeBeatLines();
     }
-    
+
     public Vector3 CalcNotePosition(int lane, float beatPos)
     {
         Debug.Assert(beatsPerBar != 0 && beatPos < beatsPerBar);
@@ -75,6 +72,17 @@ public class LoopDisplayHandler : MonoBehaviour
         return new Vector3(scale, scale, 1);
     }
 
+    Vector3 CalcLinePosition(float beatPos)
+    {
+        Debug.Assert(beatsPerBar != 0 && beatPos < beatsPerBar);
+        float barPercent = beatPos / beatsPerBar;
+        float angle = (barPercent + 0.25f) * 2f * Mathf.PI;
+        float x = RADIUS * Mathf.Cos(angle);
+        if (clockwiseMetronome) x *= -1;
+        float y = RADIUS * Mathf.Sin(angle);
+        return new Vector3(x, y, 0);
+    }
+
     public void SetMetronome(float beatPos)
     {
         Debug.Assert(beatsPerBar != 0 && beatPos < beatsPerBar);
@@ -87,14 +95,12 @@ public class LoopDisplayHandler : MonoBehaviour
         metronomeLine.enabled = false;
     }
 
-    public void Initialize(int beatsPerBar)
-    {
-        this.beatsPerBar = beatsPerBar;
-        MakeBeatLines();
-    }
-
     void MakeBeatLines()
     {
+        foreach (LineRenderer lr in beatLines)
+            Destroy(lr.gameObject);
+        beatLines.Clear();
+
         for (int i = 1; i < beatsPerBar; i++)
         {
             GameObject line = new GameObject("Beat " + (i + 1) + " Line");
@@ -105,6 +111,8 @@ public class LoopDisplayHandler : MonoBehaviour
             LineRenderer lr = line.AddComponent<LineRenderer>();
             GlobalManager.FormatLine(ref lr, lineColor, lineMaterial, "Track", 100, SUB_BEAT_LINE_WIDTH);
             lr.SetPosition(1, CalcLinePosition(i));
+
+            beatLines.Add(lr);
         }
     }
 

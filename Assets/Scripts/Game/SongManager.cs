@@ -50,23 +50,8 @@ public class SongManager : MonoBehaviour
         System.Array.Sort(hitRanges, (a, b) => a.margin.CompareTo(b.margin));
     }
 
-    public void LoadSong(TestSong s)
-    {
-        song = gameObject.AddComponent<AudioSource>();
-        song.clip = s.file;
-
-        beatsPerBar = s.beatsPerBar;
-        tempo = s.tempo;
-        songOffset = s.offset;
-        
-        foreach (Note n in s.Track)
-            notes.Add(n);
-        
-        ldm.Initialize(beatsPerBar);
-
-        StartSong();
-    }
-
+    // TODO: Stop song
+    
     public void LoadSong(Song s)
     {
         song = gameObject.AddComponent<AudioSource>();
@@ -157,6 +142,8 @@ public class SongManager : MonoBehaviour
     {
         return beat % beatsPerBar;
     }
+
+    // TODO: Pausing
 
     IEnumerator KeepTime()
     {

@@ -5,31 +5,7 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-[Serializable]
-public class TestSong
-{
-    public string title;
-    public AudioClip file;
-    public float offset = 0f;
-    public int beatsPerBar = 4;
-    public int beatUnit = 4;
-    public float tempo;
-    public TextAsset trackFile;
-
-    public Note[] Track
-    {
-        get
-        {
-            if (trackFile)
-                return GlobalManager.instance.ParseTrack(trackFile);
-            return new Note[0];
-        }
-    }
-
-    public string TrackName {
-        get => trackFile ? trackFile.name : "";
-    }
-}
+// TODO: Remove all TestSong stuff
 
 [Serializable]
 public class Song
@@ -74,15 +50,21 @@ public class Song
 
     public AudioClip Clip
     {
-        get => clipData.GenerateClip();
+        get
+        {
+            if (clipData == null)
+            {
+                Debug.LogWarning("Clip data not found");
+                return null;
+            }
+            return clipData.GenerateClip();
+        }
         set => clipData = new AudioClipData(value);
     }
 }
 
 public class SongLibrary : MonoBehaviour
 {
-    public TestSong[] testSongs;
-
     string savePath;
     const string extension = "lprs";
 
@@ -103,17 +85,6 @@ public class SongLibrary : MonoBehaviour
             string fileName = Path.GetFileNameWithoutExtension(filePaths[i]);
             songs[i] = (fileName, LoadSong(fileName));
         }
-    }
-
-    public TestSong FindTestSong(string title)
-    {
-        TestSong s = Array.Find(testSongs, song => song.title == title);
-        if (s == null)
-        {
-            Debug.LogWarning($"Song {title} not found");
-            return null;
-        }
-        return s;
     }
 
     public (string, Song) FindSong(string title)
