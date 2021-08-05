@@ -15,11 +15,9 @@ public class EditorManager : MonoBehaviour
     const float NEW_NOTE_BUFFER = 1f;
     const int NEW_NOTE_BARS = 4;
 
-    TestSong currentTestSong;
-    string currentTrackName;
-
     Song currentSong;
     string currentFileName;
+    string currentTrackName;
     public static int currentBar;
 
     List<Ref<Note>> notes = new List<Ref<Note>>();
@@ -113,6 +111,7 @@ public class EditorManager : MonoBehaviour
         beatUnitField.text = currentSong.beatUnit.ToString();
         tempoField.text = currentSong.tempo.ToString();
         GameObject.Find("File Name Field").transform.GetComponent<InputField>().text = currentFileName;
+        //GameObject.Find("Track Name Field").transform.GetComponent<InputField>().text = currentTrackName;
 
         CurrentBar = 0;
     }
@@ -121,40 +120,16 @@ public class EditorManager : MonoBehaviour
     {
         currentSong = new Song();
         currentFileName = "";
+        currentTrackName = "";
 
         Initialize();
-    }
-
-    public void LoadSong(TestSong s)
-    {
-        currentTestSong = s;
-        currentTrackName = s.TrackName;
-        
-        foreach (Note n in s.Track)
-        {
-            Ref<Note> newNoteRef = new Ref<Note>();
-            newNoteRef.Value = n;
-            notes.Add(newNoteRef);
-        }
-        
-        ldm.Initialize(s.beatsPerBar);
-        sdm.Initialize(s);
-
-        GameObject.Find("Title Field").transform.GetComponent<InputField>().text = s.title;
-        offsetField.text = s.offset.ToString();
-        offsetSlider.value = s.offset;
-        beatsPerBarField.text = s.beatsPerBar.ToString();
-        beatUnitField.text = s.beatUnit.ToString();
-        tempoField.text = s.tempo.ToString();
-        GameObject.Find("Track Name Field").transform.GetComponent<InputField>().text = currentTrackName;
-
-        CurrentBar = 0;
     }
 
     public void LoadSong(Song s, string fileName)
     {
         currentSong = s;
         currentFileName = fileName;
+        currentTrackName = "";
 
         Initialize();
     }
@@ -190,6 +165,9 @@ public class EditorManager : MonoBehaviour
         if (int.TryParse(beatsPerBarText, out beatsPerBar) && beatsPerBar > 0)
         {
             currentSong.beatsPerBar = beatsPerBar;
+            ldm.Initialize(beatsPerBar);
+            sdm.Initialize(currentSong);
+            CurrentBar = currentBar;
             // TODO: Reinitialize ldm and sdm and respawn placeholders
         }
         else
@@ -204,7 +182,8 @@ public class EditorManager : MonoBehaviour
         if (int.TryParse(beatUnitText, out beatUnit) && beatUnit > 0)
         {
             currentSong.beatUnit = beatUnit;
-            // TODO: Reinitialize ldm and sdm and respawn placeholders
+            SpawnPlaceholders();
+            // TODO: Respawn placeholders
         }
         else
         {
@@ -218,6 +197,7 @@ public class EditorManager : MonoBehaviour
         if (float.TryParse(tempoText, out tempo) && tempo > 0)
         {
             currentSong.tempo = tempo;
+            sdm.Initialize(currentSong);
             // TODO: Reinitialize sdm
         }
         else
@@ -235,6 +215,8 @@ public class EditorManager : MonoBehaviour
     {
         currentFileName = fileName;
     }
+
+    // TODO: Save track option
 
     public void SaveSong()
     {
@@ -276,11 +258,9 @@ public class EditorManager : MonoBehaviour
 
     void SpawnEditNotes()
     {
-        for (int i = barNotes.Count - 1; i >= 0; i--)
-        {
-            Destroy(barNotes[i].gameObject);
-            barNotes.RemoveAt(i);
-        }
+        foreach (EditNoteHandler enh in barNotes)
+            Destroy(enh.gameObject);
+        barNotes.Clear();
 
         foreach (Ref<Note> n in notes)
         {
@@ -487,11 +467,9 @@ public class EditorManager : MonoBehaviour
 
     void SpawnPlaceholders()
     {
-        for (int i = placeholders.Count - 1; i >= 0; i--)
-        {
-            Destroy(placeholders[i].gameObject);
-            placeholders.RemoveAt(i);
-        }
+        foreach (PlaceholderHandler ph in placeholders)
+            Destroy(ph.gameObject);
+        placeholders.Clear();
 
         if (currentNoteVal.noteVal == 0 || currentNoteVal.noteButton == null)
             return;

@@ -3255,6 +3255,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: staythenightclip
+      value: 
+      objectReference: {fileID: 8300000, guid: 67f8e3c112418c14287ea2e387c0732a, type: 3}
+    - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: testSongs.Array.size
       value: 2
       objectReference: {fileID: 0}

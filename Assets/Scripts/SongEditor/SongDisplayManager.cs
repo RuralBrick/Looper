@@ -47,25 +47,6 @@ public class SongDisplayManager : MonoBehaviour
         waveform.enabled = false;
     }
 
-    public void Initialize(TestSong s)
-    {
-        beatsPerBar = s.beatsPerBar;
-
-        float[] allSamples = new float[s.file.samples * s.file.channels];
-        s.file.GetData(allSamples, 0);
-
-        float fullSamplesPerBar = s.beatsPerBar * s.file.frequency * s.file.channels * SECONDS_PER_MINUTE / s.tempo;
-        int divisor = (int)(fullSamplesPerBar / TARGET_SAMPLES_PER_BAR);
-
-        List<float> selectedSamples = new List<float>();
-        for (int i = 0; i < allSamples.Length; i += divisor)
-            selectedSamples.Add(allSamples[i]);
-
-        samples = selectedSamples.ToArray();
-        samplesPerBar = fullSamplesPerBar / divisor;
-        samplesPerSecond = s.file.frequency * s.file.channels / divisor;
-    }
-
     public void Initialize(Song s)
     {
         beatsPerBar = s.beatsPerBar;
@@ -176,11 +157,9 @@ public class SongDisplayManager : MonoBehaviour
 
     public void SpawnNoteLines(List<Ref<Note>> notes)
     {
-        for (int i = noteLines.Count - 1; i >= 0; i--)
-        {
-            Destroy(noteLines[i].duration.gameObject);
-            noteLines.RemoveAt(i);
-        }
+        foreach (NoteLine nl in noteLines)
+            Destroy(nl.duration.gameObject);
+        noteLines.Clear();
 
         foreach (Ref<Note> n in notes)
         {
