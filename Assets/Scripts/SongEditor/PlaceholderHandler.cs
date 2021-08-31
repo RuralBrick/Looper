@@ -4,34 +4,34 @@ using UnityEngine;
 
 public class PlaceholderHandler : MonoBehaviour
 {
-    SpriteRenderer sr;
+    SpriteRenderer spriteRenderer;
 
     public int lane;
     public float beatPos;
-    public EditorManager em;
+    public EditorManager editorManager;
 
     void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Start()
     {
-        sr.enabled = false;
+        spriteRenderer.enabled = false;
     }
 
     void OnMouseEnter()
     {
-        sr.enabled = true;
+        spriteRenderer.enabled = true;
     }
 
     void OnMouseExit()
     {
-        sr.enabled = false;
+        spriteRenderer.enabled = false;
     }
 
     void OnMouseUpAsButton()
     {
-        em.AddNote(lane, beatPos);
+        editorManager.AddNote(lane, beatPos);
     }
 }

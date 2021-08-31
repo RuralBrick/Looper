@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SongManager : MonoBehaviour
+public class PlayManager : MonoBehaviour
 {
     const float SECONDS_PER_MINUTE = 60f;
     const float BASE_SONG_WAIT = 3f;
@@ -30,11 +30,11 @@ public class SongManager : MonoBehaviour
     // TODO: Figure out stereo support?
     AudioSource song;
     Coroutine metCoroutine;
-    LoopDisplayHandler ldm;
+    LoopDisplayHandler loopDisplayHandler;
 
     public GameObject[] notePrefabs = new GameObject[LoopDisplayHandler.LANE_COUNT];
 
-    public SongManager()
+    public PlayManager()
     {
         for (int i = 0; i < LoopDisplayHandler.LANE_COUNT; i++)
             activeNotes[i] = new List<NoteHandler>();
@@ -42,7 +42,7 @@ public class SongManager : MonoBehaviour
 
     void Awake()
     {
-        ldm = FindObjectOfType<LoopDisplayHandler>();
+        loopDisplayHandler = FindObjectOfType<LoopDisplayHandler>();
     }
 
     void Start()
@@ -64,9 +64,9 @@ public class SongManager : MonoBehaviour
         foreach (Note n in s.track)
             notes.Add(n);
 
-        ldm.Initialize(beatsPerBar);
+        loopDisplayHandler.Initialize(beatsPerBar);
 
-        StartSong();
+        StartCoroutine(StartSong());
     }
 
     void SpawnNotes()
@@ -79,8 +79,8 @@ public class SongManager : MonoBehaviour
                 GameObject notePrefab = notePrefabs[note.lane];
                 
                 GameObject activeNote = Instantiate(notePrefab);
-                activeNote.transform.position = ldm.CalcNotePosition(note.lane, note.beatPos);
-                activeNote.transform.localScale = ldm.CalcNoteScale();
+                activeNote.transform.position = loopDisplayHandler.CalcNotePosition(note.lane, note.beatPos);
+                activeNote.transform.localScale = loopDisplayHandler.CalcNoteScale();
 
                 NoteHandler nh = activeNote.GetComponent<NoteHandler>();
                 nh.Initialize(note, beatsPerBar, tempo);
@@ -148,7 +148,7 @@ public class SongManager : MonoBehaviour
     IEnumerator KeepTime()
     {
         beat = -BASE_SONG_WAIT * TimeToBeat;
-        ldm.SetMetronome(CurrentBeatPos());
+        loopDisplayHandler.SetMetronome(CurrentBeatPos());
 
         yield return new WaitForEndOfFrame();
 
@@ -156,7 +156,7 @@ public class SongManager : MonoBehaviour
         {
             beat += Time.deltaTime * tempo / SECONDS_PER_MINUTE;
 
-            ldm.SetMetronome(CurrentBeatPos());
+            loopDisplayHandler.SetMetronome(CurrentBeatPos());
             SpawnNotes();
             ClearNotes();
 
@@ -164,8 +164,11 @@ public class SongManager : MonoBehaviour
         }
     }
 
-    void StartSong()
+    IEnumerator StartSong()
     {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+
         if (song != null && beatsPerBar != 0 && tempo != 0)
         {
             StartCoroutine(PlaySong());

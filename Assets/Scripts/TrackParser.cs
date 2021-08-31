@@ -13,9 +13,12 @@ public struct Note
     public float stop;
 }
 
+// TODO: Save tracks to Resources
+
 public class TrackParser : MonoBehaviour
 {
     string tracksPath;
+    BinaryFormatter bf = new BinaryFormatter();
 
     void Awake()
     {
@@ -31,11 +34,9 @@ public class TrackParser : MonoBehaviour
         }
 
         string filePath = $"{tracksPath}/{fileName}.bytes";
+
         FileStream fs = new FileStream(filePath, FileMode.Create);
-
-        BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(fs, notes);
-
         fs.Close();
 
         Debug.Log($"{fileName}.bytes saved");
@@ -52,10 +53,7 @@ public class TrackParser : MonoBehaviour
         }
 
         FileStream fs = new FileStream(filePath, FileMode.Open);
-
-        BinaryFormatter bf = new BinaryFormatter();
         Note[] notes = bf.Deserialize(fs) as Note[];
-
         fs.Close();
 
         Debug.Log($"{fileName}.bytes loaded");
@@ -66,10 +64,7 @@ public class TrackParser : MonoBehaviour
     public Note[] ParseTrack(TextAsset trackFile)
     {
         MemoryStream ms = new MemoryStream(trackFile.bytes);
-
-        BinaryFormatter bf = new BinaryFormatter();
         Note[] notes = bf.Deserialize(ms) as Note[];
-
         ms.Close();
 
         return notes;
