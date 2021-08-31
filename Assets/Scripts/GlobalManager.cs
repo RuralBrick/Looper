@@ -7,20 +7,25 @@ public class GlobalManager : MonoBehaviour
 {
     public static GlobalManager instance;
 
-    SoundManager sndm;
-    InputManager im;
-    SongLibrary sl;
-    TrackParser tp;
+    SoundManager soundManager;
+    InputManager inputManager;
+    SongLibrary songLibrary;
+    TrackParser trackParser;
 
     public delegate void LaneInput(int lane);
     public LaneInput LanePressed = delegate { };
-
+    
+    // TODO: Use user prefs
     public float syncOffset = 0f;
     public float hitOffset = 0f;
 
-    SongManager sngm;
-    EditorManager em;
-    CalibrationManager cm;
+    string fileName;
+    Song currentSong;
+
+    CalibrationManager calibrationManager;
+    SongSelectManager songSelectManager;
+    PlayManager playManager;
+    EditorManager editorManager;
 
     // HACK
     public string testSong;
@@ -37,16 +42,24 @@ public class GlobalManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        sndm = GetComponentInChildren<SoundManager>();
-        im = GetComponentInChildren<InputManager>();
-        sl = GetComponentInChildren<SongLibrary>();
-        tp = GetComponentInChildren<TrackParser>();
+        soundManager = GetComponentInChildren<SoundManager>();
+        inputManager = GetComponentInChildren<InputManager>();
+        songLibrary = GetComponentInChildren<SongLibrary>();
+        trackParser = GetComponentInChildren<TrackParser>();
     }
 
     void Start()
     {
         SceneManager.sceneLoaded += SetupScenes;
         SceneManager.sceneUnloaded += TeardownScenes;
+
+        // HACK
+        if (testSong != "")
+            SelectSong(testSong);
+        else
+            (fileName, currentSong) = songLibrary.GetFirstSong();
+        // end HACK
+
         SetupScenes(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
@@ -62,28 +75,40 @@ public class GlobalManager : MonoBehaviour
         line.useWorldSpace = useWorldSpace;
     }
 
-    // TODO: Save song to SongLibrary
+    public void SelectSong(string title)
+    {
+        (string fn, Song s) = songLibrary.FindSong(title);
+
+        if (s != null)
+        {
+            fileName = fn;
+            currentSong = s;
+            // HACK
+            songSelectManager?.SetSong(s.title, 0);
+            // end HACK
+        }
+    }
 
     public void SaveTrack(Note[] notes, string fileName)
     {
-        tp.SaveTrack(notes, fileName);
+        trackParser.SaveTrack(notes, fileName);
     }
 
     public void SaveSong(Song s, string fileName)
     {
-        sl.SaveSong(s, fileName);
+        songLibrary.SaveSong(s, fileName);
     }
 
     public Note[] ParseTrack(TextAsset trackFile)
     {
-        return tp.ParseTrack(trackFile);
+        return trackParser.ParseTrack(trackFile);
     }
     #endregion
 
     #region Input
     public Vector3 MousePosition()
     {
-        return im.mousePos;
+        return inputManager.mousePos;
     }
     #endregion
 
@@ -97,9 +122,10 @@ public class GlobalManager : MonoBehaviour
     {
         switch (scene.name)
         {
-            case "GameScene": SetupGameScene(); break;
-            case "EditorScene": SetupEditorScene(); break;
             case "CalibrationScene": SetupCalibrationScene(); break;
+            case "SongSelectScene": SetupSongSelectScene(); break;
+            case "PlayScene": SetupPlayScene(); break;
+            case "EditorScene": SetupEditorScene(); break;
         }
     }
 
@@ -107,70 +133,78 @@ public class GlobalManager : MonoBehaviour
     {
         switch (scene.name)
         {
-            case "GameScene": TeardownGameScene(); break;
-            case "EditorScene": TeardownEditorScene(); break;
             case "CalibrationScene": TeardownCalibrationScene(); break;
+            case "SongSelectScene": TeardownSongSelectScene(); break;
+            case "PlayScene": TeardownPlayScene(); break;
+            case "EditorScene": TeardownEditorScene(); break;
         }
-    }
-
-    // TODO: Color code note prefabs
-
-    void SetupGameScene()
-    {
-        sngm = FindObjectOfType<SongManager>();
-        LanePressed += sngm.CheckLane;
-
-        // HACK
-        (string fn, Song s) = sl.FindSong(testSong);
-        if (s != null)
-            sngm.LoadSong(s);
-        // end HACK
-    }
-
-    void TeardownGameScene()
-    {
-        LanePressed -= sngm.CheckLane;
-        sngm = null;
-    }
-
-    void SetupEditorScene()
-    {
-        em = FindObjectOfType<EditorManager>();
-
-        // HACK
-        (string fn, Song s) = sl.FindSong(testSong);
-        if (s != null)
-            em.LoadSong(s, fn);
-        // end HACK
-    }
-
-    void TeardownEditorScene()
-    {
-        em = null;
     }
 
     void SetupCalibrationScene()
     {
-        cm = FindObjectOfType<CalibrationManager>();
-        LanePressed += cm.Hit;
+        calibrationManager = FindObjectOfType<CalibrationManager>();
+        LanePressed += calibrationManager.Hit;
     }
 
     void TeardownCalibrationScene()
     {
-        LanePressed -= cm.Hit;
-        cm = null;
+        LanePressed -= calibrationManager.Hit;
+        calibrationManager = null;
+    }
+
+    void SetupSongSelectScene()
+    {
+        songSelectManager = FindObjectOfType<SongSelectManager>();
+
+        songSelectManager.LoadLibrary(songLibrary.GetSongTitles());
+        // HACK
+        songSelectManager.SetSong(currentSong.title, 0);
+        // end HACK
+    }
+
+    void TeardownSongSelectScene()
+    {
+        songSelectManager = null;
+    }
+
+    void SetupPlayScene()
+    {
+        playManager = FindObjectOfType<PlayManager>();
+        LanePressed += playManager.CheckLane;
+
+        if (currentSong != null)
+            playManager.LoadSong(currentSong);
+    }
+
+    void TeardownPlayScene()
+    {
+        LanePressed -= playManager.CheckLane;
+        playManager = null;
+    }
+
+    void SetupEditorScene()
+    {
+        editorManager = FindObjectOfType<EditorManager>();
+
+        if (currentSong != null)
+            editorManager.LoadSong(currentSong, fileName);
+    }
+
+    void TeardownEditorScene()
+    {
+        editorManager = null;
     }
     #endregion
 
     #region Sounds
     public void StartMetronome()
     {
-        sndm.Play("metronome");
+        soundManager.Play("metronome");
     }
 
     public void StopMetronome()
     {
-        sndm.Stop("metronome");
+        soundManager.Stop("metronome");
     }
     #endregion
 }

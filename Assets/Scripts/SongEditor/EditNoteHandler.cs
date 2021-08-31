@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EditNoteHandler : MonoBehaviour
 {
-    SpriteRenderer sr;
+    SpriteRenderer spriteRenderer;
 
     public Color normalColor;
     public Color highlightedColor;
@@ -12,52 +12,52 @@ public class EditNoteHandler : MonoBehaviour
     public Color selectedColor;
 
     [HideInInspector]
-    public EditorManager em;
+    public EditorManager editorManager;
     [HideInInspector]
     public Ref<Note> info;
     bool selected = false;
 
     void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Start()
     {
-        sr.color = normalColor;
+        spriteRenderer.color = normalColor;
     }
 
     void OnMouseEnter()
     {
         if (!selected)
-            sr.color = highlightedColor;
+            spriteRenderer.color = highlightedColor;
     }
 
     void OnMouseExit()
     {
         if (!selected)
-            sr.color = normalColor;
+            spriteRenderer.color = normalColor;
     }
 
     void OnMouseDown()
     {
-        sr.color = pressedColor;
+        spriteRenderer.color = pressedColor;
     }
 
     void OnMouseUpAsButton()
     {
-        em.SelectNote(this);
+        editorManager.SelectNote(this);
     }
 
     public void Select()
     {
         selected = true;
-        sr.color = selectedColor;
+        spriteRenderer.color = selectedColor;
     }
 
     public void Deselect()
     {
         selected = false;
-        sr.color = normalColor;
+        spriteRenderer.color = normalColor;
     }
 }

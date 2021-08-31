@@ -34,20 +34,20 @@ public class EditorManager : MonoBehaviour
     struct SelectedNote
     {
         public Ref<Note> noteRef;
-        public EditNoteHandler enh;
+        public EditNoteHandler editNoteHandler;
     }
     SelectedNote selectedNote;
     List<EditNoteHandler> barNotes = new List<EditNoteHandler>();
     
-    LoopDisplayHandler ldm;
-    SongDisplayManager sdm;
+    LoopDisplayHandler loopDisplayHandler;
+    SongDisplayManager songDisplayManager;
 
     InputField offsetField;
     Slider offsetSlider;
     InputField beatsPerBarField;
     InputField beatUnitField;
     InputField tempoField;
-    NoteInfoHandler nih;
+    NoteInfoHandler noteInfoHandler;
     List<PlaceholderHandler> placeholders = new List<PlaceholderHandler>();
 
     public GameObject[] placeholderPrefabs = new GameObject[LoopDisplayHandler.LANE_COUNT];
@@ -56,20 +56,20 @@ public class EditorManager : MonoBehaviour
 
     void Awake()
     {
-        ldm = FindObjectOfType<LoopDisplayHandler>();
-        sdm = FindObjectOfType<SongDisplayManager>();
+        loopDisplayHandler = FindObjectOfType<LoopDisplayHandler>();
+        songDisplayManager = FindObjectOfType<SongDisplayManager>();
         offsetField = GameObject.Find("Offset Field").transform.GetComponent<InputField>();
         offsetSlider = GameObject.Find("Offset Slider").transform.GetComponent<Slider>();
         beatsPerBarField = GameObject.Find("Beats Per Bar Field").transform.GetComponent<InputField>();
         beatUnitField = GameObject.Find("Beat Unit Field").transform.GetComponent<InputField>();
         tempoField = GameObject.Find("Tempo Field").transform.GetComponent<InputField>();
-        nih = FindObjectOfType<NoteInfoHandler>();
+        noteInfoHandler = FindObjectOfType<NoteInfoHandler>();
     }
 
     void Start()
     {
-        ldm.HideMetronome();
-        nih.Hide();
+        loopDisplayHandler.HideMetronome();
+        noteInfoHandler.Hide();
         SelectNoteVal(4);
     }
 
@@ -88,7 +88,7 @@ public class EditorManager : MonoBehaviour
                 DeselectNote();
 
             SpawnEditNotes();
-            sdm.DisplayBar(notes);
+            songDisplayManager.DisplayBar(notes);
         }
     }
 
@@ -101,8 +101,8 @@ public class EditorManager : MonoBehaviour
             notes.Add(newNoteRef);
         }
 
-        ldm.Initialize(currentSong.beatsPerBar);
-        sdm.Initialize(currentSong);
+        loopDisplayHandler.Initialize(currentSong.beatsPerBar);
+        songDisplayManager.Initialize(currentSong);
 
         GameObject.Find("Title Field").transform.GetComponent<InputField>().text = currentSong.title;
         offsetField.text = currentSong.offset.ToString();
@@ -139,7 +139,7 @@ public class EditorManager : MonoBehaviour
         currentSong.title = title;
     }
 
-    // TODO: Upload audio clip field
+    // TODO: Make audioClip upload field
 
     public void SetOffset(string textOffset)
     {
@@ -148,7 +148,7 @@ public class EditorManager : MonoBehaviour
         {
             currentSong.offset = newOffset;
             offsetSlider.value = newOffset;
-            sdm.SetOffset(newOffset);
+            songDisplayManager.SetOffset(newOffset);
         }
     }
 
@@ -156,7 +156,7 @@ public class EditorManager : MonoBehaviour
     {
         currentSong.offset = newOffset;
         offsetField.text = newOffset.ToString();
-        sdm.SetOffset(newOffset);
+        songDisplayManager.SetOffset(newOffset);
     }
 
     public void SetBeatsPerBar(string beatsPerBarText)
@@ -165,10 +165,9 @@ public class EditorManager : MonoBehaviour
         if (int.TryParse(beatsPerBarText, out beatsPerBar) && beatsPerBar > 0)
         {
             currentSong.beatsPerBar = beatsPerBar;
-            ldm.Initialize(beatsPerBar);
-            sdm.Initialize(currentSong);
+            loopDisplayHandler.Initialize(beatsPerBar);
+            songDisplayManager.Initialize(currentSong);
             CurrentBar = currentBar;
-            // TODO: Reinitialize ldm and sdm and respawn placeholders
         }
         else
         {
@@ -183,7 +182,6 @@ public class EditorManager : MonoBehaviour
         {
             currentSong.beatUnit = beatUnit;
             SpawnPlaceholders();
-            // TODO: Respawn placeholders
         }
         else
         {
@@ -197,8 +195,7 @@ public class EditorManager : MonoBehaviour
         if (float.TryParse(tempoText, out tempo) && tempo > 0)
         {
             currentSong.tempo = tempo;
-            sdm.Initialize(currentSong);
-            // TODO: Reinitialize sdm
+            songDisplayManager.Initialize(currentSong);
         }
         else
         {
@@ -267,11 +264,11 @@ public class EditorManager : MonoBehaviour
             if (NoteInBar(n.Value.start, n.Value.stop, n.Value.beatPos))
             {
                 GameObject newEditNote = Instantiate(editNotePrefabs[n.Value.lane]);
-                newEditNote.transform.position = ldm.CalcNotePosition(n.Value.lane, n.Value.beatPos);
-                newEditNote.transform.localScale = ldm.CalcNoteScale();
+                newEditNote.transform.position = loopDisplayHandler.CalcNotePosition(n.Value.lane, n.Value.beatPos);
+                newEditNote.transform.localScale = loopDisplayHandler.CalcNoteScale();
 
                 EditNoteHandler enh = newEditNote.GetComponent<EditNoteHandler>();
-                enh.em = this;
+                enh.editorManager = this;
                 enh.info = n;
 
                 barNotes.Add(enh);
@@ -282,32 +279,32 @@ public class EditorManager : MonoBehaviour
     void UpdateNoteDisplay()
     {
         SpawnEditNotes();
-        sdm.SpawnNoteLines(notes);
+        songDisplayManager.SpawnNoteLines(notes);
     }
 
-    // TODO: Try to save when switch note
+    // TODO: Try to save note when switch note
 
     public void SelectNote(EditNoteHandler enh)
     {
-        if (selectedNote.enh != null) selectedNote.enh.Deselect();
+        if (selectedNote.editNoteHandler != null) selectedNote.editNoteHandler.Deselect();
         enh.Select();
         selectedNote.noteRef = enh.info;
-        selectedNote.enh = enh;
+        selectedNote.editNoteHandler = enh;
 
-        nih.SetStart(enh.info.Value.start);
-        nih.SetStop(enh.info.Value.stop);
+        noteInfoHandler.SetStart(enh.info.Value.start);
+        noteInfoHandler.SetStop(enh.info.Value.stop);
 
-        nih.Show();
+        noteInfoHandler.Show();
     }
 
     public void DeselectNote()
     {
-        nih.Hide();
+        noteInfoHandler.Hide();
 
-        if (selectedNote.enh != null) selectedNote.enh.Deselect();
+        if (selectedNote.editNoteHandler != null) selectedNote.editNoteHandler.Deselect();
 
         selectedNote.noteRef = null;
-        selectedNote.enh = null;
+        selectedNote.editNoteHandler = null;
     }
 
     public void AddNote(int lane, float beatPos)
@@ -363,7 +360,7 @@ public class EditorManager : MonoBehaviour
             
             if (!StartValid(info, start))
             {
-                nih.SetStart(info.start);
+                noteInfoHandler.SetStart(info.start);
                 return;
             }
 
@@ -391,8 +388,8 @@ public class EditorManager : MonoBehaviour
             info.start = newStart;
             selectedNote.noteRef.Value = info;
 
-            nih.SetStart(newStart);
-            nih.ClearStartAdjust();
+            noteInfoHandler.SetStart(newStart);
+            noteInfoHandler.ClearStartAdjust();
 
             if (!NoteInBar(info.start, info.stop, info.beatPos))
                 DeselectNote();
@@ -415,7 +412,7 @@ public class EditorManager : MonoBehaviour
             
             if (!StopValid(info, stop))
             {
-                nih.SetStop(info.stop);
+                noteInfoHandler.SetStop(info.stop);
                 return;
             }
 
@@ -443,8 +440,8 @@ public class EditorManager : MonoBehaviour
             info.stop = newStop;
             selectedNote.noteRef.Value = info;
 
-            nih.SetStop(newStop);
-            nih.ClearStopAdjust();
+            noteInfoHandler.SetStop(newStop);
+            noteInfoHandler.ClearStopAdjust();
 
             if (!NoteInBar(info.start, info.stop, info.beatPos))
                 DeselectNote();
@@ -455,12 +452,12 @@ public class EditorManager : MonoBehaviour
 
     public void RemoveSelectedNote()
     {
-        nih.Hide();
+        noteInfoHandler.Hide();
 
         notes.Remove(selectedNote.noteRef);
 
         selectedNote.noteRef = null;
-        selectedNote.enh = null;
+        selectedNote.editNoteHandler = null;
 
         UpdateNoteDisplay();
     }
@@ -481,11 +478,11 @@ public class EditorManager : MonoBehaviour
             for (float beat = 0; beat < currentSong.beatsPerBar; beat += noteLength)
             {
                 GameObject newPlaceholder = Instantiate(placeholderPrefabs[lane]);
-                newPlaceholder.transform.position = ldm.CalcNotePosition(lane, beat);
-                newPlaceholder.transform.localScale = ldm.CalcNoteScale();
+                newPlaceholder.transform.position = loopDisplayHandler.CalcNotePosition(lane, beat);
+                newPlaceholder.transform.localScale = loopDisplayHandler.CalcNoteScale();
 
                 PlaceholderHandler ph = newPlaceholder.GetComponent<PlaceholderHandler>();
-                ph.em = this;
+                ph.editorManager = this;
                 ph.lane = lane;
                 ph.beatPos = beat;
 

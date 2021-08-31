@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 111141897
   m_SortingLayer: 2
   m_SortingOrder: 10
-  m_Sprite: {fileID: -7231393468810757983, guid: 0fef2ed69746ec7479299dcc4caab257, type: 3}
+  m_Sprite: {fileID: 6390492541579310417, guid: a5cba806a26e18849a98edac9d872bb3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -116,3 +116,4 @@ MonoBehaviour:
   highlightedColor: {r: 1, g: 1, b: 1, a: 1}
   pressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
   selectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+  em: {fileID: 0}

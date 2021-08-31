@@ -9,7 +9,7 @@ public class NoteHandler : MonoBehaviour
     const float SIZE_INCREASE = 1.1f;
     const float SIZE_CHANGE_TIME = 0.1f;
 
-    SpriteRenderer sr;
+    SpriteRenderer spriteRenderer;
 
     float stop;
     float fadeTime;
@@ -19,7 +19,7 @@ public class NoteHandler : MonoBehaviour
 
     void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public static bool ShouldSpawn(float beat, float start)
@@ -57,7 +57,7 @@ public class NoteHandler : MonoBehaviour
 
     // TODO: Figure out misses
     
-    public bool GetHit(float beat, SongManager.HitRange[] hitRanges, out SongManager.HitRangeType hit, out bool late)
+    public bool GetHit(float beat, PlayManager.HitRange[] hitRanges, out PlayManager.HitRangeType hit, out bool late)
     {
         for (int i = 0; i < hits.Count; i++)
         {
@@ -77,7 +77,7 @@ public class NoteHandler : MonoBehaviour
             }
         }
         
-        hit = SongManager.HitRangeType.None;
+        hit = PlayManager.HitRangeType.None;
         late = false;
 
         return false;
@@ -85,9 +85,9 @@ public class NoteHandler : MonoBehaviour
 
     IEnumerator FadeIn()
     {
-        Color color = sr.color;
+        Color color = spriteRenderer.color;
         color.a = 0f;
-        sr.color = color;
+        spriteRenderer.color = color;
 
         yield return new WaitForEndOfFrame();
 
@@ -97,12 +97,12 @@ public class NoteHandler : MonoBehaviour
         {
             timePassed += Time.deltaTime;
             color.a = timePassed / fadeTime;
-            sr.color = color;
+            spriteRenderer.color = color;
             yield return null;
         }
 
         color.a = 1f;
-        sr.color = color;
+        spriteRenderer.color = color;
 
         yield return null;
     }
@@ -111,9 +111,9 @@ public class NoteHandler : MonoBehaviour
 
     IEnumerator FadeOut(ListRemove lastCall)
     {
-        Color color = sr.color;
+        Color color = spriteRenderer.color;
         color.a = 1f;
-        sr.color = color;
+        spriteRenderer.color = color;
 
         yield return new WaitForEndOfFrame();
 
@@ -123,7 +123,7 @@ public class NoteHandler : MonoBehaviour
         {
             timeLeft -= Time.deltaTime;
             color.a = timeLeft / fadeTime;
-            sr.color = color;
+            spriteRenderer.color = color;
             yield return null;
         }
 

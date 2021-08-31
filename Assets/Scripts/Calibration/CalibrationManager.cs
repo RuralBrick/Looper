@@ -9,7 +9,7 @@ public class CalibrationManager : MonoBehaviour
     const int BEATS_PER_BAR = 4;
     const float SECONDS_PER_BEAT = 0.5f;
 
-    LoopDisplayHandler ldm;
+    LoopDisplayHandler loopDisplayHandler;
 
     float currentTime;
     float syncOffset;
@@ -29,7 +29,7 @@ public class CalibrationManager : MonoBehaviour
 
     void Awake()
     {
-        ldm = FindObjectOfType<LoopDisplayHandler>();
+        loopDisplayHandler = FindObjectOfType<LoopDisplayHandler>();
         instructionsText = GameObject.Find("Instructions Text").transform.GetComponent<Text>();
         syncSlider = GameObject.Find("Sync Slider").transform.GetComponent<Slider>();
     }
@@ -40,7 +40,7 @@ public class CalibrationManager : MonoBehaviour
         hitOffset = GlobalManager.instance.hitOffset;
         syncConfirmed = false;
 
-        ldm.Initialize(4);
+        loopDisplayHandler.Initialize(4);
         instructionsText.text = instructions[0];
 
         GlobalManager.instance.StartMetronome();
@@ -57,7 +57,7 @@ public class CalibrationManager : MonoBehaviour
     IEnumerator KeepTime()
     {
         currentTime = 0f;
-        ldm.SetMetronome(CurrentBeatPos());
+        loopDisplayHandler.SetMetronome(CurrentBeatPos());
 
         yield return new WaitForEndOfFrame();
 
@@ -65,7 +65,7 @@ public class CalibrationManager : MonoBehaviour
         {
             currentTime += Time.deltaTime;
 
-            ldm.SetMetronome(CurrentBeatPos());
+            loopDisplayHandler.SetMetronome(CurrentBeatPos());
 
             yield return null;
         }

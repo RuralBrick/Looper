@@ -5,8 +5,6 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-// TODO: Remove all TestSong stuff
-
 [Serializable]
 public class Song
 {
@@ -63,12 +61,15 @@ public class Song
     }
 }
 
+// TODO: Save songs to Resources
+
 public class SongLibrary : MonoBehaviour
 {
     string savePath;
     const string extension = "lprs";
+    BinaryFormatter bf = new BinaryFormatter();
 
-    (string, Song)[] songs;
+    List<(string, Song)> songs;
 
     void Awake()
     {
@@ -79,17 +80,54 @@ public class SongLibrary : MonoBehaviour
     {
         string[] filePaths = Directory.GetFiles(savePath, $"*.{extension}");
 
-        songs = new (string, Song)[filePaths.Length];
-        for (int i = 0; i < filePaths.Length; i++)
+        songs = new List<(string, Song)>();
+        foreach (string file in filePaths)
         {
-            string fileName = Path.GetFileNameWithoutExtension(filePaths[i]);
-            songs[i] = (fileName, LoadSong(fileName));
+            string fileName = Path.GetFileNameWithoutExtension(file);
+            songs.Add((fileName, LoadSong(fileName)));
         }
+    }
+
+    Song LoadSong(string fileName)
+    {
+        string filePath = $"{savePath}/{fileName}.{extension}";
+
+        if (!File.Exists(filePath))
+        {
+            Debug.LogWarning($"{fileName}.{extension} does not exist");
+            return null;
+        }
+
+        FileStream fs = new FileStream(filePath, FileMode.Open);
+        Song s = bf.Deserialize(fs) as Song;
+        fs.Close();
+
+        return s;
+    }
+
+    public string[] GetSongTitles()
+    {
+        string[] titles = new string[songs.Count];
+
+        for (int i = 0; i < songs.Count; i++)
+            titles[i] = songs[i].Item2.title;
+
+        return titles;
+    }
+
+    public (string, Song) GetFirstSong()
+    {
+        if (songs.Count == 0)
+        {
+            Debug.LogWarning($"No songs in library");
+            return ("", null);
+        }
+        return songs[0];
     }
 
     public (string, Song) FindSong(string title)
     {
-        (string fn, Song s) = Array.Find(songs, entry => entry.Item2.title == title);
+        (string fn, Song s) = songs.Find(entry => entry.Item2.title == title);
         if (s == null)
         {
             Debug.LogWarning($"Song {title} not found");
@@ -100,34 +138,39 @@ public class SongLibrary : MonoBehaviour
 
     public void SaveSong(Song song, string fileName)
     {
+        if (!songs.Exists(entry => entry.Item1 == fileName))
+        {
+            songs.Add((fileName, song));
+        }
+
         string filePath = $"{savePath}/{fileName}.{extension}";
+
         FileStream fs = new FileStream(filePath, FileMode.Create);
-
-        BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(fs, song);
-
         fs.Close();
 
         Debug.Log($"{fileName}.{extension} saved");
     }
 
-    Song LoadSong(string fileName)
+    public void DeleteSong(string title)
     {
-        string filePath = $"{savePath}/{fileName}.{extension}";
-
-        if (!File.Exists(filePath))
+        (string fn, Song s) = songs.Find(entry => entry.Item2.title == title);
+        if (s == null)
         {
-            Debug.LogWarning($"{fileName}.{extension} does not exits");
-            return null;
+            Debug.LogWarning($"Song {title} not found");
+            return;
         }
 
-        FileStream fs = new FileStream(filePath, FileMode.Open);
+        string filePath = $"{savePath}/{fn}.{extension}";
+        if (!File.Exists(filePath))
+        {
+            Debug.LogWarning($"{fn}.{extension} does not exist");
+            return;
+        }
 
-        BinaryFormatter bf = new BinaryFormatter();
-        Song s = bf.Deserialize(fs) as Song;
+        songs.Remove((fn, s));
+        File.Delete(filePath);
 
-        fs.Close();
-
-        return s;
+        Debug.Log($"{fn}.{extension} deleted");
     }
 }
