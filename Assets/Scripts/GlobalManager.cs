@@ -99,6 +99,11 @@ public class GlobalManager : MonoBehaviour
         songLibrary.SaveSong(s, fileName);
     }
 
+    public void DevSaveSong(Song s, string fileName)
+    {
+        songLibrary.SaveSongToResources(s, fileName);
+    }
+
     public Note[] ParseTrack(TextAsset trackFile)
     {
         return trackParser.ParseTrack(trackFile);
