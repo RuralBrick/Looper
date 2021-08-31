@@ -225,6 +225,16 @@ public class EditorManager : MonoBehaviour
         GlobalManager.instance.SaveSong(currentSong, currentFileName);
     }
 
+    public void DevSaveSong()
+    {
+        currentSong.track = new Note[notes.Count];
+
+        for (int i = 0; i < notes.Count; i++)
+            currentSong.track[i] = notes[i].Value;
+
+        GlobalManager.instance.DevSaveSong(currentSong, currentFileName);
+    }
+
     public void DisplayNextBar()
     {
         CurrentBar++;
