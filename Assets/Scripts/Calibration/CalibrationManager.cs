@@ -16,6 +16,11 @@ public class CalibrationManager : MonoBehaviour
     float hitOffset;
     List<float> offsetData;
 
+    float SyncOffset
+    {
+        get => LoopDisplayHandler.clockwiseMetronome ? -1 * syncOffset : syncOffset;
+    }
+
     bool syncConfirmed = false;
 
     Text instructionsText;
@@ -49,7 +54,7 @@ public class CalibrationManager : MonoBehaviour
 
     float CurrentBeatPos()
     {
-        float adjustedTime = currentTime - syncOffset;
+        float adjustedTime = currentTime - SyncOffset;
         float currentBeat = adjustedTime * BEATS_PER_SECOND;
         return currentBeat % BEATS_PER_BAR;
     }
@@ -90,7 +95,7 @@ public class CalibrationManager : MonoBehaviour
 
     void ConfirmSync()
     {
-        Debug.Log("Sync: " + syncOffset);
+        Debug.Log("Sync: " + SyncOffset);
         GameObject.Find("Sync Controls").SetActive(false);
 
         instructionsText.text = instructions[1];
@@ -116,7 +121,7 @@ public class CalibrationManager : MonoBehaviour
 
         Debug.Log("Hits: " + hitOffset);
 
-        GlobalManager.instance.syncOffset = syncOffset;
+        GlobalManager.instance.syncOffset = SyncOffset;
         GlobalManager.instance.hitOffset = hitOffset;
 
         Debug.Log("Calibration finished");
@@ -138,7 +143,7 @@ public class CalibrationManager : MonoBehaviour
 
         if (syncConfirmed)
         {
-            float adjustedTime = currentTime - syncOffset;
+            float adjustedTime = currentTime - SyncOffset;
             float plusAdjusted = adjustedTime + halfBeat;
             float modAjusted = plusAdjusted % SECONDS_PER_BEAT;
             float offset = modAjusted - halfBeat;

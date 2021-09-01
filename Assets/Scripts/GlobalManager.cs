@@ -117,6 +117,8 @@ public class GlobalManager : MonoBehaviour
     }
     #endregion
 
+    // TODO: Raise resolution
+
     #region Scenes
     public static void ChangeScene(string sceneName)
     {
