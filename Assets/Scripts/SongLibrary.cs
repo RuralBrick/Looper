@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -72,8 +73,8 @@ public class SongLibrary : MonoBehaviour
     string savePath;
     const string extension = "lprs";
 
-    List<(string, Song)> songs;
-    List<(string, Song)> userSongs;
+    Dictionary<string, Song> songs;
+    Dictionary<string, Song> userSongs;
 
     BinaryFormatter bf = new BinaryFormatter();
 
@@ -88,7 +89,7 @@ public class SongLibrary : MonoBehaviour
         if (!Directory.Exists(savePath))
             Directory.CreateDirectory(savePath);
 
-        songs = new List<(string, Song)>();
+        songs = new Dictionary<string, Song>();
 
         TextAsset[] songData = Resources.LoadAll<TextAsset>("Song Data");
         foreach (var file in songData)
@@ -97,10 +98,10 @@ public class SongLibrary : MonoBehaviour
             Song s = bf.Deserialize(ms) as Song;
             ms.Close();
 
-            songs.Add((file.name, s));
+            songs.Add(file.name, s);
         }
 
-        userSongs = new List<(string, Song)>();
+        userSongs = new Dictionary<string, Song>();
 
         string[] filePaths = Directory.GetFiles(savePath, $"*.{extension}");
         foreach (string filePath in filePaths)
@@ -109,55 +110,70 @@ public class SongLibrary : MonoBehaviour
             Song s = bf.Deserialize(fs) as Song;
             fs.Close();
 
-            userSongs.Add((Path.GetFileNameWithoutExtension(filePath), s));
+            userSongs.Add(Path.GetFileNameWithoutExtension(filePath), s);
         }
     }
 
-    public string[] GetSongTitles()
+    public (string, string)[] GetSongs()
     {
         string[] titles = new string[songs.Count + userSongs.Count];
+        (string, string)[] songList = new (string, string)[songs.Count + userSongs.Count];
 
         int t = 0;
-        for (int i = 0; i < songs.Count; i++)
+        foreach (var entry in songs)
         {
-            titles[t] = songs[i].Item2.title;
+            titles[t] = entry.Value.title;
+            songList[t] = (entry.Key, entry.Value.title);
             t++;
         }
-        for (int i = 0; i < userSongs.Count; i++)
+        foreach (var entry in userSongs)
         {
-            titles[t] = userSongs[i].Item2.title;
+            titles[t] = entry.Value.title;
+            songList[t] = (entry.Key, entry.Value.title);
             t++;
         }
 
-        return titles;
+        Array.Sort(titles, songList);
+        return songList;
     }
 
-    public (string, Song) GetFirstSong()
+    public Song FindSong(string fileName)
     {
-        if (songs.Count == 0)
+        Song s;
+        if (userSongs.TryGetValue(fileName, out s))
         {
-            Debug.LogWarning($"No songs in library");
-            return ("", null);
+            return s;
         }
-        return songs[0];
+        if (songs.TryGetValue(fileName, out s))
+        {
+            return s;
+        }
+
+        Debug.LogWarning($"Song {fileName} not found");
+        return null;
     }
 
-    // TODO: Find/delete song by different identifier
-
-    public (string, Song) FindSong(string title)
+    public (string, Song) FindSongByTitle(string title)
     {
-        (string fn, Song s) = userSongs.Find(entry => entry.Item2.title == title);
-        
+        var entry = userSongs.Where(entry => entry.Value.title == title).FirstOrDefault();
+        string fn = entry.Key;
+        Song s = entry.Value;
+
         if (s != null)
-            return (fn, s);
-
-        (fn, s) = songs.Find(entry => entry.Item2.title == title);
-        if (s == null)
         {
-            Debug.LogWarning($"Song {title} not found");
-            return ("", null);
+            return (fn, s);
         }
-        return (fn, s);
+
+        entry = songs.Where(entry => entry.Value.title == title).FirstOrDefault();
+        fn = entry.Key;
+        s = entry.Value;
+        if (s != null)
+        {
+            return (fn, s);
+        }
+
+        Debug.LogWarning($"Song {title} not found");
+        return ("", null);
     }
 
     public void SaveSongToResources(Song song, string fileName)
@@ -173,9 +189,13 @@ public class SongLibrary : MonoBehaviour
 
     public void SaveSong(Song song, string fileName)
     {
-        if (!userSongs.Exists(entry => entry.Item1 == fileName))
+        if (!userSongs.ContainsKey(fileName))
         {
-            userSongs.Add((fileName, song));
+            userSongs.Add(fileName, song);
+        }
+        else
+        {
+            userSongs[fileName] = song;
         }
 
         string filePath = $"{savePath}/{fileName}.{extension}";
@@ -187,25 +207,24 @@ public class SongLibrary : MonoBehaviour
         Debug.Log($"{fileName}.{extension} saved");
     }
 
-    public void DeleteSong(string title)
+    public void DeleteSong(string fileName)
     {
-        (string fn, Song s) = userSongs.Find(entry => entry.Item2.title == title);
-        if (s == null)
+        if (!userSongs.ContainsKey(fileName))
         {
-            Debug.LogWarning($"User song {title} not found");
+            Debug.LogWarning($"User song {fileName} not found");
             return;
         }
-
-        string filePath = $"{savePath}/{fn}.{extension}";
+        
+        string filePath = $"{savePath}/{fileName}.{extension}";
         if (!File.Exists(filePath))
         {
-            Debug.LogWarning($"{fn}.{extension} does not exist");
+            Debug.LogWarning($"{fileName}.{extension} does not exist");
             return;
         }
 
-        userSongs.Remove((fn, s));
+        userSongs.Remove(fileName);
         File.Delete(filePath);
 
-        Debug.Log($"{fn}.{extension} deleted");
+        Debug.Log($"{fileName}.{extension} deleted");
     }
 }

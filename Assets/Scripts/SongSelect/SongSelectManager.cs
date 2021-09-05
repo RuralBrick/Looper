@@ -16,9 +16,12 @@ public class SongSelectManager : MonoBehaviour
         songListHandler = FindObjectOfType<SongListHandler>();
     }
 
-    public void LoadLibrary(string[] titles)
+    public void LoadLibrary((string, string)[] songList)
     {
-        songListHandler.CreateList(titles);
+        songListHandler.CreateList(songList);
+        // HACK
+        SetSong(songList[0].Item2, 0);
+        // end HACK
     }
 
     public void SetSong(string title, int highScore)

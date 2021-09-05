@@ -14,10 +14,10 @@ public class SongButtonHandler : MonoBehaviour
         text = GetComponentInChildren<Text>();
     }
 
-    public void SetSong(string title)
+    public void SetSong(string fileName, string title)
     {
         Button.ButtonClickedEvent newOnClick = new Button.ButtonClickedEvent();
-        newOnClick.AddListener(delegate { GlobalManager.instance.SelectSong(title); });
+        newOnClick.AddListener(delegate { GlobalManager.instance.SelectSong(fileName); });
         button.onClick = newOnClick;
 
         text.text = title;
