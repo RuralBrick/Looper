@@ -55,9 +55,7 @@ public class GlobalManager : MonoBehaviour
 
         // HACK
         if (testSong != "")
-            SelectSong(testSong);
-        else
-            (fileName, currentSong) = songLibrary.GetFirstSong();
+            (fileName, currentSong) = songLibrary.FindSongByTitle(testSong);
         // end HACK
 
         SetupScenes(SceneManager.GetActiveScene(), LoadSceneMode.Single);
@@ -75,13 +73,13 @@ public class GlobalManager : MonoBehaviour
         line.useWorldSpace = useWorldSpace;
     }
 
-    public void SelectSong(string title)
+    public void SelectSong(string fileName)
     {
-        (string fn, Song s) = songLibrary.FindSong(title);
+        Song s = songLibrary.FindSong(fileName);
 
         if (s != null)
         {
-            fileName = fn;
+            this.fileName = fileName;
             currentSong = s;
             // HACK
             songSelectManager?.SetSong(s.title, 0);
@@ -157,14 +155,13 @@ public class GlobalManager : MonoBehaviour
         calibrationManager = null;
     }
 
+    // TODO: Load song highscores
+
     void SetupSongSelectScene()
     {
         songSelectManager = FindObjectOfType<SongSelectManager>();
 
-        songSelectManager.LoadLibrary(songLibrary.GetSongTitles());
-        // HACK
-        songSelectManager.SetSong(currentSong.title, 0);
-        // end HACK
+        songSelectManager.LoadLibrary(songLibrary.GetSongs());
     }
 
     void TeardownSongSelectScene()

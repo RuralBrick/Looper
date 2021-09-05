@@ -12,6 +12,9 @@ public class PlayManager : MonoBehaviour
     int beatsPerBar = 0;
     float tempo = 0;
 
+    public static int score = 0;
+    public static int combo = 0;
+
     public enum HitRangeType { None, Perfect, Great }
     public struct HitRange
     {

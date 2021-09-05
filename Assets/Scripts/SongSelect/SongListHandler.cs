@@ -22,15 +22,15 @@ public class SongListHandler : MonoBehaviour
         }
     }
 
-    public void CreateList(string[] titles)
+    public void CreateList((string, string)[] songList)
     {
         foreach (SongButtonHandler sbh in songButtons)
             Destroy(sbh.gameObject);
         songButtons.Clear();
 
-        content.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, titles.Length * songButtonHeight);
+        content.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, songList.Length * songButtonHeight);
 
-        for (int i = 0; i < titles.Length; i++)
+        for (int i = 0; i < songList.Length; i++)
         {
             GameObject newSongButton = Instantiate(songButtonPrefab, content.transform);
 
@@ -38,7 +38,7 @@ public class SongListHandler : MonoBehaviour
             songButtonRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, i * songButtonHeight, songButtonHeight);
 
             SongButtonHandler songButtonHandler = newSongButton.GetComponent<SongButtonHandler>();
-            songButtonHandler.SetSong(titles[i]);
+            songButtonHandler.SetSong(songList[i].Item1, songList[i].Item2);
 
             songButtons.Add(songButtonHandler);
         }
