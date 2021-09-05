@@ -94,6 +94,8 @@ public class LoopDisplayHandler : MonoBehaviour
     {
         metronomeLine.enabled = false;
     }
+    
+    // TODO: Change lines to prefabs
 
     void MakeBeatLines()
     {

@@ -506,7 +506,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: testSong
-      value: 
+      value: test track (short)
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: hitOffset
