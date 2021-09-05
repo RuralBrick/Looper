@@ -155,6 +155,8 @@ public class SongDisplayManager : MonoBehaviour
         return BOTTOM + disp;
     }
 
+    // TODO: Change lines to prefabs
+
     public void SpawnNoteLines(List<Ref<Note>> notes)
     {
         foreach (NoteLine nl in noteLines)

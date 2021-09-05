@@ -49,14 +49,12 @@ public class NoteHandler : MonoBehaviour
         return beat > stop;
     }
 
-    public void Disappear(ListRemove listRemove)
+    public void Disappear(System.Action listRemove)
     {
         if (fadeOut == null)
             fadeOut = StartCoroutine(FadeOut(listRemove));
     }
 
-    // TODO: Figure out misses
-    
     public bool GetHit(float beat, PlayManager.HitRange[] hitRanges, out PlayManager.HitRangeType hit, out bool late)
     {
         for (int i = 0; i < hits.Count; i++)
@@ -80,6 +78,19 @@ public class NoteHandler : MonoBehaviour
         hit = PlayManager.HitRangeType.None;
         late = false;
 
+        return false;
+    }
+    
+    public bool MissedNote(float beat, float lastMargin)
+    {
+        for (int i = 0; i < hits.Count; i++)
+        {
+            if (beat - hits[i] > lastMargin)
+            {
+                hits.RemoveAt(i);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -109,7 +120,7 @@ public class NoteHandler : MonoBehaviour
 
     public delegate bool ListRemove(NoteHandler nh);
 
-    IEnumerator FadeOut(ListRemove lastCall)
+    IEnumerator FadeOut(System.Action lastCall)
     {
         Color color = spriteRenderer.color;
         color.a = 1f;
@@ -127,8 +138,7 @@ public class NoteHandler : MonoBehaviour
             yield return null;
         }
 
-        if (!lastCall(this))
-            Debug.LogWarning("Could not remove note handler");
+        lastCall();
         Destroy(gameObject);
 
         yield return null;

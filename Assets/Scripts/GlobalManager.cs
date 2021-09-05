@@ -117,8 +117,6 @@ public class GlobalManager : MonoBehaviour
     }
     #endregion
 
-    // TODO: Raise resolution
-
     #region Scenes
     public static void ChangeScene(string sceneName)
     {
@@ -180,7 +178,10 @@ public class GlobalManager : MonoBehaviour
         LanePressed += playManager.CheckLane;
 
         if (currentSong != null)
+        {
+            soundManager.LoadSong(currentSong);
             playManager.LoadSong(currentSong);
+        }
     }
 
     void TeardownPlayScene()
@@ -204,6 +205,11 @@ public class GlobalManager : MonoBehaviour
     #endregion
 
     #region Sounds
+    public void PlaySong()
+    {
+        soundManager.PlaySong();
+    }
+
     public void StartMetronome()
     {
         soundManager.Play("metronome");

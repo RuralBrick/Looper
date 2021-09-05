@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,11 @@ using UnityEngine;
 public class PlayManager : MonoBehaviour
 {
     const float SECONDS_PER_MINUTE = 60f;
-    const float BASE_SONG_WAIT = 3f;
+    public const float BASE_SONG_WAIT = 3f;
 
     float beat = 0;
     int beatsPerBar = 0;
     float tempo = 0;
-    float songOffset = 0f;
 
     public enum HitRangeType { None, Perfect, Great }
     public struct HitRange
@@ -27,8 +27,6 @@ public class PlayManager : MonoBehaviour
     List<Note> notes = new List<Note>();
     List<NoteHandler>[] activeNotes = new List<NoteHandler>[LoopDisplayHandler.LANE_COUNT];
 
-    // TODO: Figure out stereo support?
-    AudioSource song;
     Coroutine metCoroutine;
     LoopDisplayHandler loopDisplayHandler;
 
@@ -47,19 +45,15 @@ public class PlayManager : MonoBehaviour
 
     void Start()
     {
-        System.Array.Sort(hitRanges, (a, b) => a.margin.CompareTo(b.margin));
+        Array.Sort(hitRanges, (a, b) => a.margin.CompareTo(b.margin));
     }
 
     // TODO: Stop song
     
     public void LoadSong(Song s)
     {
-        song = gameObject.AddComponent<AudioSource>();
-        song.clip = s.Clip;
-
         beatsPerBar = s.beatsPerBar;
         tempo = s.tempo;
-        songOffset = s.offset;
 
         foreach (Note n in s.track)
             notes.Add(n);
@@ -91,12 +85,34 @@ public class PlayManager : MonoBehaviour
         }
     }
 
+    void CheckMisses()
+    {
+        int misses = 0;
+        foreach (List<NoteHandler> lane in activeNotes)
+            foreach (NoteHandler noteHandler in lane)
+                if (noteHandler.MissedNote(beat, hitRanges[hitRanges.Length - 1].margin))
+                    misses++;
+        if (misses > 0)
+            Debug.Log($"Missed: {misses}");
+    }
+
     void ClearNotes()
     {
         foreach (List<NoteHandler> lane in activeNotes)
             foreach (NoteHandler nh in lane)
                 if (nh.ShouldDespawn(beat))
-                    nh.Disappear(lane.Remove);
+                    nh.Disappear(delegate
+                    { 
+                        if (!lane.Remove(nh))
+                            Debug.LogWarning("Could not remove note handler");
+                        CheckEnd();
+                    });
+    }
+
+    void CheckEnd()
+    {
+        if (notes.Count == 0 && Array.TrueForAll(activeNotes, lane => lane.Count == 0))
+            GlobalManager.ChangeScene("ResultsScene");
     }
 
     float TimeToBeat
@@ -131,13 +147,6 @@ public class PlayManager : MonoBehaviour
         }
     }
 
-    IEnumerator PlaySong()
-    {
-        float wait = BASE_SONG_WAIT + songOffset - GlobalManager.instance.syncOffset;
-        yield return new WaitForSeconds(wait);
-        song.Play();
-    }
-
     float CurrentBeatPos()
     {
         return beat % beatsPerBar;
@@ -158,6 +167,7 @@ public class PlayManager : MonoBehaviour
 
             loopDisplayHandler.SetMetronome(CurrentBeatPos());
             SpawnNotes();
+            CheckMisses();
             ClearNotes();
 
             yield return null;
@@ -169,9 +179,9 @@ public class PlayManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
-        if (song != null && beatsPerBar != 0 && tempo != 0)
+        if (beatsPerBar != 0 && tempo != 0)
         {
-            StartCoroutine(PlaySong());
+            GlobalManager.instance.PlaySong();
             metCoroutine = StartCoroutine(KeepTime());
         }
     }

@@ -22,10 +22,14 @@ public class Sound
 
 public class SoundManager : MonoBehaviour
 {
+    AudioSource song;
+    float songDelay;
+
     public Sound[] sounds;
 
     void Awake()
     {
+        song = gameObject.AddComponent<AudioSource>();
         foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -35,6 +39,17 @@ public class SoundManager : MonoBehaviour
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
         }
+    }
+
+    public void LoadSong(Song s)
+    {
+        song.clip = s.Clip;
+        songDelay = PlayManager.BASE_SONG_WAIT + s.offset + GlobalManager.instance.syncOffset;
+    }
+
+    public void PlaySong()
+    {
+        song.PlayDelayed(songDelay);
     }
 
     public Sound Play(string name)
