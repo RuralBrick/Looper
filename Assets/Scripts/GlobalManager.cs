@@ -24,8 +24,9 @@ public class GlobalManager : MonoBehaviour
 
     CalibrationManager calibrationManager;
     SongSelectManager songSelectManager;
-    PlayManager playManager;
     EditorManager editorManager;
+    PlayManager playManager;
+    ResultsManager resultsManager;
 
     // HACK
     public string testSong;
@@ -127,8 +128,9 @@ public class GlobalManager : MonoBehaviour
         {
             case "CalibrationScene": SetupCalibrationScene(); break;
             case "SongSelectScene": SetupSongSelectScene(); break;
-            case "PlayScene": SetupPlayScene(); break;
             case "EditorScene": SetupEditorScene(); break;
+            case "PlayScene": SetupPlayScene(); break;
+            case "ResultsScene": SetupResultsScene(); break;
         }
     }
 
@@ -138,8 +140,9 @@ public class GlobalManager : MonoBehaviour
         {
             case "CalibrationScene": TeardownCalibrationScene(); break;
             case "SongSelectScene": TeardownSongSelectScene(); break;
-            case "PlayScene": TeardownPlayScene(); break;
             case "EditorScene": TeardownEditorScene(); break;
+            case "PlayScene": TeardownPlayScene(); break;
+            case "ResultsScene": TeardownResultsScene(); break;
         }
     }
 
@@ -169,6 +172,19 @@ public class GlobalManager : MonoBehaviour
         songSelectManager = null;
     }
 
+    void SetupEditorScene()
+    {
+        editorManager = FindObjectOfType<EditorManager>();
+
+        if (currentSong != null)
+            editorManager.LoadSong(currentSong, fileName);
+    }
+
+    void TeardownEditorScene()
+    {
+        editorManager = null;
+    }
+
     void SetupPlayScene()
     {
         playManager = FindObjectOfType<PlayManager>();
@@ -187,17 +203,18 @@ public class GlobalManager : MonoBehaviour
         playManager = null;
     }
 
-    void SetupEditorScene()
+    void SetupResultsScene()
     {
-        editorManager = FindObjectOfType<EditorManager>();
+        resultsManager = FindObjectOfType<ResultsManager>();
 
-        if (currentSong != null)
-            editorManager.LoadSong(currentSong, fileName);
+        resultsManager.SetText(PlayManager.score, PlayManager.maxCombo);
     }
 
-    void TeardownEditorScene()
+    // TODO: Stop music on leave
+
+    void TeardownResultsScene()
     {
-        editorManager = null;
+        resultsManager = null;
     }
     #endregion
 

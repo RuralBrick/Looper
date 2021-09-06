@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayManager : MonoBehaviour
 {
@@ -14,17 +15,24 @@ public class PlayManager : MonoBehaviour
 
     public static int score = 0;
     public static int combo = 0;
+    public static int maxCombo = 0;
 
     public enum HitRangeType { None, Perfect, Great }
     public struct HitRange
     {
         public float margin;
         public HitRangeType type;
+        public int points;
     }
     HitRange[] hitRanges =
     {
         new HitRange{ margin = 0.075f, type = HitRangeType.Perfect },
         new HitRange{ margin = 0.25f, type = HitRangeType.Great }
+    };
+    Dictionary<HitRangeType, int> hitRangePoints = new Dictionary<HitRangeType, int>()
+    {
+        { HitRangeType.Perfect, 100 },
+        { HitRangeType.Great, 25 }
     };
 
     List<Note> notes = new List<Note>();
@@ -32,6 +40,32 @@ public class PlayManager : MonoBehaviour
 
     Coroutine metCoroutine;
     LoopDisplayHandler loopDisplayHandler;
+    Text scoreText;
+    Text comboText;
+
+    int Score
+    {
+        get => score;
+        set
+        {
+            score = value;
+            scoreText.text = $"Score: {score}";
+        }
+    }
+
+    int Combo
+    {
+        get => combo;
+        set
+        {
+            combo = value;
+            if (combo > maxCombo)
+            {
+                maxCombo = combo;
+            }
+            comboText.text = $"Combo: {combo}";
+        }
+    }
 
     public GameObject[] notePrefabs = new GameObject[LoopDisplayHandler.LANE_COUNT];
 
@@ -44,15 +78,18 @@ public class PlayManager : MonoBehaviour
     void Awake()
     {
         loopDisplayHandler = FindObjectOfType<LoopDisplayHandler>();
+        scoreText = GameObject.Find("Score Text").GetComponent<Text>();
+        comboText = GameObject.Find("Combo Text").GetComponent<Text>();
     }
 
     void Start()
     {
         Array.Sort(hitRanges, (a, b) => a.margin.CompareTo(b.margin));
+        Score = 0;
+        Combo = 0;
+        maxCombo = 0;
     }
 
-    // TODO: Stop song
-    
     public void LoadSong(Song s)
     {
         beatsPerBar = s.beatsPerBar;
@@ -92,24 +129,39 @@ public class PlayManager : MonoBehaviour
     {
         int misses = 0;
         foreach (List<NoteHandler> lane in activeNotes)
+        {
             foreach (NoteHandler noteHandler in lane)
+            {
                 if (noteHandler.MissedNote(beat, hitRanges[hitRanges.Length - 1].margin))
+                {
                     misses++;
+                }
+            }
+        }
         if (misses > 0)
+        {
             Debug.Log($"Missed: {misses}");
+            Combo = 0;
+        }
     }
 
     void ClearNotes()
     {
         foreach (List<NoteHandler> lane in activeNotes)
+        {
             foreach (NoteHandler nh in lane)
+            {
                 if (nh.ShouldDespawn(beat))
+                {
                     nh.Disappear(delegate
                     { 
                         if (!lane.Remove(nh))
                             Debug.LogWarning("Could not remove note handler");
                         CheckEnd();
                     });
+                }
+            }
+        }
     }
 
     void CheckEnd()
@@ -128,6 +180,13 @@ public class PlayManager : MonoBehaviour
         get => GlobalManager.instance.hitOffset * TimeToBeat;
     }
 
+    float PointsMultiplier()
+    {
+        return (100 + combo) / 100f;
+    }
+
+    // TODO: Hit type splashes
+
     public void CheckLane(int lane)
     {
         foreach (NoteHandler nh in activeNotes[lane])
@@ -141,9 +200,13 @@ public class PlayManager : MonoBehaviour
                 {
                     case HitRangeType.Perfect:
                         Debug.Log("Perfect");
+                        Score += (int)(hitRangePoints[HitRangeType.Perfect] * PointsMultiplier());
+                        Combo++;
                         break;
                     case HitRangeType.Great:
                         Debug.Log("Great, " + (late ? "Late" : "Early"));
+                        Score += (int)(hitRangePoints[HitRangeType.Great] * PointsMultiplier());
+                        Combo++;
                         break;
                 }
             }
