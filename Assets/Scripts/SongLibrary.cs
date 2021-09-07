@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
 
 [Serializable]
 public class Song
@@ -73,10 +73,10 @@ public class SongLibrary : MonoBehaviour
     string savePath;
     const string extension = "lprs";
 
+    BinaryFormatter bf = new BinaryFormatter();
+
     Dictionary<string, Song> songs;
     Dictionary<string, Song> userSongs;
-
-    BinaryFormatter bf = new BinaryFormatter();
 
     void Awake()
     {
@@ -137,23 +137,23 @@ public class SongLibrary : MonoBehaviour
         return songList;
     }
 
-    public Song FindSong(string fileName)
+    public (Song, bool) FindSong(string fileName)
     {
         Song s;
         if (userSongs.TryGetValue(fileName, out s))
         {
-            return s;
+            return (s, true);
         }
         if (songs.TryGetValue(fileName, out s))
         {
-            return s;
+            return (s, false);
         }
 
         Debug.LogWarning($"Song {fileName} not found");
-        return null;
+        return (null, false);
     }
 
-    public (string, Song) FindSongByTitle(string title)
+    public (string, Song, bool) FindSongByTitle(string title)
     {
         var entry = userSongs.Where(entry => entry.Value.title == title).FirstOrDefault();
         string fn = entry.Key;
@@ -161,7 +161,7 @@ public class SongLibrary : MonoBehaviour
 
         if (s != null)
         {
-            return (fn, s);
+            return (fn, s, true);
         }
 
         entry = songs.Where(entry => entry.Value.title == title).FirstOrDefault();
@@ -169,11 +169,11 @@ public class SongLibrary : MonoBehaviour
         s = entry.Value;
         if (s != null)
         {
-            return (fn, s);
+            return (fn, s, false);
         }
 
         Debug.LogWarning($"Song {title} not found");
-        return ("", null);
+        return ("", null, false);
     }
 
     public void SaveSongToResources(Song song, string fileName)

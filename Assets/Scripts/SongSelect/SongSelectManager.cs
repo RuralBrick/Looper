@@ -19,9 +19,6 @@ public class SongSelectManager : MonoBehaviour
     public void LoadLibrary((string, string)[] songList)
     {
         songListHandler.CreateList(songList);
-        // HACK
-        SetSong(songList[0].Item2, 0);
-        // end HACK
     }
 
     public void SetSong(string title, int highScore)

@@ -52,6 +52,11 @@ public class SoundManager : MonoBehaviour
         song.PlayDelayed(songDelay);
     }
 
+    public void StopSong()
+    {
+        song.Stop();
+    }
+
     public Sound Play(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
