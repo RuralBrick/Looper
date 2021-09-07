@@ -11,6 +11,7 @@ public class GlobalManager : MonoBehaviour
     InputManager inputManager;
     SongLibrary songLibrary;
     TrackParser trackParser;
+    UserDataManager userDataManager;
 
     public delegate void LaneInput(int lane);
     public LaneInput LanePressed = delegate { };
@@ -19,8 +20,9 @@ public class GlobalManager : MonoBehaviour
     public float syncOffset = 0f;
     public float hitOffset = 0f;
 
-    string fileName;
-    Song currentSong;
+    string fileName = "";
+    Song currentSong = null;
+    bool usingUserSong = false;
 
     CalibrationManager calibrationManager;
     SongSelectManager songSelectManager;
@@ -47,6 +49,7 @@ public class GlobalManager : MonoBehaviour
         inputManager = GetComponentInChildren<InputManager>();
         songLibrary = GetComponentInChildren<SongLibrary>();
         trackParser = GetComponentInChildren<TrackParser>();
+        userDataManager = GetComponentInChildren<UserDataManager>();
     }
 
     void Start()
@@ -56,7 +59,7 @@ public class GlobalManager : MonoBehaviour
 
         // HACK
         if (testSong != "")
-            (fileName, currentSong) = songLibrary.FindSongByTitle(testSong);
+            (fileName, currentSong, usingUserSong) = songLibrary.FindSongByTitle(testSong);
         // end HACK
 
         SetupScenes(SceneManager.GetActiveScene(), LoadSceneMode.Single);
@@ -76,15 +79,16 @@ public class GlobalManager : MonoBehaviour
 
     public void SelectSong(string fileName)
     {
-        Song s = songLibrary.FindSong(fileName);
+        (Song s, bool uus) = songLibrary.FindSong(fileName);
 
         if (s != null)
         {
             this.fileName = fileName;
             currentSong = s;
-            // HACK
-            songSelectManager?.SetSong(s.title, 0);
-            // end HACK
+            usingUserSong = uus;
+            songSelectManager?.SetSong(s.title, uus ? 
+                userDataManager.GetUserSongScore(fileName) : 
+                userDataManager.GetSongScore(fileName));
         }
     }
 
@@ -106,6 +110,18 @@ public class GlobalManager : MonoBehaviour
     public Note[] ParseTrack(TextAsset trackFile)
     {
         return trackParser.ParseTrack(trackFile);
+    }
+
+    public void SaveScore(int score)
+    {
+        if (usingUserSong)
+        {
+            userDataManager.SaveUserSongScore(fileName, score);
+        }
+        else
+        {
+            userDataManager.SaveSongScore(fileName, score);
+        }
     }
     #endregion
 
@@ -158,13 +174,13 @@ public class GlobalManager : MonoBehaviour
         calibrationManager = null;
     }
 
-    // TODO: Load song highscores
-
     void SetupSongSelectScene()
     {
         songSelectManager = FindObjectOfType<SongSelectManager>();
 
-        songSelectManager.LoadLibrary(songLibrary.GetSongs());
+        var songs = songLibrary.GetSongs();
+        songSelectManager.LoadLibrary(songs);
+        SelectSong(songs[0].Item1);
     }
 
     void TeardownSongSelectScene()
@@ -210,11 +226,11 @@ public class GlobalManager : MonoBehaviour
         resultsManager.SetText(PlayManager.score, PlayManager.maxCombo);
     }
 
-    // TODO: Stop music on leave
-
     void TeardownResultsScene()
     {
         resultsManager = null;
+
+        soundManager.StopSong();
     }
     #endregion
 

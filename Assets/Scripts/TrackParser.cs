@@ -18,6 +18,7 @@ public struct Note
 public class TrackParser : MonoBehaviour
 {
     string tracksPath;
+
     BinaryFormatter bf = new BinaryFormatter();
 
     void Awake()

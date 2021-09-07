@@ -42,6 +42,11 @@ public class PlayManager : MonoBehaviour
     LoopDisplayHandler loopDisplayHandler;
     Text scoreText;
     Text comboText;
+    HitSplashHandler perfectSplash;
+    HitSplashHandler greatSplash;
+    HitSplashHandler missSplash;
+    HitSplashHandler earlySplash;
+    HitSplashHandler lateSplash;
 
     int Score
     {
@@ -80,6 +85,11 @@ public class PlayManager : MonoBehaviour
         loopDisplayHandler = FindObjectOfType<LoopDisplayHandler>();
         scoreText = GameObject.Find("Score Text").GetComponent<Text>();
         comboText = GameObject.Find("Combo Text").GetComponent<Text>();
+        perfectSplash = GameObject.Find("Perfect Text").GetComponent<HitSplashHandler>();
+        greatSplash = GameObject.Find("Great Text").GetComponent<HitSplashHandler>();
+        missSplash = GameObject.Find("Miss Text").GetComponent<HitSplashHandler>();
+        earlySplash = GameObject.Find("Early Text").GetComponent<HitSplashHandler>();
+        lateSplash = GameObject.Find("Late Text").GetComponent<HitSplashHandler>();
     }
 
     void Start()
@@ -99,6 +109,7 @@ public class PlayManager : MonoBehaviour
             notes.Add(n);
 
         loopDisplayHandler.Initialize(beatsPerBar);
+        HitSplashHandler.Initialize(tempo);
 
         StartCoroutine(StartSong());
     }
@@ -140,8 +151,8 @@ public class PlayManager : MonoBehaviour
         }
         if (misses > 0)
         {
-            Debug.Log($"Missed: {misses}");
             Combo = 0;
+            missSplash.Splash();
         }
     }
 
@@ -167,7 +178,10 @@ public class PlayManager : MonoBehaviour
     void CheckEnd()
     {
         if (notes.Count == 0 && Array.TrueForAll(activeNotes, lane => lane.Count == 0))
+        {
+            GlobalManager.instance.SaveScore(score);
             GlobalManager.ChangeScene("ResultsScene");
+        }
     }
 
     float TimeToBeat
@@ -185,8 +199,6 @@ public class PlayManager : MonoBehaviour
         return (100 + combo) / 100f;
     }
 
-    // TODO: Hit type splashes
-
     public void CheckLane(int lane)
     {
         foreach (NoteHandler nh in activeNotes[lane])
@@ -199,14 +211,18 @@ public class PlayManager : MonoBehaviour
                 switch (hitType)
                 {
                     case HitRangeType.Perfect:
-                        Debug.Log("Perfect");
                         Score += (int)(hitRangePoints[HitRangeType.Perfect] * PointsMultiplier());
                         Combo++;
+                        perfectSplash.Splash();
                         break;
                     case HitRangeType.Great:
-                        Debug.Log("Great, " + (late ? "Late" : "Early"));
                         Score += (int)(hitRangePoints[HitRangeType.Great] * PointsMultiplier());
                         Combo++;
+                        greatSplash.Splash();
+                        if (late)
+                            lateSplash.Splash();
+                        else
+                            earlySplash.Splash();
                         break;
                 }
             }
