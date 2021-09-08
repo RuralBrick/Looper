@@ -62,11 +62,6 @@ public class Song
     }
 }
 
-/* TODO: Songs to add
- *       * Hot Milk
- *       * 
- */
-
 public class SongLibrary : MonoBehaviour
 {
     string resourcesPath;
@@ -82,10 +77,7 @@ public class SongLibrary : MonoBehaviour
     {
         resourcesPath = $"{Application.dataPath}/Resources/Song Data";
         savePath = $"{Application.persistentDataPath}/Song Data";
-    }
-
-    void Start()
-    {
+        
         if (!Directory.Exists(savePath))
             Directory.CreateDirectory(savePath);
 

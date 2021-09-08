@@ -136,6 +136,11 @@ public class PlayManager : MonoBehaviour
         }
     }
 
+    float HitBeat
+    {
+        get => beat + GlobalManager.instance.hitOffset * TimeToBeat;
+    }
+
     void CheckMisses()
     {
         int misses = 0;
@@ -143,7 +148,7 @@ public class PlayManager : MonoBehaviour
         {
             foreach (NoteHandler noteHandler in lane)
             {
-                if (noteHandler.MissedNote(beat, hitRanges[hitRanges.Length - 1].margin))
+                if (noteHandler.MissedNote(HitBeat, hitRanges[hitRanges.Length - 1].margin))
                 {
                     misses++;
                 }
@@ -189,15 +194,12 @@ public class PlayManager : MonoBehaviour
         get => tempo / SECONDS_PER_MINUTE;
     }
 
-    float HitBeatOffset
-    {
-        get => GlobalManager.instance.hitOffset * TimeToBeat;
-    }
-
     float PointsMultiplier()
     {
         return (100 + combo) / 100f;
     }
+
+    // TODO: Add hit sfx
 
     public void CheckLane(int lane)
     {
@@ -205,8 +207,7 @@ public class PlayManager : MonoBehaviour
         {
             HitRangeType hitType;
             bool late;
-            float hitBeat = beat + HitBeatOffset;
-            if (nh.GetHit(hitBeat , hitRanges, out hitType, out late))
+            if (nh.GetHit(HitBeat , hitRanges, out hitType, out late))
             {
                 switch (hitType)
                 {
@@ -238,14 +239,14 @@ public class PlayManager : MonoBehaviour
 
     IEnumerator KeepTime()
     {
-        beat = -BASE_SONG_WAIT * TimeToBeat;
+        beat = -(BASE_SONG_WAIT + GlobalManager.instance.syncOffset) * TimeToBeat;
         loopDisplayHandler.SetMetronome(CurrentBeatPos());
 
         yield return new WaitForEndOfFrame();
 
         while (true)
         {
-            beat += Time.deltaTime * tempo / SECONDS_PER_MINUTE;
+            beat += Time.deltaTime * TimeToBeat;
 
             loopDisplayHandler.SetMetronome(CurrentBeatPos());
             SpawnNotes();

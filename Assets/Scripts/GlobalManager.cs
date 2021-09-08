@@ -16,7 +16,6 @@ public class GlobalManager : MonoBehaviour
     public delegate void LaneInput(int lane);
     public LaneInput LanePressed = delegate { };
     
-    // TODO: Use user prefs
     public float syncOffset = 0f;
     public float hitOffset = 0f;
 
@@ -57,6 +56,31 @@ public class GlobalManager : MonoBehaviour
         SceneManager.sceneLoaded += SetupScenes;
         SceneManager.sceneUnloaded += TeardownScenes;
 
+        if (PlayerPrefs.HasKey("SFX Volume"))
+        {
+            // TODO: Tell soundManager
+        }
+        if (PlayerPrefs.HasKey("Music Volume"))
+        {
+            soundManager.SetSongVolume(PlayerPrefs.GetFloat("Music Volume"));
+        }
+        if (syncOffset != 0)
+        {
+            PlayerPrefs.SetFloat("Sync Offset", syncOffset);
+        }
+        else if (PlayerPrefs.HasKey("Sync Offset"))
+        {
+            syncOffset = PlayerPrefs.GetFloat("Sync Offset");
+        }
+        if (hitOffset != 0)
+        {
+            PlayerPrefs.SetFloat("Hit Offset", hitOffset);
+        }
+        else if (PlayerPrefs.HasKey("Hit Offset"))
+        {
+            hitOffset = PlayerPrefs.GetFloat("Hit Offset");
+        }
+
         // HACK
         if (testSong != "")
             (fileName, currentSong, usingUserSong) = songLibrary.FindSongByTitle(testSong);
@@ -66,6 +90,31 @@ public class GlobalManager : MonoBehaviour
     }
 
     #region Helper
+    public static void SetSFXVolume(float volume)
+    {
+        // TODO: Tell soundManager
+
+        PlayerPrefs.SetFloat("SFX Volume", volume);
+    }
+
+    public static void SetMusicVolume(float volume)
+    {
+        instance.soundManager.SetSongVolume(volume);
+        PlayerPrefs.SetFloat("Music Volume", volume);
+    }
+    
+    public static void SetSyncOffset(float offset)
+    {
+        instance.syncOffset = offset;
+        PlayerPrefs.SetFloat("Sync Offset", offset);
+    }
+
+    public static void SetHitOffset(float offset)
+    {
+        instance.hitOffset = offset;
+        PlayerPrefs.SetFloat("Hit Offset", offset);
+    }
+
     public static void FormatLine(ref LineRenderer line, Color color, Material material, 
         string sortingLayer, int sortingOrder, float width, bool useWorldSpace = false)
     {
@@ -142,6 +191,7 @@ public class GlobalManager : MonoBehaviour
     {
         switch (scene.name)
         {
+            case "TitleScene": SetupTitleScene(); break;
             case "CalibrationScene": SetupCalibrationScene(); break;
             case "SongSelectScene": SetupSongSelectScene(); break;
             case "EditorScene": SetupEditorScene(); break;
@@ -159,6 +209,20 @@ public class GlobalManager : MonoBehaviour
             case "EditorScene": TeardownEditorScene(); break;
             case "PlayScene": TeardownPlayScene(); break;
             case "ResultsScene": TeardownResultsScene(); break;
+        }
+    }
+
+    void SetupTitleScene()
+    {
+        if (PlayerPrefs.HasKey("SFX Volume"))
+        {
+            UnityEngine.UI.Slider sfxSlider = GameObject.Find("SFX Volume Slider").GetComponent<UnityEngine.UI.Slider>();
+            sfxSlider.value = PlayerPrefs.GetFloat("SFX Volume");
+        }
+        if (PlayerPrefs.HasKey("Music Volume"))
+        {
+            UnityEngine.UI.Slider musicSlider = GameObject.Find("Music Volume Slider").GetComponent<UnityEngine.UI.Slider>();
+            musicSlider.value = PlayerPrefs.GetFloat("Music Volume");
         }
     }
 
@@ -194,6 +258,8 @@ public class GlobalManager : MonoBehaviour
 
         if (currentSong != null)
             editorManager.LoadSong(currentSong, fileName);
+        else
+            editorManager.InitializeEmpty();
     }
 
     void TeardownEditorScene()

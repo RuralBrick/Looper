@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class HitSplashHandler : MonoBehaviour
 {
+    const float SIXTEENTH_NOTE_MULTIPLIER = 1f / 15f;
+    const float EIGTH_NOTE_MULTIPLIER = 1f / 30f;
     const float QUARTER_NOTE_MULTIPLIER = 1f / 60f;
 
     static float fadeTime;
