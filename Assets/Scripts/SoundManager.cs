@@ -57,6 +57,11 @@ public class SoundManager : MonoBehaviour
         song.Stop();
     }
 
+    public void SetSongVolume(float volume)
+    {
+        song.volume = volume;
+    }
+
     public Sound Play(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);

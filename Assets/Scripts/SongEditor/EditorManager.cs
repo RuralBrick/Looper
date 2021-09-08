@@ -20,6 +20,10 @@ public class EditorManager : MonoBehaviour
     string currentTrackName;
     public static int currentBar;
 
+    // HACK
+    public AudioClip songFile;
+    // end HACK
+
     List<Ref<Note>> notes = new List<Ref<Note>>();
 
     [Serializable]
@@ -121,6 +125,10 @@ public class EditorManager : MonoBehaviour
         currentSong = new Song();
         currentFileName = "";
         currentTrackName = "";
+
+        // HACK
+        currentSong.Clip = songFile;
+        // end HACK
 
         Initialize();
     }

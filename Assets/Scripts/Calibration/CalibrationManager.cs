@@ -12,8 +12,8 @@ public class CalibrationManager : MonoBehaviour
     LoopDisplayHandler loopDisplayHandler;
 
     float currentTime;
-    float syncOffset;
-    float hitOffset;
+    float syncOffset = 0;
+    float hitOffset = 0;
     List<float> offsetData;
 
     float SyncOffset
@@ -41,14 +41,11 @@ public class CalibrationManager : MonoBehaviour
 
     void Start()
     {
-        syncOffset = GlobalManager.instance.syncOffset;
-        hitOffset = GlobalManager.instance.hitOffset;
         syncConfirmed = false;
 
         loopDisplayHandler.Initialize(4);
         instructionsText.text = instructions[0];
 
-        GlobalManager.instance.StartMetronome();
         StartCoroutine(KeepTime());
     }
 
@@ -61,8 +58,12 @@ public class CalibrationManager : MonoBehaviour
 
     IEnumerator KeepTime()
     {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+
         currentTime = 0f;
         loopDisplayHandler.SetMetronome(CurrentBeatPos());
+        GlobalManager.instance.StartMetronome();
 
         yield return new WaitForEndOfFrame();
 
@@ -121,12 +122,13 @@ public class CalibrationManager : MonoBehaviour
 
         Debug.Log("Hits: " + hitOffset);
 
-        GlobalManager.instance.syncOffset = SyncOffset;
-        GlobalManager.instance.hitOffset = hitOffset;
+        GlobalManager.SetSyncOffset(SyncOffset);
+        GlobalManager.SetHitOffset(hitOffset);
 
         Debug.Log("Calibration finished");
 
-        // TODO: Switch scene
+        GlobalManager.instance.StopMetronome();
+        GlobalManager.ChangeScene("TitleScene");
     }
 
     public void Confirm()

@@ -22,6 +22,8 @@ public class NoteHandler : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    // TODO: Spawn notes based on beats per measure
+
     public static bool ShouldSpawn(float beat, float start)
     {
         return (start - beat) < BEATS_ANTICIPATION;
