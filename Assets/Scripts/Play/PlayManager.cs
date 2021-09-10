@@ -9,6 +9,8 @@ public class PlayManager : MonoBehaviour
     const float SECONDS_PER_MINUTE = 60f;
     public const float BASE_SONG_WAIT = 3f;
 
+    // TODO: Redo timing with absolute time
+
     float beat = 0;
     int beatsPerBar = 0;
     float tempo = 0;
