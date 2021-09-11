@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class CalibrationManager : MonoBehaviour
 {
-    const float BEATS_PER_SECOND = 2f;
+    const float BEATS_PER_SECOND = 1f;//2f;
     const int BEATS_PER_BAR = 4;
-    const float SECONDS_PER_BEAT = 0.5f;
+    const float SECONDS_PER_BEAT = 1f;//0.5f;
 
     LoopDisplayHandler loopDisplayHandler;
 
@@ -21,7 +21,7 @@ public class CalibrationManager : MonoBehaviour
         get => LoopDisplayHandler.clockwiseMetronome ? -1 * syncOffset : syncOffset;
     }
 
-    bool syncConfirmed = false;
+    bool syncConfirmed = true;//false;
 
     Text instructionsText;
     Slider syncSlider;
@@ -36,15 +36,21 @@ public class CalibrationManager : MonoBehaviour
     {
         loopDisplayHandler = FindObjectOfType<LoopDisplayHandler>();
         instructionsText = GameObject.Find("Instructions Text").transform.GetComponent<Text>();
-        syncSlider = GameObject.Find("Sync Slider").transform.GetComponent<Slider>();
+        //syncSlider = GameObject.Find("Sync Slider").transform.GetComponent<Slider>();
     }
+
+    // TODO: Add option to use separate sync and hit offsets
+
+    // TODO: Add manual calibration
 
     void Start()
     {
-        syncConfirmed = false;
+        //syncConfirmed = false;
 
         loopDisplayHandler.Initialize(4);
-        instructionsText.text = instructions[0];
+        instructionsText.text = instructions[1];//[0];
+
+        offsetData = new List<float>();
 
         StartCoroutine(KeepTime());
     }
@@ -122,7 +128,7 @@ public class CalibrationManager : MonoBehaviour
 
         Debug.Log("Hits: " + hitOffset);
 
-        GlobalManager.SetSyncOffset(SyncOffset);
+        //GlobalManager.SetSyncOffset(SyncOffset);
         GlobalManager.SetHitOffset(hitOffset);
 
         Debug.Log("Calibration finished");
@@ -149,6 +155,8 @@ public class CalibrationManager : MonoBehaviour
             float plusAdjusted = adjustedTime + halfBeat;
             float modAjusted = plusAdjusted % SECONDS_PER_BEAT;
             float offset = modAjusted - halfBeat;
+
+            Debug.Log($"Offset: {offset}");
 
             offsetData.Add(offset);
         }

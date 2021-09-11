@@ -24,7 +24,6 @@ public class PlayManager : MonoBehaviour
     {
         public float margin;
         public HitRangeType type;
-        public int points;
     }
     HitRange[] hitRanges =
     {
@@ -140,7 +139,7 @@ public class PlayManager : MonoBehaviour
 
     float HitBeat
     {
-        get => beat + GlobalManager.instance.hitOffset * TimeToBeat;
+        get => beat - GlobalManager.instance.hitOffset * TimeToBeat;
     }
 
     void CheckMisses()
@@ -232,17 +231,17 @@ public class PlayManager : MonoBehaviour
         }
     }
 
-    float CurrentBeatPos()
+    float MetBeatPos
     {
-        return beat % beatsPerBar;
+        get => (beat - GlobalManager.instance.hitOffset * TimeToBeat) % beatsPerBar;
     }
 
     // TODO: Pausing
 
     IEnumerator KeepTime()
     {
-        beat = -(BASE_SONG_WAIT + GlobalManager.instance.syncOffset) * TimeToBeat;
-        loopDisplayHandler.SetMetronome(CurrentBeatPos());
+        beat = -BASE_SONG_WAIT * TimeToBeat;
+        loopDisplayHandler.SetMetronome(MetBeatPos);
 
         yield return new WaitForEndOfFrame();
 
@@ -250,7 +249,7 @@ public class PlayManager : MonoBehaviour
         {
             beat += Time.deltaTime * TimeToBeat;
 
-            loopDisplayHandler.SetMetronome(CurrentBeatPos());
+            loopDisplayHandler.SetMetronome(MetBeatPos);
             SpawnNotes();
             CheckMisses();
             ClearNotes();
