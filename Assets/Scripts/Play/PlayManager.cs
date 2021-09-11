@@ -213,6 +213,8 @@ public class PlayManager : MonoBehaviour
 
     // TODO: Add hit sfx
 
+    // TODO: Make lanes flash on any input
+
     public void CheckLane(int lane)
     {
         foreach (NoteHandler nh in activeNotes[lane])
