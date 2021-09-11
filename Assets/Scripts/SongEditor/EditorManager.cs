@@ -77,6 +77,8 @@ public class EditorManager : MonoBehaviour
         SelectNoteVal(4);
     }
 
+    // TODO: Maybe add time stamps
+
     int CurrentBar
     {
         get => currentBar;
@@ -242,6 +244,8 @@ public class EditorManager : MonoBehaviour
 
         GlobalManager.instance.DevSaveSong(currentSong, currentFileName);
     }
+
+    // TODO: Add "Go to Measure" function
 
     public void DisplayNextBar()
     {
