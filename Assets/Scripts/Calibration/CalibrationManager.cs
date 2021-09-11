@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class CalibrationManager : MonoBehaviour
 {
-    const float BEATS_PER_SECOND = 1f;//2f;
+    const float BEATS_PER_SECOND = 1f;
     const int BEATS_PER_BAR = 4;
-    const float SECONDS_PER_BEAT = 1f;//0.5f;
+    const float SECONDS_PER_BEAT = 1f / BEATS_PER_SECOND;
 
     LoopDisplayHandler loopDisplayHandler;
 
-    float currentTime;
+    float startTime;
     float syncOffset = 0;
     float hitOffset = 0;
     List<float> offsetData;
@@ -55,9 +55,14 @@ public class CalibrationManager : MonoBehaviour
         StartCoroutine(KeepTime());
     }
 
-    float CurrentBeatPos()
+    float CurrentTime
     {
-        float adjustedTime = currentTime - SyncOffset;
+        get => Time.time - startTime;
+    }
+
+    float MetBeatPos()
+    {
+        float adjustedTime = CurrentTime - SyncOffset;
         float currentBeat = adjustedTime * BEATS_PER_SECOND;
         return currentBeat % BEATS_PER_BAR;
     }
@@ -67,17 +72,15 @@ public class CalibrationManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
-        currentTime = 0f;
-        loopDisplayHandler.SetMetronome(CurrentBeatPos());
+        startTime = Time.time;
+        loopDisplayHandler.SetMetronome(MetBeatPos());
         GlobalManager.instance.StartMetronome();
 
         yield return new WaitForEndOfFrame();
 
         while (true)
         {
-            currentTime += Time.deltaTime;
-
-            loopDisplayHandler.SetMetronome(CurrentBeatPos());
+            loopDisplayHandler.SetMetronome(MetBeatPos());
 
             yield return null;
         }
@@ -151,10 +154,9 @@ public class CalibrationManager : MonoBehaviour
 
         if (syncConfirmed)
         {
-            float adjustedTime = currentTime - SyncOffset;
-            float plusAdjusted = adjustedTime + halfBeat;
-            float modAjusted = plusAdjusted % SECONDS_PER_BEAT;
-            float offset = modAjusted - halfBeat;
+            float halfForwardShift = CurrentTime + halfBeat;
+            float placeInNoteRange = halfForwardShift % SECONDS_PER_BEAT;
+            float offset = placeInNoteRange - halfBeat;
 
             Debug.Log($"Offset: {offset}");
 

@@ -9,9 +9,8 @@ public class PlayManager : MonoBehaviour
     const float SECONDS_PER_MINUTE = 60f;
     public const float BASE_SONG_WAIT = 3f;
 
-    // TODO: Redo timing with absolute time
+    float startTime;
 
-    float beat = 0;
     int beatsPerBar = 0;
     float tempo = 0;
 
@@ -115,12 +114,34 @@ public class PlayManager : MonoBehaviour
         StartCoroutine(StartSong());
     }
 
+    float TimeToBeat
+    {
+        get => tempo / SECONDS_PER_MINUTE;
+    }
+
+    float Beat
+    {
+        get => (Time.time - startTime) * TimeToBeat;
+    }
+
+    float SyncBeat
+    {
+        // HACK
+        get => Beat - GlobalManager.instance.hitOffset * TimeToBeat;
+        // end HACK
+    }
+
+    float HitBeat
+    {
+        get => Beat - GlobalManager.instance.hitOffset * TimeToBeat;
+    }
+
     void SpawnNotes()
     {
         for (int i = notes.Count - 1; i >= 0; i--)
         {
             Note note = notes[i];
-            if (NoteHandler.ShouldSpawn(beat, note.start))
+            if (NoteHandler.ShouldSpawn(SyncBeat, note.start))
             {
                 GameObject notePrefab = notePrefabs[note.lane];
                 
@@ -135,11 +156,6 @@ public class PlayManager : MonoBehaviour
                 notes.RemoveAt(i);
             }
         }
-    }
-
-    float HitBeat
-    {
-        get => beat - GlobalManager.instance.hitOffset * TimeToBeat;
     }
 
     void CheckMisses()
@@ -168,7 +184,7 @@ public class PlayManager : MonoBehaviour
         {
             foreach (NoteHandler nh in lane)
             {
-                if (nh.ShouldDespawn(beat))
+                if (nh.ShouldDespawn(SyncBeat))
                 {
                     nh.Disappear(delegate
                     { 
@@ -188,11 +204,6 @@ public class PlayManager : MonoBehaviour
             GlobalManager.instance.SaveScore(score);
             GlobalManager.ChangeScene("ResultsScene");
         }
-    }
-
-    float TimeToBeat
-    {
-        get => tempo / SECONDS_PER_MINUTE;
     }
 
     float PointsMultiplier()
@@ -233,22 +244,20 @@ public class PlayManager : MonoBehaviour
 
     float MetBeatPos
     {
-        get => (beat - GlobalManager.instance.hitOffset * TimeToBeat) % beatsPerBar;
+        get => SyncBeat % beatsPerBar;
     }
 
     // TODO: Pausing
 
     IEnumerator KeepTime()
     {
-        beat = -BASE_SONG_WAIT * TimeToBeat;
+        startTime = Time.time + BASE_SONG_WAIT;
         loopDisplayHandler.SetMetronome(MetBeatPos);
 
         yield return new WaitForEndOfFrame();
 
         while (true)
         {
-            beat += Time.deltaTime * TimeToBeat;
-
             loopDisplayHandler.SetMetronome(MetBeatPos);
             SpawnNotes();
             CheckMisses();

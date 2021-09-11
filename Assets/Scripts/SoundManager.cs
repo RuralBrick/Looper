@@ -44,7 +44,7 @@ public class SoundManager : MonoBehaviour
     public void LoadSong(Song s)
     {
         song.clip = s.Clip;
-        songDelay = PlayManager.BASE_SONG_WAIT + s.offset + GlobalManager.instance.syncOffset;
+        songDelay = PlayManager.BASE_SONG_WAIT + s.offset;
     }
 
     public void PlaySong()
