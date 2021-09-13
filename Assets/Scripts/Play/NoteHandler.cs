@@ -6,13 +6,15 @@ public class NoteHandler : MonoBehaviour
 {
     const float SECONDS_PER_MINUTE = 60f;
     const float BEATS_ANTICIPATION = 2f;
+    const float BEATS_DISAPPEAR = 0.5f;
     const float SIZE_INCREASE = 1.1f;
     const float SIZE_CHANGE_TIME = 0.1f;
 
     SpriteRenderer spriteRenderer;
 
     float stop;
-    float fadeTime;
+    float fadeInTime;
+    float fadeOutTime;
     List<float> hits;
 
     Coroutine fadeOut;
@@ -22,8 +24,6 @@ public class NoteHandler : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // TODO: Spawn notes based on beats per measure
-
     public static bool ShouldSpawn(float beat, float start)
     {
         return (start - beat) < BEATS_ANTICIPATION;
@@ -32,7 +32,8 @@ public class NoteHandler : MonoBehaviour
     public void Initialize(Note n, int beatsPerBar, float tempo)
     {
         stop = n.stop;
-        fadeTime = BEATS_ANTICIPATION * SECONDS_PER_MINUTE / tempo;
+        fadeInTime = BEATS_ANTICIPATION * SECONDS_PER_MINUTE / tempo;
+        fadeOutTime = BEATS_DISAPPEAR * SECONDS_PER_MINUTE / tempo;
 
         float startBar = Mathf.Floor(n.start / beatsPerBar);
         float firstHit = startBar * beatsPerBar + n.beatPos;
@@ -106,10 +107,10 @@ public class NoteHandler : MonoBehaviour
 
         float timePassed = 0f;
 
-        while (timePassed < fadeTime)
+        while (timePassed < fadeInTime)
         {
             timePassed += Time.deltaTime;
-            color.a = timePassed / fadeTime;
+            color.a = timePassed / fadeInTime;
             spriteRenderer.color = color;
             yield return null;
         }
@@ -120,8 +121,6 @@ public class NoteHandler : MonoBehaviour
         yield return null;
     }
 
-    public delegate bool ListRemove(NoteHandler nh);
-
     IEnumerator FadeOut(System.Action lastCall)
     {
         Color color = spriteRenderer.color;
@@ -130,12 +129,12 @@ public class NoteHandler : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        float timeLeft = fadeTime;
+        float timeLeft = fadeOutTime;
 
         while (timeLeft > 0f)
         {
             timeLeft -= Time.deltaTime;
-            color.a = timeLeft / fadeTime;
+            color.a = timeLeft / fadeOutTime;
             spriteRenderer.color = color;
             yield return null;
         }

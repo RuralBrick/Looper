@@ -3349,7 +3349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: testSong
-      value: Tracing that Dream
+      value: Shadow of the boundary
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.size
@@ -4784,7 +4784,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0688447cd74a44f4dab0a56cf3385274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  songFile: {fileID: 8300000, guid: 20cb0ab48969acc44aca30344439a0c7, type: 3}
+  songFile: {fileID: 8300000, guid: 678c6afdab387be41bddf8befda6a6e5, type: 3}
   placeholderPrefabs:
   - {fileID: 4482068774927038285, guid: def1d2cc6d76d5d459a5b1d58d7992ff, type: 3}
   - {fileID: 3543880337164776414, guid: 98916d4c036c3d84caa262b0cad27db8, type: 3}
@@ -5521,6 +5521,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1424596078}
   - component: {fileID: 1424596079}
+  - component: {fileID: 1424596080}
   m_Layer: 5
   m_Name: Offset Slider
   m_TagString: Untagged
@@ -5603,7 +5604,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1297695410}
         m_TargetAssemblyTypeName: EditorManager, Assembly-CSharp
-        m_MethodName: SetOffset
+        m_MethodName: AdjustOffset
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5613,6 +5614,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1424596080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424596077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43175e68795ebb34c89c6f43c2e7db7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  editorManager: {fileID: 1297695410}
 --- !u!1 &1434301991
 GameObject:
   m_ObjectHideFlags: 0

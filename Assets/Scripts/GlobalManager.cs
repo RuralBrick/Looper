@@ -81,6 +81,9 @@ public class GlobalManager : MonoBehaviour
             hitOffset = PlayerPrefs.GetFloat("Hit Offset");
         }
 
+        Debug.Log($"Sync: {syncOffset}");
+        Debug.Log($"Hit: {hitOffset}");
+
         // HACK
         if (testSong != "")
             (fileName, currentSong, usingUserSong) = songLibrary.FindSongByTitle(testSong);

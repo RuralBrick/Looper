@@ -126,9 +126,7 @@ public class PlayManager : MonoBehaviour
 
     float SyncBeat
     {
-        // HACK
-        get => Beat - GlobalManager.instance.hitOffset * TimeToBeat;
-        // end HACK
+        get => Beat - GlobalManager.instance.syncOffset * TimeToBeat;
     }
 
     float HitBeat
