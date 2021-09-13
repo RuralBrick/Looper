@@ -18,6 +18,7 @@ public class EditorManager : MonoBehaviour
     Song currentSong;
     string currentFileName;
     string currentTrackName;
+    float tempOffset;
     public static int currentBar;
 
     // HACK
@@ -109,10 +110,10 @@ public class EditorManager : MonoBehaviour
 
         loopDisplayHandler.Initialize(currentSong.beatsPerBar);
         songDisplayManager.Initialize(currentSong);
+        songDisplayManager.SetOffset(currentSong.offset);
 
         GameObject.Find("Title Field").transform.GetComponent<InputField>().text = currentSong.title;
         offsetField.text = currentSong.offset.ToString();
-        offsetSlider.value = currentSong.offset;
         beatsPerBarField.text = currentSong.beatsPerBar.ToString();
         beatUnitField.text = currentSong.beatUnit.ToString();
         tempoField.text = currentSong.tempo.ToString();
@@ -157,16 +158,20 @@ public class EditorManager : MonoBehaviour
         if (float.TryParse(textOffset, out newOffset))
         {
             currentSong.offset = newOffset;
-            offsetSlider.value = newOffset;
             songDisplayManager.SetOffset(newOffset);
         }
     }
 
-    public void SetOffset(float newOffset)
+    public void AdjustOffset(float adjustment)
     {
-        currentSong.offset = newOffset;
-        offsetField.text = newOffset.ToString();
-        songDisplayManager.SetOffset(newOffset);
+        tempOffset = currentSong.offset + adjustment;
+        offsetField.text = tempOffset.ToString();
+        songDisplayManager.SetOffset(tempOffset);
+    }
+
+    public void ConfirmOffset()
+    {
+        currentSong.offset = tempOffset;
     }
 
     public void SetBeatsPerBar(string beatsPerBarText)
@@ -178,6 +183,7 @@ public class EditorManager : MonoBehaviour
             loopDisplayHandler.Initialize(beatsPerBar);
             songDisplayManager.Initialize(currentSong);
             CurrentBar = currentBar;
+            SpawnPlaceholders();
         }
         else
         {
