@@ -3349,7 +3349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: testSong
-      value: Shadow of the boundary
+      value: End of the Universe
       objectReference: {fileID: 0}
     - target: {fileID: 7891609695934888754, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: songs.Array.size
@@ -4784,7 +4784,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0688447cd74a44f4dab0a56cf3385274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  songFile: {fileID: 8300000, guid: 678c6afdab387be41bddf8befda6a6e5, type: 3}
+  songFile: {fileID: 8300000, guid: a894b573f8b42e74aaa06f5662f84302, type: 3}
   placeholderPrefabs:
   - {fileID: 4482068774927038285, guid: def1d2cc6d76d5d459a5b1d58d7992ff, type: 3}
   - {fileID: 3543880337164776414, guid: 98916d4c036c3d84caa262b0cad27db8, type: 3}
