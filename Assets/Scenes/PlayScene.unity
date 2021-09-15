@@ -964,23 +964,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].clip
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8300000, guid: c1f3e4e02b8d56746b7f76ed4ad55d5a, type: 3}
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].name
-      value: 
+      value: hit sfx
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: sounds.Array.data[0].isSFX
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].pitch
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].volume
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886520, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: m_RootOrder
@@ -1032,15 +1036,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: testSong
-      value: End of the Universe
+      value: Hot Milk
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: hitOffset
-      value: 0
+      value: 0.378
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: syncOffset
-      value: 0
+      value: 0.378
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: calibration

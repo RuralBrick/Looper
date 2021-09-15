@@ -18,6 +18,7 @@ public class Sound
     public float pitch = 1f;
 
     public bool loop = false;
+    public bool isSFX = false;
 }
 
 public class SoundManager : MonoBehaviour
@@ -60,6 +61,18 @@ public class SoundManager : MonoBehaviour
     public void SetSongVolume(float volume)
     {
         song.volume = volume;
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        foreach (Sound sound in sounds)
+        {
+            if (sound.isSFX)
+            {
+                sound.volume = volume;
+                sound.source.volume = volume;
+            }
+        }
     }
 
     public Sound Play(string name)

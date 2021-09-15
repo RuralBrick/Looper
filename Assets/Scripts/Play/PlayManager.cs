@@ -227,6 +227,7 @@ public class PlayManager : MonoBehaviour
                         Score += (int)(hitRangePoints[HitRangeType.Perfect] * PointsMultiplier());
                         Combo++;
                         perfectSplash.Splash();
+                        GlobalManager.instance.PlayHitSFX();
                         break;
                     case HitRangeType.Great:
                         Score += (int)(hitRangePoints[HitRangeType.Great] * PointsMultiplier());
@@ -236,6 +237,7 @@ public class PlayManager : MonoBehaviour
                             lateSplash.Splash();
                         else
                             earlySplash.Splash();
+                        GlobalManager.instance.PlayHitSFX();
                         break;
                 }
             }
