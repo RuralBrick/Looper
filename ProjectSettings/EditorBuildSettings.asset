@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CalibrationScene.unity
     guid: 07f95adbe864e5f478b56196a7971dd8
   - enabled: 1
+    path: Assets/Scenes/ControlsScene.unity
+    guid: df91d9f82c7fdb343966c0f81c77706d
+  - enabled: 1
     path: Assets/Scenes/SongSelectScene.unity
     guid: b696f09409ffe5849afaf464505a034a
   - enabled: 0
