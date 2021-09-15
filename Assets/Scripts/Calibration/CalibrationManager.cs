@@ -148,6 +148,8 @@ public class CalibrationManager : MonoBehaviour
             ConfirmCalibration();
     }
 
+    // TODO: Use hit sfx
+
     public void Hit(int lane)
     {
         const float halfBeat = SECONDS_PER_BEAT / 2f;

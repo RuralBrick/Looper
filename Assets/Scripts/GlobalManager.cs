@@ -58,7 +58,7 @@ public class GlobalManager : MonoBehaviour
 
         if (PlayerPrefs.HasKey("SFX Volume"))
         {
-            // TODO: Tell soundManager
+            soundManager.SetSFXVolume(PlayerPrefs.GetFloat("SFX Volume"));
         }
         if (PlayerPrefs.HasKey("Music Volume"))
         {
@@ -95,8 +95,7 @@ public class GlobalManager : MonoBehaviour
     #region Helper
     public static void SetSFXVolume(float volume)
     {
-        // TODO: Tell soundManager
-
+        instance.soundManager.SetSFXVolume(volume);
         PlayerPrefs.SetFloat("SFX Volume", volume);
     }
 
@@ -317,6 +316,11 @@ public class GlobalManager : MonoBehaviour
     public void StopMetronome()
     {
         soundManager.Stop("metronome");
+    }
+
+    public void PlayHitSFX()
+    {
+        soundManager.Play("hit sfx");
     }
     #endregion
 }

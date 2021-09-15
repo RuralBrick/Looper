@@ -250,7 +250,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &312412454
 RectTransform:
   m_ObjectHideFlags: 0
@@ -420,7 +420,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].clip
@@ -435,11 +435,35 @@ PrefabInstance:
       value: metronome
       objectReference: {fileID: 0}
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: sounds.Array.data[1].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: c1f3e4e02b8d56746b7f76ed4ad55d5a, type: 3}
+    - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: sounds.Array.data[1].loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: sounds.Array.data[1].name
+      value: hit sfx
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].pitch
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: sounds.Array.data[1].isSFX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: sounds.Array.data[1].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: sounds.Array.data[0].volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195590021, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: sounds.Array.data[1].volume
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886520, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
@@ -489,6 +513,14 @@ PrefabInstance:
     - target: {fileID: 1384424412205886522, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: m_Name
       value: Global Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: hitOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
+      propertyPath: syncOffset
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: calibration
@@ -796,7 +828,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &795779891
 RectTransform:
   m_ObjectHideFlags: 0
@@ -890,8 +922,8 @@ RectTransform:
   m_Father: {fileID: 596868128}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 39.8585, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -966,7 +998,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
