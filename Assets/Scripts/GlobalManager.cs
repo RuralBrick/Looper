@@ -187,24 +187,29 @@ public class GlobalManager : MonoBehaviour
     #endregion
 
     #region Scenes
+    public static void QuitGame()
+    {
+        Application.Quit();
+    }
+
     public static void ChangeScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
     }
 
-    void ShowEscMenu()
+    public static void ShowEscMenu()
     {
-        escMenu?.SetActive(true);
+        instance.escMenu?.SetActive(true);
     }
 
-    void HideEscMenu()
+    public static void HideEscMenu()
     {
-        escMenu?.SetActive(false);
+        instance.escMenu?.SetActive(false);
     }
 
-    public void ToggleEscMenu()
+    public static void ToggleEscMenu()
     {
-        if (escMenu && !escMenu.activeSelf)
+        if (instance.escMenu && !instance.escMenu.activeSelf)
         {
             ShowEscMenu();
         }
