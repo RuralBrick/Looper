@@ -8,9 +8,10 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        // HACK
-        if (Input.GetKey(KeyCode.Escape)) Application.Quit();
-        // end HACK
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GlobalManager.instance.ToggleEscMenu();
+        }
 
         Vector3 rawMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos = new Vector3(rawMousePos.x, rawMousePos.y, 0f);
