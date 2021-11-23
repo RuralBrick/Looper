@@ -6,8 +6,6 @@ public class InputManager : MonoBehaviour
 {
     public Vector3 mousePos;
 
-    // TODO: Keyboard legend near home screen
-
     void Update()
     {
         // HACK
