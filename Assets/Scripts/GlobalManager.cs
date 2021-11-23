@@ -13,6 +13,8 @@ public class GlobalManager : MonoBehaviour
     TrackParser trackParser;
     UserDataManager userDataManager;
 
+    GameObject escMenu;
+
     public delegate void LaneInput(int lane);
     public LaneInput LanePressed = delegate { };
     
@@ -90,6 +92,7 @@ public class GlobalManager : MonoBehaviour
         // end HACK
 
         SetupScenes(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+        HideEscMenu();
     }
 
     #region Helper
@@ -189,8 +192,32 @@ public class GlobalManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
+    void ShowEscMenu()
+    {
+        escMenu?.SetActive(true);
+    }
+
+    void HideEscMenu()
+    {
+        escMenu?.SetActive(false);
+    }
+
+    public void ToggleEscMenu()
+    {
+        if (escMenu && !escMenu.activeSelf)
+        {
+            ShowEscMenu();
+        }
+        else
+        {
+            HideEscMenu();
+        }
+    }
+
     public void SetupScenes(Scene scene, LoadSceneMode mode)
     {
+        escMenu = GameObject.Find("Esc Menu");
+
         switch (scene.name)
         {
             case "TitleScene": SetupTitleScene(); break;
@@ -212,6 +239,8 @@ public class GlobalManager : MonoBehaviour
             case "PlayScene": TeardownPlayScene(); break;
             case "ResultsScene": TeardownResultsScene(); break;
         }
+
+        escMenu = null;
     }
 
     void SetupTitleScene()
