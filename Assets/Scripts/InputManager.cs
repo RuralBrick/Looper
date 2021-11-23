@@ -10,7 +10,7 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GlobalManager.instance.ToggleEscMenu();
+            GlobalManager.ToggleEscMenu();
         }
 
         Vector3 rawMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
