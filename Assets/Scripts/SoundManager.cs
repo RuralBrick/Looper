@@ -56,7 +56,7 @@ public class SoundManager : MonoBehaviour
     public void PauseSong()
     {
         float pauseTime = song.time;
-        song.Stop();
+        song.Pause();
         song.time = pauseTime;
     }
 
