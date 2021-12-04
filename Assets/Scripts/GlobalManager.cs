@@ -7,6 +7,8 @@ public class GlobalManager : MonoBehaviour
 {
     public static GlobalManager instance;
 
+    static bool paused = false;
+
     SoundManager soundManager;
     InputManager inputManager;
     SongLibrary songLibrary;
@@ -17,6 +19,9 @@ public class GlobalManager : MonoBehaviour
 
     public delegate void LaneInput(int lane);
     public LaneInput LanePressed = delegate { };
+    public delegate void SideEffect();
+    public SideEffect PauseEffects = delegate { };
+    public SideEffect UnpauseEffects = delegate { };
     
     public float syncOffset = 0f;
     public float hitOffset = 0f;
@@ -177,12 +182,60 @@ public class GlobalManager : MonoBehaviour
             userDataManager.SaveSongScore(fileName, score);
         }
     }
+
+    void StopTime()
+    {
+        Time.timeScale = 0;
+    }
+
+    void ResumeTime()
+    {
+        Time.timeScale = 1;
+    }
     #endregion
 
     #region Input
     public Vector3 MousePosition()
     {
         return inputManager.mousePos;
+    }
+
+    public static void HandleEsc()
+    {
+        if (paused)
+        {
+            HideEscMenu();
+            instance.UnpauseEffects();
+            paused = false;
+        }
+        else
+        {
+            ShowEscMenu();
+            instance.PauseEffects();
+            paused = true;
+        }
+    }
+
+    void DisableLaneInput()
+    {
+        // TODO: Implement this
+    }
+
+    void EnableLaneInput()
+    {
+        // TODO: Implement this
+    }
+    #endregion
+
+    #region UI
+    public static void ShowEscMenu()
+    {
+        instance.escMenu?.SetActive(true);
+    }
+
+    public static void HideEscMenu()
+    {
+        instance.escMenu?.SetActive(false);
     }
     #endregion
 
@@ -195,28 +248,6 @@ public class GlobalManager : MonoBehaviour
     public static void ChangeScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
-    }
-
-    public static void ShowEscMenu()
-    {
-        instance.escMenu?.SetActive(true);
-    }
-
-    public static void HideEscMenu()
-    {
-        instance.escMenu?.SetActive(false);
-    }
-
-    public static void ToggleEscMenu()
-    {
-        if (instance.escMenu && !instance.escMenu.activeSelf)
-        {
-            ShowEscMenu();
-        }
-        else
-        {
-            HideEscMenu();
-        }
     }
 
     public void SetupScenes(Scene scene, LoadSceneMode mode)
@@ -307,6 +338,12 @@ public class GlobalManager : MonoBehaviour
     {
         playManager = FindObjectOfType<PlayManager>();
         LanePressed += playManager.CheckLane;
+        PauseEffects += StopTime;
+        PauseEffects += soundManager.PauseSong;
+        PauseEffects += DisableLaneInput;
+        UnpauseEffects += ResumeTime;
+        UnpauseEffects += soundManager.UnpauseSong;
+        UnpauseEffects += EnableLaneInput;
 
         if (currentSong != null)
         {
@@ -318,6 +355,12 @@ public class GlobalManager : MonoBehaviour
     void TeardownPlayScene()
     {
         LanePressed -= playManager.CheckLane;
+        PauseEffects -= StopTime;
+        PauseEffects -= soundManager.PauseSong;
+        PauseEffects -= DisableLaneInput;
+        UnpauseEffects -= ResumeTime;
+        UnpauseEffects -= soundManager.UnpauseSong;
+        UnpauseEffects -= EnableLaneInput;
         playManager = null;
     }
 
