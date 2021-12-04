@@ -68,6 +68,7 @@ public class SoundManager : MonoBehaviour
     public void StopSong()
     {
         song.Stop();
+        song.time = 0;
     }
 
     public void SetSongVolume(float volume)

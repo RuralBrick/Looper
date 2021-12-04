@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -183,14 +184,28 @@ public class GlobalManager : MonoBehaviour
         }
     }
 
-    void StopTime()
+    static void StopTime()
     {
         Time.timeScale = 0;
     }
 
-    void ResumeTime()
+    static void ResumeTime()
     {
         Time.timeScale = 1;
+    }
+
+    public static void Pause()
+    {
+        ShowEscMenu();
+        instance.PauseEffects();
+        paused = true;
+    }
+
+    public static void Unpause()
+    {
+        HideEscMenu();
+        instance.UnpauseEffects();
+        paused = false;
     }
     #endregion
 
@@ -204,15 +219,11 @@ public class GlobalManager : MonoBehaviour
     {
         if (paused)
         {
-            HideEscMenu();
-            instance.UnpauseEffects();
-            paused = false;
+            Unpause();
         }
         else
         {
-            ShowEscMenu();
-            instance.PauseEffects();
-            paused = true;
+            Pause();
         }
     }
 
@@ -247,12 +258,19 @@ public class GlobalManager : MonoBehaviour
 
     public static void ChangeScene(string sceneName)
     {
+        if (paused)
+        {
+            ResumeTime();
+            instance.soundManager.StopSong();
+            instance.EnableLaneInput();
+            paused = false;
+        }
         SceneManager.LoadScene(sceneName);
     }
 
     public void SetupScenes(Scene scene, LoadSceneMode mode)
     {
-        escMenu = GameObject.Find("Esc Menu");
+        escMenu = Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(obj => obj.name == "Esc Menu");
 
         switch (scene.name)
         {
