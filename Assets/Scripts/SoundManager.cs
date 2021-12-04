@@ -53,6 +53,18 @@ public class SoundManager : MonoBehaviour
         song.PlayDelayed(songDelay);
     }
 
+    public void PauseSong()
+    {
+        float pauseTime = song.time;
+        song.Stop();
+        song.time = pauseTime;
+    }
+
+    public void UnpauseSong()
+    {
+        song.Play();
+    }
+
     public void StopSong()
     {
         song.Stop();
