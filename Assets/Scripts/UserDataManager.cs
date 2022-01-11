@@ -37,17 +37,17 @@ public class UserDataManager : MonoBehaviour
 
         if (File.Exists(filePath))
         {
-            FileStream fileStream = new FileStream(filePath, FileMode.Open);
-            UserData userData = binaryFormatter.Deserialize(fileStream) as UserData;
-            fileStream.Close();
-
-            for (int i = 0; i < userData.songs.Length; i++)
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
             {
-                songScores.Add(userData.songs[i], userData.songScores[i]);
-            }
-            for (int i = 0; i < userData.userSongs.Length; i++)
-            {
-                userSongScores.Add(userData.userSongs[i], userData.userSongScores[i]);
+                UserData userData = binaryFormatter.Deserialize(fileStream) as UserData;
+                for (int i = 0; i < userData.songs.Length; i++)
+                {
+                    songScores.Add(userData.songs[i], userData.songScores[i]);
+                }
+                for (int i = 0; i < userData.userSongs.Length; i++)
+                {
+                    userSongScores.Add(userData.userSongs[i], userData.userSongScores[i]);
+                }
             }
         }
     }
@@ -76,11 +76,11 @@ public class UserDataManager : MonoBehaviour
             i++;
         }
 
-        FileStream fileStream = new FileStream(filePath, FileMode.Create);
-        binaryFormatter.Serialize(fileStream, userData);
-        fileStream.Close();
-
-        Debug.Log($"{fileName} saved");
+        using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+        {
+            binaryFormatter.Serialize(fileStream, userData);
+            Debug.Log($"{fileName} saved");
+        }
     }
 
     public void SaveSongScore(string fileName, int score)

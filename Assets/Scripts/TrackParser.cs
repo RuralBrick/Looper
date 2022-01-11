@@ -36,11 +36,11 @@ public class TrackParser : MonoBehaviour
 
         string filePath = $"{tracksPath}/{fileName}.bytes";
 
-        FileStream fs = new FileStream(filePath, FileMode.Create);
-        bf.Serialize(fs, notes);
-        fs.Close();
-
-        Debug.Log($"{fileName}.bytes saved");
+        using (FileStream fs = new FileStream(filePath, FileMode.Create))
+        {
+            bf.Serialize(fs, notes);
+            Debug.Log($"{fileName}.bytes saved");
+        }
     }
 
     public Note[] LoadTrack(string fileName)
@@ -53,21 +53,20 @@ public class TrackParser : MonoBehaviour
             return null;
         }
 
-        FileStream fs = new FileStream(filePath, FileMode.Open);
-        Note[] notes = bf.Deserialize(fs) as Note[];
-        fs.Close();
-
-        Debug.Log($"{fileName}.bytes loaded");
-
-        return notes;
+        using (FileStream fs = new FileStream(filePath, FileMode.Open))
+        {
+            Note[] notes = bf.Deserialize(fs) as Note[];
+            Debug.Log($"{fileName}.bytes loaded");
+            return notes;
+        }
     }
 
     public Note[] ParseTrack(TextAsset trackFile)
     {
-        MemoryStream ms = new MemoryStream(trackFile.bytes);
-        Note[] notes = bf.Deserialize(ms) as Note[];
-        ms.Close();
-
-        return notes;
+        using (MemoryStream ms = new MemoryStream(trackFile.bytes))
+        {
+            Note[] notes = bf.Deserialize(ms) as Note[];
+            return notes;
+        }
     }
 }
