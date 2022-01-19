@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.IO.Compression;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -86,11 +87,11 @@ public class SongLibrary : MonoBehaviour
         TextAsset[] songData = Resources.LoadAll<TextAsset>("Song Data");
         foreach (var file in songData)
         {
-            using (MemoryStream ms = new MemoryStream(file.bytes))
-            {
-                Song s = bf.Deserialize(ms) as Song;
-                songs.Add(file.name, s);
-            }
+            using MemoryStream ms = new MemoryStream(file.bytes);
+            using var decompressor = new GZipStream(ms, CompressionMode.Decompress);
+
+            Song s = bf.Deserialize(decompressor) as Song;
+            songs.Add(file.name, s);
         }
 
         userSongs = new Dictionary<string, Song>();
@@ -98,11 +99,11 @@ public class SongLibrary : MonoBehaviour
         string[] filePaths = Directory.GetFiles(savePath, $"*.{extension}");
         foreach (string filePath in filePaths)
         {
-            using (FileStream fs = new FileStream(filePath, FileMode.Open))
-            {
-                Song s = bf.Deserialize(fs) as Song;
-                userSongs.Add(Path.GetFileNameWithoutExtension(filePath), s);
-            }
+            using FileStream fs = File.OpenRead(filePath);
+            using var decompressor = new GZipStream(fs, CompressionMode.Decompress);
+
+            Song s = bf.Deserialize(decompressor) as Song;
+            userSongs.Add(Path.GetFileNameWithoutExtension(filePath), s);
         }
     }
 
@@ -172,11 +173,12 @@ public class SongLibrary : MonoBehaviour
     {
         string filePath = $"{resourcesPath}/{fileName}.bytes";
 
-        using (FileStream fs = new FileStream(filePath, FileMode.Create))
-        {
-            bf.Serialize(fs, song);
-            Debug.Log($"{fileName}.bytes saved");
-        }
+        using FileStream fs = File.Create(filePath);
+        using var compressor = new GZipStream(fs, CompressionMode.Compress);
+
+        bf.Serialize(compressor, song);
+
+        Debug.Log($"{fileName}.bytes saved");
     }
 
     public void SaveSong(Song song, string fileName)
@@ -192,11 +194,12 @@ public class SongLibrary : MonoBehaviour
 
         string filePath = $"{savePath}/{fileName}.{extension}";
 
-        using (FileStream fs = new FileStream(filePath, FileMode.Create))
-        {
-            bf.Serialize(fs, song);
-            Debug.Log($"{fileName}.{extension} saved");
-        }
+        using FileStream fs = File.Create(filePath);
+        using var compressor = new GZipStream(fs, CompressionMode.Compress);
+
+        bf.Serialize(compressor, song);
+
+        Debug.Log($"{fileName}.{extension} saved");
     }
 
     public void DeleteSong(string fileName)
