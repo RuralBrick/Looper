@@ -17,71 +17,16 @@ class UserData
 
 public class UserDataManager : MonoBehaviour
 {
-    const string fileName = "looperUser.data";
-    string filePath;
-
-    BinaryFormatter binaryFormatter = new BinaryFormatter();
-
     Dictionary<string, int> songScores;
     Dictionary<string, int> userSongScores;
-
-    void Awake()
-    {
-        filePath = $"{Application.persistentDataPath}/{fileName}";
-    }
 
     void Start()
     {
         songScores = new Dictionary<string, int>();
         userSongScores = new Dictionary<string, int>();
-
-        if (File.Exists(filePath))
-        {
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
-            {
-                UserData userData = binaryFormatter.Deserialize(fileStream) as UserData;
-                for (int i = 0; i < userData.songs.Length; i++)
-                {
-                    songScores.Add(userData.songs[i], userData.songScores[i]);
-                }
-                for (int i = 0; i < userData.userSongs.Length; i++)
-                {
-                    userSongScores.Add(userData.userSongs[i], userData.userSongScores[i]);
-                }
-            }
-        }
     }
 
-    void SaveScores()
-    {
-        UserData userData = new UserData();
-
-        userData.songs = new string[songScores.Count];
-        userData.songScores = new int[songScores.Count];
-        int i = 0;
-        foreach (var item in songScores)
-        {
-            userData.songs[i] = item.Key;
-            userData.songScores[i] = item.Value;
-            i++;
-        }
-
-        userData.userSongs = new string[userSongScores.Count];
-        userData.userSongScores = new int[userSongScores.Count];
-        i = 0;
-        foreach (var item in userSongScores)
-        {
-            userData.userSongs[i] = item.Key;
-            userData.userSongScores[i] = item.Value;
-            i++;
-        }
-
-        using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-        {
-            binaryFormatter.Serialize(fileStream, userData);
-            Debug.Log($"{fileName} saved");
-        }
-    }
+    void SaveScores() { }
 
     public void SaveSongScore(string fileName, int score)
     {
