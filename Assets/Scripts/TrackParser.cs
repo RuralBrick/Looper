@@ -17,48 +17,13 @@ public struct Note
 
 public class TrackParser : MonoBehaviour
 {
-    string tracksPath;
-
     BinaryFormatter bf = new BinaryFormatter();
 
-    void Awake()
-    {
-        tracksPath = $"{Application.dataPath}/Tracks";
-    }
-
-    public void SaveTrack(Note[] notes, string fileName)
-    {
-        if (string.IsNullOrWhiteSpace(fileName))
-        {
-            Debug.LogWarning("Track name cannot be blank");
-            return;
-        }
-
-        string filePath = $"{tracksPath}/{fileName}.bytes";
-
-        using (FileStream fs = new FileStream(filePath, FileMode.Create))
-        {
-            bf.Serialize(fs, notes);
-            Debug.Log($"{fileName}.bytes saved");
-        }
-    }
+    public void SaveTrack(Note[] notes, string fileName) { }
 
     public Note[] LoadTrack(string fileName)
     {
-        string filePath = $"{tracksPath}/{fileName}.bytes";
-
-        if (!File.Exists(filePath))
-        {
-            Debug.LogWarning($"File {fileName} not found");
-            return null;
-        }
-
-        using (FileStream fs = new FileStream(filePath, FileMode.Open))
-        {
-            Note[] notes = bf.Deserialize(fs) as Note[];
-            Debug.Log($"{fileName}.bytes loaded");
-            return notes;
-        }
+        return null;
     }
 
     public Note[] ParseTrack(TextAsset trackFile)
