@@ -66,21 +66,15 @@ public class Song
 public class SongLibrary : MonoBehaviour
 {
     string resourcesPath;
-    string savePath;
     const string extension = "lprs";
 
     BinaryFormatter bf = new BinaryFormatter();
 
     Dictionary<string, Song> songs;
-    Dictionary<string, Song> userSongs;
 
     void Awake()
     {
         resourcesPath = $"{Application.dataPath}/Resources/Song Data";
-        savePath = $"{Application.persistentDataPath}/Song Data";
-        
-        if (!Directory.Exists(savePath))
-            Directory.CreateDirectory(savePath);
 
         songs = new Dictionary<string, Song>();
 
@@ -93,33 +87,15 @@ public class SongLibrary : MonoBehaviour
             Song s = bf.Deserialize(decompressor) as Song;
             songs.Add(file.name, s);
         }
-
-        userSongs = new Dictionary<string, Song>();
-
-        string[] filePaths = Directory.GetFiles(savePath, $"*.{extension}");
-        foreach (string filePath in filePaths)
-        {
-            using FileStream fs = File.OpenRead(filePath);
-            using var decompressor = new GZipStream(fs, CompressionMode.Decompress);
-
-            Song s = bf.Deserialize(decompressor) as Song;
-            userSongs.Add(Path.GetFileNameWithoutExtension(filePath), s);
-        }
     }
 
     public (string, string)[] GetSongs()
     {
-        string[] titles = new string[songs.Count + userSongs.Count];
-        (string, string)[] songList = new (string, string)[songs.Count + userSongs.Count];
+        string[] titles = new string[songs.Count];
+        (string, string)[] songList = new (string, string)[songs.Count];
 
         int t = 0;
         foreach (var entry in songs)
-        {
-            titles[t] = entry.Value.title;
-            songList[t] = (entry.Key, entry.Value.title);
-            t++;
-        }
-        foreach (var entry in userSongs)
         {
             titles[t] = entry.Value.title;
             songList[t] = (entry.Key, entry.Value.title);
@@ -133,10 +109,6 @@ public class SongLibrary : MonoBehaviour
     public (Song, bool) FindSong(string fileName)
     {
         Song s;
-        if (userSongs.TryGetValue(fileName, out s))
-        {
-            return (s, true);
-        }
         if (songs.TryGetValue(fileName, out s))
         {
             return (s, false);
@@ -148,18 +120,9 @@ public class SongLibrary : MonoBehaviour
 
     public (string, Song, bool) FindSongByTitle(string title)
     {
-        var entry = userSongs.Where(entry => entry.Value.title == title).FirstOrDefault();
+        var entry = songs.Where(entry => entry.Value.title == title).FirstOrDefault();
         string fn = entry.Key;
         Song s = entry.Value;
-
-        if (s != null)
-        {
-            return (fn, s, true);
-        }
-
-        entry = songs.Where(entry => entry.Value.title == title).FirstOrDefault();
-        fn = entry.Key;
-        s = entry.Value;
         if (s != null)
         {
             return (fn, s, false);
@@ -181,45 +144,7 @@ public class SongLibrary : MonoBehaviour
         Debug.Log($"{fileName}.bytes saved");
     }
 
-    public void SaveSong(Song song, string fileName)
-    {
-        if (!userSongs.ContainsKey(fileName))
-        {
-            userSongs.Add(fileName, song);
-        }
-        else
-        {
-            userSongs[fileName] = song;
-        }
+    public void SaveSong(Song song, string fileName) { }
 
-        string filePath = $"{savePath}/{fileName}.{extension}";
-
-        using FileStream fs = File.Create(filePath);
-        using var compressor = new GZipStream(fs, CompressionMode.Compress);
-
-        bf.Serialize(compressor, song);
-
-        Debug.Log($"{fileName}.{extension} saved");
-    }
-
-    public void DeleteSong(string fileName)
-    {
-        if (!userSongs.ContainsKey(fileName))
-        {
-            Debug.LogWarning($"User song {fileName} not found");
-            return;
-        }
-        
-        string filePath = $"{savePath}/{fileName}.{extension}";
-        if (!File.Exists(filePath))
-        {
-            Debug.LogWarning($"{fileName}.{extension} does not exist");
-            return;
-        }
-
-        userSongs.Remove(fileName);
-        File.Delete(filePath);
-
-        Debug.Log($"{fileName}.{extension} deleted");
-    }
+    public void DeleteSong(string fileName) { }
 }
