@@ -65,7 +65,6 @@ public class Song
 
 public class SongLibrary : MonoBehaviour
 {
-    string resourcesPath;
     const string extension = "lprs";
 
     BinaryFormatter bf = new BinaryFormatter();
@@ -74,8 +73,6 @@ public class SongLibrary : MonoBehaviour
 
     void Awake()
     {
-        resourcesPath = $"{Application.dataPath}/Resources/Song Data";
-
         songs = new Dictionary<string, Song>();
 
         TextAsset[] songData = Resources.LoadAll<TextAsset>("Song Data");
@@ -132,17 +129,7 @@ public class SongLibrary : MonoBehaviour
         return ("", null, false);
     }
 
-    public void SaveSongToResources(Song song, string fileName)
-    {
-        string filePath = $"{resourcesPath}/{fileName}.bytes";
-
-        using FileStream fs = File.Create(filePath);
-        using var compressor = new GZipStream(fs, CompressionMode.Compress);
-
-        bf.Serialize(compressor, song);
-
-        Debug.Log($"{fileName}.bytes saved");
-    }
+    public void SaveSongToResources(Song song, string fileName) { }
 
     public void SaveSong(Song song, string fileName) { }
 
