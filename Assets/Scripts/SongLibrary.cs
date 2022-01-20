@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.IO.Compression;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -77,9 +76,7 @@ public class SongLibrary : MonoBehaviour
         foreach (var file in songData)
         {
             using MemoryStream ms = new MemoryStream(file.bytes);
-            using var decompressor = new GZipStream(ms, CompressionMode.Decompress);
-
-            Song s = bf.Deserialize(decompressor) as Song;
+            Song s = bf.Deserialize(ms) as Song;
             songs.Add(file.name, s);
         }
     }
