@@ -65,8 +65,6 @@ public class Song
 
 public class SongLibrary : MonoBehaviour
 {
-    const string extension = "lprs";
-
     BinaryFormatter bf = new BinaryFormatter();
 
     Dictionary<string, Song> songs;
