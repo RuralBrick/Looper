@@ -209,8 +209,6 @@ public class PlayManager : MonoBehaviour
         return (100 + combo) / 100f;
     }
 
-    // TODO: Add hit sfx
-
     // TODO: Make lanes flash on any input
 
     public void CheckLane(int lane)
@@ -248,8 +246,6 @@ public class PlayManager : MonoBehaviour
     {
         get => SyncBeat % beatsPerBar;
     }
-
-    // TODO: Pausing
 
     IEnumerator KeepTime()
     {
