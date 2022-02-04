@@ -11,6 +11,7 @@ public class LoopDisplayHandler : MonoBehaviour
     const float RADIUS = 4f;
     const float LANE_WIDTH = 0.75f;
     const float TRACK_WIDTH = LANE_COUNT * LANE_WIDTH; // NOTE: Make sure TRACK_WIDTH <= RADIUS
+    const uint _track_width_check = TRACK_WIDTH <= RADIUS ? 0 : -666;
     const float INNER_GAP = RADIUS - TRACK_WIDTH;
     const float NOTE_WIDTH = 0.7f;
     const float SUB_BEAT_LINE_WIDTH = 0.025f;
