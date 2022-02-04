@@ -9,23 +9,19 @@ public class LoopDisplayHandler : MonoBehaviour
     public static bool clockwiseMetronome = true;
     
     const float RADIUS = 4f;
+    const float DOWNBEAT_LINE_WIDTH = 0.1f;
+
+    const float NOTE_WIDTH = 0.7f;
     const float LANE_WIDTH = 0.75f;
-    const float TRACK_WIDTH = LANE_COUNT * LANE_WIDTH; // NOTE: Make sure TRACK_WIDTH <= RADIUS
+
+    const float TRACK_WIDTH = LANE_COUNT * LANE_WIDTH;
     const uint _track_width_check = TRACK_WIDTH <= RADIUS ? 0 : -666;
     const float INNER_GAP = RADIUS - TRACK_WIDTH;
-    const float NOTE_WIDTH = 0.7f;
-    const float LANE_LINE_WIDTH = 0.025f;
 
     int beatsPerBar = 0;
     
-    public Color lineColor;
-    public Sprite circleSprite;
-    public Material lineMaterial;
-    public Material spriteMaterial;
-
     public GameObject beatLinePrefab;
     public GameObject laneLinePrefab;
-    public GameObject centerDotPrefab;
 
     LineRenderer metronomeLine;
     
@@ -118,11 +114,7 @@ public class LoopDisplayHandler : MonoBehaviour
             laneLine.SetPositions(r);
         }
 
-        if (Mathf.Approximately(INNER_GAP, 0f))
-        {
-            Instantiate(centerDotPrefab, transform);
-        }
-        else
+        if (INNER_GAP > DOWNBEAT_LINE_WIDTH)
         {
             LaneLineHandler laneLine = Instantiate(laneLinePrefab, transform).GetComponent<LaneLineHandler>();
             laneLine.SetPositions(INNER_GAP);
