@@ -261,6 +261,9 @@ MonoBehaviour:
   circleSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   lineMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   spriteMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  beatLinePrefab: {fileID: 3328850901953010930, guid: e7d83081ed63a0b4192dc2a7c40bf024, type: 3}
+  laneLinePrefab: {fileID: 834524105649360495, guid: 25ccc53524e5f6443970d3f31066e17b, type: 3}
+  centerDotPrefab: {fileID: 2977394105872685990, guid: 7441c358ad7de254da2dad556a807e80, type: 3}
 --- !u!1 &1532994389610382585
 GameObject:
   m_ObjectHideFlags: 0
