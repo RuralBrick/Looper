@@ -236,7 +236,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 84.52014, y: -163}
+  m_AnchoredPosition: {x: 84.52051, y: -163}
   m_SizeDelta: {x: 1861.4858, y: 90.2938}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &80264105
@@ -698,7 +698,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 84.52014, y: -57.5229}
+  m_AnchoredPosition: {x: 84.52051, y: -57.52295}
   m_SizeDelta: {x: 1861.4858, y: 90.2938}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &620682333
@@ -1672,7 +1672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: testSong
-      value: Shadow of the boundary
+      value: Tracing that Dream
       objectReference: {fileID: 0}
     - target: {fileID: 1384424412205886523, guid: dba3b15409f62b84dabdfeef0306ceff, type: 3}
       propertyPath: hitOffset
@@ -2465,6 +2465,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1532994388421760279, guid: 6d9fbdef7be1ce74c8e86f6b8af0a918, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1532994389610382535, guid: 6d9fbdef7be1ce74c8e86f6b8af0a918, type: 3}
+      propertyPath: m_Parameters.numCapVertices
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
