@@ -2123,7 +2123,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 507.3695, y: -77.845}
+  m_AnchoredPosition: {x: 507.36914, y: -77.845}
   m_SizeDelta: {x: 854.6891, y: 76.2753}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &580290207
@@ -4465,7 +4465,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 65.50122, y: -161.41504}
+  m_AnchoredPosition: {x: 65.50098, y: -161.41504}
   m_SizeDelta: {x: 1069.5042, y: 220.9036}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1173795720
@@ -8333,6 +8333,8 @@ MonoBehaviour:
   - {r: 0.4813101, g: 0.754717, b: 0.4813101, a: 1}
   - {r: 0.7735849, g: 0.7735849, b: 0.49334285, a: 1}
   lineMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  noteLinePrefab: {fileID: 5818319546586697331, guid: c7c3216f257b32a498ef1654a649c94f, type: 3}
+  hitMarkPrefab: {fileID: 0}
   beatNumbers:
   - {fileID: 2083311738}
   - {fileID: 1933753257}
@@ -8610,7 +8612,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 65.362, y: -650}
+  m_AnchoredPosition: {x: 65.362305, y: -650}
   m_SizeDelta: {x: 375.4487, y: 76.2753}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &2067623859

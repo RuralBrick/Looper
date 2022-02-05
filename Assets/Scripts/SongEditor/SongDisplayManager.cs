@@ -15,8 +15,6 @@ public class SongDisplayManager : MonoBehaviour
     const float DISPLAY_HEIGHT = TOP - BOTTOM;
     const float HALF_HEIGHT = DISPLAY_HEIGHT / 2f;
     const float TARGET_SAMPLES_PER_BAR = 4801f;
-    const float NOTE_LINE_WIDTH = 0.05f;
-    const float HIT_NOTE_LENGTH = 0.1f;
 
     int beatsPerBar;
     float[] samples;
@@ -25,17 +23,10 @@ public class SongDisplayManager : MonoBehaviour
     float offsetSamples;
 
     public Color[] laneColors = new Color[LoopDisplayHandler.LANE_COUNT];
-    public Material lineMaterial;
+    public GameObject noteLinePrefab;
 
     LineRenderer waveform;
     public UnityEngine.UI.Text[] beatNumbers = new UnityEngine.UI.Text[6];
-    
-    struct NoteLine
-    {
-        public LineRenderer duration;
-        public List<LineRenderer> hits;
-    }
-    List<NoteLine> noteLines = new List<NoteLine>();
 
     void Awake()
     {
@@ -154,72 +145,35 @@ public class SongDisplayManager : MonoBehaviour
         float disp = (lane + 1) * LaneToY;
         return BOTTOM + disp;
     }
-
-    // TODO: Change lines to prefabs
+    float CalcDurationPosition(float beat)
+    {
+        float leftBeat = LeftBar * beatsPerBar;
+        float beatOffsetFromLeft = beat - leftBeat;
+        float offsetFromLeft = beatOffsetFromLeft * BeatToX;
+        return Mathf.Clamp(offsetFromLeft, 0f, DISPLAY_WIDTH);
+    }
 
     public void SpawnNoteLines(List<Ref<Note>> notes)
     {
-        foreach (NoteLine nl in noteLines)
-            Destroy(nl.duration.gameObject);
-        noteLines.Clear();
+        NoteLineHandler.DestroyNoteLines();
 
         foreach (Ref<Note> n in notes)
         {
             if (NoteInPhrase(n.Value.start, n.Value.stop))
             {
-                NoteLine newNoteLine = new NoteLine();
-
-                GameObject durationObj = new GameObject("Note Line");
-                durationObj.transform.parent = transform;
-                durationObj.transform.localPosition = new Vector3(LEFT, CalcLaneY(n.Value.lane));
-
-                newNoteLine.duration = durationObj.AddComponent<LineRenderer>();
-                GlobalManager.FormatLine(ref newNoteLine.duration, laneColors[n.Value.lane], lineMaterial, "Track", 150, NOTE_LINE_WIDTH);
-
-                float leftBeat = LeftBar * beatsPerBar;
-                float startBeatOffsetFromLeft = n.Value.start - leftBeat;
-                float startOffsetFromLeft = startBeatOffsetFromLeft * BeatToX;
-                float durationStart = startOffsetFromLeft < 0f ? 0f : startOffsetFromLeft;
-                Vector3 durationLeft = new Vector3(durationStart, 0, 0);
-
-                float stopBeatOffsetFromLeft = n.Value.stop - leftBeat;
-                float stopOffsetFromLeft = stopBeatOffsetFromLeft * BeatToX;
-                float durationStop = stopOffsetFromLeft > DISPLAY_WIDTH ? DISPLAY_WIDTH : stopOffsetFromLeft;
-                Vector3 durationRight = new Vector3(durationStop, 0, 0);
-
-                newNoteLine.duration.SetPositions(new Vector3[] { durationLeft, durationRight });
-
-
-                newNoteLine.hits = new List<LineRenderer>();
+                float durationStart = CalcDurationPosition(n.Value.start);
+                float durationStop = CalcDurationPosition(n.Value.stop);
 
                 Color hitColor = Color.HSVToRGB(n.Value.beatPos / beatsPerBar, 1f, 1f);
-
+                
                 float firstHit = n.Value.beatPos * BeatPosToX;
-
                 while (firstHit < DISPLAY_WIDTH && firstHit < durationStart)
                     firstHit += BAR_WIDTH;
-                for (float x = firstHit; x <= durationStop && x < DISPLAY_WIDTH; x += BAR_WIDTH)
-                {
-                    GameObject hitObj = new GameObject("Hit Mark");
-                    hitObj.transform.parent = durationObj.transform;
-                    hitObj.transform.localPosition = Vector3.zero;
 
-                    LineRenderer newHit = hitObj.AddComponent<LineRenderer>();
-                    GlobalManager.FormatLine(ref newHit, hitColor, lineMaterial, "Track", 155, NOTE_LINE_WIDTH);
-
-                    Vector3 hitLeft = new Vector3(x, 0, 0);
-
-                    float right = x + HIT_NOTE_LENGTH;
-                    if (right > DISPLAY_WIDTH) right = DISPLAY_WIDTH;
-                    Vector3 hitRight = new Vector3(right, 0, 0);
-
-                    newHit.SetPositions(new Vector3[] { hitLeft, hitRight });
-
-                    newNoteLine.hits.Add(newHit);
-                }
-
-
-                noteLines.Add(newNoteLine);
+                NoteLineHandler noteLine = Instantiate(noteLinePrefab, transform.position + new Vector3(LEFT, CalcLaneY(n.Value.lane)), Quaternion.identity, transform).GetComponent<NoteLineHandler>();
+                noteLine.SetColor(laneColors[n.Value.lane]);
+                noteLine.SetPositions(durationStart, durationStop);
+                noteLine.SpawnHitMarks(hitColor, firstHit, durationStop, DISPLAY_WIDTH, BAR_WIDTH);
             }
         }
     }
