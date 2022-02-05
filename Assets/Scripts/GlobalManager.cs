@@ -126,17 +126,6 @@ public class GlobalManager : MonoBehaviour
         PlayerPrefs.SetFloat("Hit Offset", offset);
     }
 
-    public static void FormatLine(ref LineRenderer line, Color color, Material material, 
-        string sortingLayer, int sortingOrder, float width, bool useWorldSpace = false)
-    {
-        line.startColor = line.endColor = color;
-        line.material = material;
-        line.sortingLayerName = sortingLayer;
-        line.sortingOrder = sortingOrder;
-        line.startWidth = line.endWidth = width;
-        line.useWorldSpace = useWorldSpace;
-    }
-
     public void SelectSong(string fileName)
     {
         (Song s, bool uus) = songLibrary.FindSong(fileName);
