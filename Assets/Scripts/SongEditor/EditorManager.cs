@@ -366,7 +366,7 @@ public class EditorManager : MonoBehaviour
     {
         float offset = (start + currentSong.beatsPerBar) % currentSong.beatsPerBar;
         float adjustedBeatPos = (beatPos + currentSong.beatsPerBar - offset) % currentSong.beatsPerBar;
-        float rangeStart = 0f; // NOTE: start - start
+        float rangeStart = start - start;
         float rangeEnd = end - start;
         return rangeStart <= adjustedBeatPos && adjustedBeatPos <= rangeEnd;
     }
