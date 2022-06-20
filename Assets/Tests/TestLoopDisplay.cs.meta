@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 9acf8e292e355774a8da366b3ee42f3f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - loopDisplayPrefab: {fileID: 1532994388421760264, guid: 6d9fbdef7be1ce74c8e86f6b8af0a918, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
