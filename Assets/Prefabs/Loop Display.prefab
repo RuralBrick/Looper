@@ -259,6 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beatLinePrefab: {fileID: 3328850901953010930, guid: e7d83081ed63a0b4192dc2a7c40bf024, type: 3}
+  subbeatLinePrefab: {fileID: 3328850901953010930, guid: 6ead3384ce5086040b85dc4ef46d9842, type: 3}
   laneLinePrefab: {fileID: 834524105649360495, guid: 25ccc53524e5f6443970d3f31066e17b, type: 3}
 --- !u!1 &1532994389610382585
 GameObject:

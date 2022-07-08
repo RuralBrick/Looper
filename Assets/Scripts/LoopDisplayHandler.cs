@@ -7,6 +7,8 @@ public class LoopDisplayHandler : MonoBehaviour
     public const int LANE_COUNT = 4;
 
     public static bool clockwiseMetronome = true;
+    // TODO: Set user prefs
+    public static int beatSubdivisions = 4;
     
     const float RADIUS = 4f;
     const float DOWNBEAT_LINE_WIDTH = 0.1f;
@@ -21,6 +23,7 @@ public class LoopDisplayHandler : MonoBehaviour
     int beatsPerBar = 0;
     
     public GameObject beatLinePrefab;
+    public GameObject subbeatLinePrefab;
     public GameObject laneLinePrefab;
 
     LineRenderer metronomeLine;
@@ -95,10 +98,23 @@ public class LoopDisplayHandler : MonoBehaviour
     
     void MakeBeatLines()
     {
+        float subbeatLength = 1 / beatSubdivisions;
+
+        for (int i = 1; i < beatSubdivisions; i++)
+        {
+            BeatLineHandler subbeatLine = Instantiate(subbeatLinePrefab, transform).GetComponent<BeatLineHandler>();
+            subbeatLine.SetPosition(CalcLinePosition(subbeatLength * i));
+        }
+
         for (int i = 1; i < beatsPerBar; i++)
         {
             BeatLineHandler beatLine = Instantiate(beatLinePrefab, transform).GetComponent<BeatLineHandler>();
             beatLine.SetPosition(CalcLinePosition(i));
+            for (int j = 1; j < beatSubdivisions; j++)
+            {
+                BeatLineHandler subbeatLine = Instantiate(subbeatLinePrefab, transform).GetComponent<BeatLineHandler>();
+                subbeatLine.SetPosition(CalcLinePosition(i + subbeatLength * j));
+            }
         }
     }
 
